@@ -2,6 +2,9 @@ package modele;
 
 import java.io.Serializable;
 
+
+/*Test*/
+
 public class Compte implements Serializable {
 
   private Integer identifiant;
