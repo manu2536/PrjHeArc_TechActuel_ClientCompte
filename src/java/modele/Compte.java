@@ -2,70 +2,78 @@ package modele;
 
 import java.io.Serializable;
 
-/*hello*/
+public class Compte implements Serializable {
 
-public class Compte implements Serializable{
-    private Integer identifiant;
-    private String  nom;
-    private Float   solde;
-    private Float   taux;
-    
-    public Compte(Integer _identifiant,String _nom,Float _solde,Float _taux){
-        this.identifiant = _identifiant;
-        this.nom = _nom;
-        this.solde = _solde;
-        this.taux = _taux;
-    }
-    
-    public Compte(){
-        this.identifiant = null;
-        this.nom = null;
-        this.solde = null;
-        this.taux = null;
-    }
+  private Integer identifiant;
+  private String numero;
+  private String nom;
+  private Float solde;
+  private Float taux;
 
-    @Override
-    public String toString(){
-        return String.valueOf(identifiant) + "," + nom + "," + String.valueOf(solde) + "," + String.valueOf(taux);
-    }
-    
-    public void print(){
-        System.out.println(this.toString());
-    }
-    
-    public boolean isNull(){
-        return nom==null && solde==null && taux==null && identifiant==null;
-    }
-    
-    public Integer getIdentifiant() {
-        return identifiant;
-    }
+  public Compte(Integer _identifiant, String _nom, Float _solde, Float _taux) {
+    this.identifiant = _identifiant;
+    this.nom = _nom;
+    this.solde = _solde;
+    this.taux = _taux;
+  }
 
-    public void setIdentifiant(Integer identifiant) {
-        this.identifiant = identifiant;
-    }
+  public Compte() {
+    this.identifiant = null;
+    this.nom = null;
+    this.solde = null;
+    this.taux = null;
+  }
 
-    public String getNom() {
-        return nom;
-    }
+  @Override
+  public String toString() {
+    return String.valueOf(identifiant) + "," + nom + "," + String.valueOf(solde) + "," + String.valueOf(taux);
+  }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+  public void print() {
+    System.out.println(this.toString());
+  }
 
-    public Float getSolde() {
-        return solde;
-    }
+  public boolean isNull() {
+    return nom == null && solde == null && taux == null && identifiant == null;
+  }
 
-    public void setSolde(Float solde) {
-        this.solde = solde;
-    }
+  public Integer getIdentifiant() {
+    return identifiant;
+  }
 
-    public Float getTaux() {
-        return taux;
-    }
+  public void setIdentifiant(Integer identifiant) {
+    this.identifiant = identifiant;
+  }
 
-    public void setTaux(Float taux) {
-        this.taux = taux;
-    }
+  public String getNom() {
+    return nom;
+  }
+
+  public void setNom(String nom) {
+    this.nom = nom;
+  }
+
+  public Float getSolde() {
+    return solde;
+  }
+
+  public void setSolde(Float solde) {
+    this.solde = solde;
+  }
+
+  public Float getTaux() {
+    return taux;
+  }
+
+  public void setTaux(Float taux) {
+    this.taux = taux;
+  }
+
+  public String getNumero() {
+    return numero;
+  }
+
+  public void setNumero(String numero) {
+    this.numero = numero;
+  }
 }
