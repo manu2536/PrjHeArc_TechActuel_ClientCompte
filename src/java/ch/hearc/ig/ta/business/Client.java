@@ -1,4 +1,4 @@
-package ch.hearc.ig.ta.modele;
+package ch.hearc.ig.ta.business;
 
 import java.io.Serializable;
 import java.util.ArrayList;

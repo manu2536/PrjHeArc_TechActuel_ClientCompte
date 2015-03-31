@@ -11,7 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import ch.hearc.ig.ta.modele.Compte;
+import ch.hearc.ig.ta.business.Compte;
+import ch.hearc.ig.ta.exceptions.AccountDaoException;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -177,8 +178,11 @@ public class CompteDao {
 
         }
     }
-    
-    public static void update(Compte cpt){
+    /**
+     * ancien update - laisser pour les servlets actuelles
+     * @param cpt 
+     */
+     public static void update(Compte cpt){
         Connection cnx = null;
         PreparedStatement pstmt = null;
 
@@ -202,6 +206,35 @@ public class CompteDao {
                 cnx.close();
             } catch (SQLException ex) {
                 System.out.println("Error UPDATE CLOSE: " + ex.getMessage());
+            }
+        }
+    }
+     
+     /**
+      * surchage de l'update pour permettre la gestion des versements
+      * de manière transactionnelle
+      * @param cpt
+      * @param connection 
+      */
+    public static void update(Compte cpt, Connection connection) throws AccountDaoException{
+        PreparedStatement pstmt = null;
+
+        try {
+            StringBuilder sql = new StringBuilder("UPDATE compte SET NOM = ?, SOLDE = ?, TAUX = ? WHERE numero = ?");
+            pstmt = (OraclePreparedStatement) connection.prepareStatement(sql.toString());
+
+            pstmt.setString(1, cpt.getNom());
+            pstmt.setFloat(2, cpt.getSolde());
+            pstmt.setFloat(3, cpt.getTaux());
+            pstmt.setLong(4, cpt.getIdentifiant());
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+          throw new AccountDaoException("Error UPDATE SET: " + ex.getMessage());
+        } finally {
+            try {
+                pstmt.close();
+            } catch (SQLException ex) {
+               throw new AccountDaoException("Error UPDATE CLOSE: " + ex.getMessage());
             }
         }
     }
@@ -277,14 +310,14 @@ public class CompteDao {
         System.out.println(cptId);
         try{
             cnx = OracleConnections.getConnection();
-            sql = new StringBuilder("select c.id from client c inner join compte cpt on cpt.id_client=c.id where cpt.id=" + cptId);
+            sql = new StringBuilder("select c.numero from client c inner join compte cpt on cpt.numero_client=c.numero where cpt.numero=" + cptId);
             System.out.println("SQL Query: " + sql.toString());
             stmt = cnx.createStatement();
 
             rs = stmt.executeQuery(sql.toString());
 
             while (rs.next()) {
-                result = rs.getInt("id");
+                result = rs.getInt("numero");
             }
         }catch(Exception ex){
             System.out.println("Error SELECT SQL owner: " + ex.getMessage());

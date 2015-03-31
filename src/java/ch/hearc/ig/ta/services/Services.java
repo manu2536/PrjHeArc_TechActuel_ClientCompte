@@ -3,8 +3,7 @@
  * and open the template in the editor.
  */
 package ch.hearc.ig.ta.services;
-
-import ch.hearc.ig.ta.modele.Compte;
+import ch.hearc.ig.ta.business.Compte;
 
 /**
  *
