@@ -2,55 +2,55 @@
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <servlet>
         <servlet-name>listAll</servlet-name>
-        <servlet-class>servlets.listAll</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.listAll</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addClient</servlet-name>
-        <servlet-class>servlets.addClient</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.addClient</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>displayClient</servlet-name>
-        <servlet-class>servlets.displayClient</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.displayClient</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>deleteConfirm</servlet-name>
-        <servlet-class>servlets.deleteConfirm</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.deleteConfirm</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>delete</servlet-name>
-        <servlet-class>servlets.delete</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.delete</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>displayModifierClient</servlet-name>
-        <servlet-class>servlets.displayModifierClient</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.displayModifierClient</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>doModifier</servlet-name>
-        <servlet-class>servlets.doModifier</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.doModifier</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>allComptes</servlet-name>
-        <servlet-class>servlets.allComptes</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.allComptes</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addCompte</servlet-name>
-        <servlet-class>servlets.addCompte</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.addCompte</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>deleteCompteConfirm</servlet-name>
-        <servlet-class>servlets.deleteCompteConfirm</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.deleteCompteConfirm</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>deleteCompte</servlet-name>
-        <servlet-class>servlets.deleteCompte</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.deleteCompte</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>modifierCompte</servlet-name>
-        <servlet-class>servlets.modifierCompte</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.modifierCompte</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>doModifierCompte</servlet-name>
-        <servlet-class>servlets.doModifierCompte</servlet-class>
+        <servlet-class>ch.hearc.ig.ta.servlets.doModifierCompte</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>listAll</servlet-name>

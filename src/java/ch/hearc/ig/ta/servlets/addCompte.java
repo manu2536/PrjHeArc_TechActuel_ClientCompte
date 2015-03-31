@@ -2,26 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
+import ch.hearc.ig.ta.dao.ClientDao;
+import ch.hearc.ig.ta.dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Map;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import utilities.WebUtilities;
+import ch.hearc.ig.ta.modele.Client;
+import ch.hearc.ig.ta.modele.Compte;
 
 /**
  *
  * @author christop.francill
  */
-public class displayClient extends HttpServlet {
+public class addCompte extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -37,44 +35,16 @@ public class displayClient extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
-        WebUtilities.doHeader(out, "Afficher un client");
-        
         try {
-            Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Client> cliListe = new ArrayList<Client>();
-            cliListe.addAll(ClientDao.research(cli));
+            Compte newCompt = new Compte();
+            newCompt.setNom(request.getParameter("nom"));
+            newCompt.setSolde(Float.parseFloat(request.getParameter("solde")));
+            newCompt.setTaux(Float.parseFloat(request.getParameter("taux")));
+                        
+            CompteDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
 
-            if(cliListe.size()>0){
-                cli = cliListe.get(0);
-                /* TODO output your page here. You may use following sample code. */
-                try{
-                    if(request.getParameter("add").equals("true")){
-                        out.println("<div class=\"alert alert-success\">");
-                        out.println("Client crée.");
-                        out.println("</div>");
-                    }
-                }catch(Exception ex){}
-                out.println("<fieldset><legend>" + cli.getNom() + " " + cli.getPrenom() + "</legend>");
-                out.println(cli.getAdresse() + "<br/>");
-                out.println(cli.getVille());
-                
-                RequestDispatcher dispatcher = request.getRequestDispatcher("allComptes?idCli=" + cli.getIdentifiant());
-                dispatcher.include(request, response);
-                
-                out.println("</fieldset>");
-            }else{
-                out.println("<div class=\"alert\">");
-                out.println("Aucun client n'existe avec cet identifiant.");
-                out.println("</div>");
-            }
-            out.println("<br/><br/>");
-        }catch(Exception ex){
-            out.println(ex.getMessage());
-        } finally {   
-            out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
-            WebUtilities.doFooter(out);
+            response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
+        } finally {            
             out.close();
         }
     }

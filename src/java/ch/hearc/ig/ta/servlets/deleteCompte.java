@@ -2,24 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
-import dao.CompteDao;
+import ch.hearc.ig.ta.dao.ClientDao;
+import ch.hearc.ig.ta.dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import modele.Compte;
+import ch.hearc.ig.ta.modele.Client;
+import ch.hearc.ig.ta.modele.Compte;
 
 /**
  *
  * @author christop.francill
  */
-public class addCompte extends HttpServlet {
+public class deleteCompte extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -36,14 +37,16 @@ public class addCompte extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            Compte newCompt = new Compte();
-            newCompt.setNom(request.getParameter("nom"));
-            newCompt.setSolde(Float.parseFloat(request.getParameter("solde")));
-            newCompt.setTaux(Float.parseFloat(request.getParameter("taux")));
-                        
-            CompteDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
-
-            response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
+            Compte cpt = new Compte();
+            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Compte> cptListe = CompteDao.research(cpt);
+            if(cptListe.size()>0){
+                cpt = cptListe.get(0);
+                CompteDao.delete(cpt);
+                response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + request.getParameter("cliId") + "&del=true");
+            }else{
+                response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + request.getParameter("cliId") + "&del=error1");
+            }
         } finally {            
             out.close();
         }

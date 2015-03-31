@@ -1,4 +1,4 @@
-package utilities;
+package ch.hearc.ig.ta.utilities;
 
 import java.io.IOException;
 import java.io.PrintWriter;

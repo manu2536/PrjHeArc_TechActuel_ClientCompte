@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
+import ch.hearc.ig.ta.dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,14 +12,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import utilities.WebUtilities;
+import ch.hearc.ig.ta.modele.Client;
 
 /**
  *
  * @author christop.francill
  */
-public class displayModifierClient extends HttpServlet {
+public class delete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -39,49 +38,19 @@ public class displayModifierClient extends HttpServlet {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
-            WebUtilities.doHeader(out, "Modifier un client");
-            
-            try{
-                String modParam = request.getParameter("mod");
-                
-                if(modParam.equals("true")){
-                    out.println("<div class=\"alert alert-success\">");
-                    out.println("Client modifié.");
-                    out.println("</div>");
-                }
-            }catch(Exception ex){}
-            
             if(cliListe.size()>0){
                 cli = cliListe.get(0);
-                out.println("<form  id=\"form1\" name=\"form1\" method=\"post\"  action=\"doModifier\">");
-                    out.println("<input type=\"hidden\" name=\"id\" value=\""+ cli.getIdentifiant() +"\"/>");
-                      out.println("<p>");
-                        out.println("<label for=\"nom\">Nom</label>");
-                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\""+ cli.getNom() +"\"/>");
-                      out.println("</p>");
-                      out.println("<p>");
-                        out.println("<label for=\"prenom\">Prénom</label>");
-                        out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\""+ cli.getPrenom() +"\"/>");
-                      out.println("</p>");
-                      out.println("<p>");
-                        out.println("<label for=\"adresse\">Adresse</label>");
-                        out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\""+ cli.getAdresse() +"\"/>");
-                      out.println("</p>");
-                      out.println("<p>");
-                        out.println("<label for=\"ville\">Ville</label>");
-                        out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\""+ cli.getVille() +"\"/>");
-                      out.println("</p>");
-                    //out.println("<input type=\"submit\" id=\"modifier\" value=\"Modifier\"/>");
-                    out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
-                out.println("</form>");
+                if(ClientDao.delete(cli)){
+                    response.sendRedirect(request.getContextPath() + "/index?del=true");
+                }else{
+                    response.sendRedirect(request.getContextPath() + "/index?del=false");
+                }
             }else{
-                out.println("<div class=\"alert alert-warning\">");
-                out.println("Aucun client n'existe avec cet identifiant.");
-                out.println("</div>");
+                response.sendRedirect(request.getContextPath() + "/index?del=error1");
             }
-        } finally {
-            out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
-            WebUtilities.doFooter(out);
+        }catch(Exception ex){
+            response.sendRedirect(request.getContextPath() + "/index?del=error2&text=\""+ ex.getMessage() +"\"");
+        }finally {
             out.close();
         }
     }

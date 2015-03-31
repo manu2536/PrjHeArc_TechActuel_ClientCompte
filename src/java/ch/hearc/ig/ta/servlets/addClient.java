@@ -2,23 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
+import ch.hearc.ig.ta.dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
+import ch.hearc.ig.ta.modele.Client;
 
 /**
  *
  * @author christop.francill
  */
-public class doModifier extends HttpServlet {
+public class addClient extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -35,22 +36,15 @@ public class doModifier extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Client> cliListe = ClientDao.research(cli);
-            if(cliListe.size()>0){
-                cli = cliListe.get(0);
-                cli.setNom(request.getParameter("nom"));
-                cli.setPrenom(request.getParameter("prenom"));
-                cli.setAdresse(request.getParameter("adresse"));
-                cli.setVille(request.getParameter("ville"));
-                ClientDao.update(cli);
-                response.sendRedirect(request.getContextPath() + "/modifier?id="+ cli.getIdentifiant() +"&mod=true");
-            }else{
-                response.sendRedirect(request.getContextPath() + "/index?mod=error1");
-            }
-        }catch(Exception ex){
-            response.sendRedirect(request.getContextPath() + "/index?mod=error2&text=\""+ ex.getMessage() +"\"");
+            Client newCli = new Client();
+            newCli.setNom(request.getParameter("nom"));
+            newCli.setPrenom(request.getParameter("prenom"));
+            newCli.setAdresse(request.getParameter("adresse"));
+            newCli.setVille(request.getParameter("ville"));
+            
+            int identifiant = (int)ClientDao.create(newCli);
+
+            response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + identifiant + "&add=true");
         } finally {            
             out.close();
         }

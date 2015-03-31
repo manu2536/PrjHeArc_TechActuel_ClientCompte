@@ -2,24 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
+import ch.hearc.ig.ta.dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
+import ch.hearc.ig.ta.modele.Client;
+import ch.hearc.ig.ta.utilities.WebUtilities;
 
 /**
  *
  * @author christop.francill
  */
-public class addClient extends HttpServlet {
+public class deleteConfirm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -36,16 +36,25 @@ public class addClient extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            Client newCli = new Client();
-            newCli.setNom(request.getParameter("nom"));
-            newCli.setPrenom(request.getParameter("prenom"));
-            newCli.setAdresse(request.getParameter("adresse"));
-            newCli.setVille(request.getParameter("ville"));
-            
-            int identifiant = (int)ClientDao.create(newCli);
-
-            response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + identifiant + "&add=true");
+            Client cli = new Client();
+            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Client> cliListe = ClientDao.research(cli);
+            WebUtilities.doHeader(out, "Supprimer un client");
+            if(cliListe.size()>0){
+                cli = cliListe.get(0);
+                out.println("<h3>Voulez-vous vraiment supprimer "+ cli.getNom() + " " + cli.getPrenom() +" ?</h3>");
+                out.println("<form action=\"delete\">");
+                    out.println("<input type=\"hidden\" name=\"id\" value=\""+ cli.getIdentifiant() +"\"/>");
+                    out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
+                out.println("</form>");
+                out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
+            }else{
+                out.println("<div class=\"alert alert-warning\">");
+                out.println("Aucun client n'existe avec cet identifiant.");
+                out.println("</div>");
+            }
         } finally {            
+            WebUtilities.doFooter(out);
             out.close();
         }
     }

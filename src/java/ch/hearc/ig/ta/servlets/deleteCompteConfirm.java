@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
+import ch.hearc.ig.ta.dao.ClientDao;
+import ch.hearc.ig.ta.dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,14 +13,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import utilities.WebUtilities;
+import ch.hearc.ig.ta.modele.Client;
+import ch.hearc.ig.ta.modele.Compte;
+import ch.hearc.ig.ta.utilities.WebUtilities;
 
 /**
  *
  * @author christop.francill
  */
-public class deleteConfirm extends HttpServlet {
+public class deleteCompteConfirm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -36,25 +38,26 @@ public class deleteConfirm extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Client> cliListe = ClientDao.research(cli);
+            Compte cpt = new Compte();
+            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Compte> cptListe = CompteDao.research(cpt);
             WebUtilities.doHeader(out, "Supprimer un client");
-            if(cliListe.size()>0){
-                cli = cliListe.get(0);
-                out.println("<h3>Voulez-vous vraiment supprimer "+ cli.getNom() + " " + cli.getPrenom() +" ?</h3>");
-                out.println("<form action=\"delete\">");
-                    out.println("<input type=\"hidden\" name=\"id\" value=\""+ cli.getIdentifiant() +"\"/>");
+            if(cptListe.size()>0){
+                cpt = cptListe.get(0);
+                String owner = CompteDao.researchOwner(cpt.getIdentifiant());
+                out.println("<h3>Voulez-vous vraiment supprimer le compte "+ cpt.getNom() + " de " + owner +" ?</h3>");
+                out.println("<form action=\"deleteCompte\">");
+                    out.println("<input type=\"hidden\" name=\"id\" value=\""+ cpt.getIdentifiant() +"\"/>");
+                    out.println("<input type=\"hidden\" name=\"cliId\" value=\""+ request.getParameter("idCli") +"\"/>");
                     out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
                 out.println("</form>");
-                out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
+                out.println("<a href=\"afficherClient?id=" + request.getParameter("idCli") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
             }else{
                 out.println("<div class=\"alert alert-warning\">");
-                out.println("Aucun client n'existe avec cet identifiant.");
+                out.println("Aucun compte n'existe avec cet identifiant.");
                 out.println("</div>");
             }
         } finally {            
-            WebUtilities.doFooter(out);
             out.close();
         }
     }

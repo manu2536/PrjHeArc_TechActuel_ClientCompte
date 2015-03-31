@@ -4,7 +4,7 @@
  */
 package ch.hearc.ig.ta.services;
 
-import modele.Compte;
+import ch.hearc.ig.ta.modele.Compte;
 
 /**
  *

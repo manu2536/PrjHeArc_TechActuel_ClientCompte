@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
+package ch.hearc.ig.ta.servlets;
 
-import dao.ClientDao;
-import dao.CompteDao;
+import ch.hearc.ig.ta.dao.ClientDao;
+import ch.hearc.ig.ta.dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,9 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import modele.Compte;
-import utilities.WebUtilities;
+import ch.hearc.ig.ta.modele.Client;
+import ch.hearc.ig.ta.modele.Compte;
+import ch.hearc.ig.ta.utilities.WebUtilities;
 
 /**
  *
