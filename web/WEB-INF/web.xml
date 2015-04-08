@@ -52,6 +52,10 @@
         <servlet-name>doModifierCompte</servlet-name>
         <servlet-class>ch.hearc.ig.ta.servlets.doModifierCompte</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BanqueController</servlet-name>
+        <servlet-class>ch.hearc.ig.ta.servlets.BankController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>listAll</servlet-name>
         <url-pattern>/index</url-pattern>
@@ -103,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>doModifierCompte</servlet-name>
         <url-pattern>/doModifierCompte</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BanqueController</servlet-name>
+        <url-pattern>/BanqueController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -4,7 +4,9 @@
  */
 package ch.hearc.ig.ta.services;
 
+import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.business.Compte;
+import ch.hearc.ig.ta.dao.ClientDao;
 import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.dbfactory.OracleConnections;
 import ch.hearc.ig.ta.exceptions.AccountDaoException;
@@ -16,7 +18,9 @@ import ch.hearc.ig.ta.exceptions.RollbackException;
 import ch.hearc.ig.ta.log.ApplicationLogger;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -150,7 +154,28 @@ public class ServicesImpl implements Services {
       }
     }
   }
-
+  
+   @Override
+    public List<Client> searchClient(String recherche) {
+        Connection connection = null;
+      try {
+          connection = initConnection();
+          Client cl = new Client();
+          cl.setNom(recherche);
+          return ClientDao.research(cl);
+      } catch (ConnectionProblemException ex) {
+          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+          return null;
+      } finally {
+            try {
+            // dans tous les cas on ferme la connexion.
+            closeConnection(connection);
+            } catch (ConnectionProblemException ex) {
+                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+            }
+      }
+    }
+          
   /**
    * Méthodes privées pour gérer les connexions
    */
@@ -168,6 +193,8 @@ public class ServicesImpl implements Services {
     }
     return connection;
   }
+
+   
 
   private void commit(Connection connection) throws CommitException {
     try {
@@ -211,4 +238,6 @@ public class ServicesImpl implements Services {
     }
 
   }
+  
+  
 }
