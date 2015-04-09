@@ -162,6 +162,7 @@ public class ServicesImpl implements Services {
           connection = initConnection();
           Client cl = new Client();
           cl.setNom(recherche);
+          cl.setIdentifiant(-1);
           return ClientDao.research(cl);
       } catch (ConnectionProblemException ex) {
           ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
