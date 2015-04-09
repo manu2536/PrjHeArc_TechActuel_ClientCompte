@@ -9,18 +9,26 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
     <body>
         <h1>Hello World!</h1>
+        <div> <!-- DIV Form Search -->
+            <form name="formSearch" method="get" action="BankController">
+                <input type="hidden" name="action" value="listClient"/>
+                <input type="text" name="recherche"/>
+                <button type="submit">Search</button>
+            </form>
+        </div> <!-- DIV Form Search -->
         <div> <!-- MAIN -->
             <table class="table table-hover" style="width: 100%;">
-                <th>
-                    <td> Nom </td>
-                    <td> Adresse </td>
-                    <td> Operation </td>
-                </th>
+                <tr>
+                    <th> Nom </th>
+                    <th> Adresse </th>
+                    <th> Operation </th>
+                </tr>
                 <c:forEach var="customer" items="${ListCustomers}">
                     <tr>
                         <td>${customer.nom} ${customer.prenom}</td>
