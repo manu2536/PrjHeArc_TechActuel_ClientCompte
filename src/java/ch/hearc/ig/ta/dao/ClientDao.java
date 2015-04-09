@@ -100,7 +100,75 @@ public class ClientDao {
         }
     }
     
+    public static ArrayList<Client> researchFullText(String text){
+        ArrayList<Client> listCli = new ArrayList<Client>();
+        boolean and = false;
+        Connection cnx = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String[] motsCle = text.split(" ");
+        StringBuilder sql = new StringBuilder("select numero, nom, prenom, adresse, ville from client");
+        
+        sql.append(" WHERE")
+                .append(whereClause("nom",motsCle))
+                .append(" OR ")
+                .append(whereClause("prenom",motsCle))
+                .append(" OR ")
+                .append(whereClause("adresse",motsCle))
+                .append(" OR ")
+                .append(whereClause("ville",motsCle));
+        
+        try {
+            cnx = OracleConnections.getConnection();
+            stmt = cnx.createStatement();
+
+            rs = stmt.executeQuery(sql.toString());
+
+            while (rs.next()) {
+                Client c = new Client();
+                c.setIdentifiant(rs.getInt("numero"));
+                c.setNom(rs.getString("nom"));
+                c.setPrenom(rs.getString("prenom"));
+                c.setAdresse(rs.getString("adresse"));
+                c.setVille(rs.getString("ville"));
+                c.setListeCompte(CompteDao.research(c.getIdentifiant()));
+                listCli.add(c);
+            }
+            return listCli;
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return null;
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                cnx.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+
+        }
+        
+    }
+    
+    private static StringBuilder whereClause(String col,String[] motsCle){
+        StringBuilder where = new StringBuilder();
+        for(String mot : motsCle){
+            if(where.length()!=0){
+                where.append(" OR");
+            }
+            where.append(" UPPER(")
+               .append(col)
+               .append(") LIKE '%' || UPPER('")
+               .append(mot)
+               .append("')|| '%'");        
+        } 
+        return where;
+    }
+    
+    
     public static ArrayList<Client> research(Client cli){
+               
         ArrayList<Client> listCli = new ArrayList<Client>();
         
         boolean and = false;

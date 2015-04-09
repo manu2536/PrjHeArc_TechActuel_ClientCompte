@@ -26,7 +26,7 @@
                         <td>${customer.nom} ${customer.prenom}</td>
                         <td>${customer.adresse} ${customer.ville}</td>
                         <td>
-                            <a href="afficherClient?id=${customer.id}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
+                            <a href="afficherClient?id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
                         </td>
                     </tr>
                 </c:forEach>

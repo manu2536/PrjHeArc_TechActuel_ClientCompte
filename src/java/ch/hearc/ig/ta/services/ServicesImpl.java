@@ -160,10 +160,7 @@ public class ServicesImpl implements Services {
         Connection connection = null;
       try {
           connection = initConnection();
-          Client cl = new Client();
-          cl.setNom(recherche);
-          cl.setIdentifiant(-1);
-          return ClientDao.research(cl);
+          return ClientDao.researchFullText(recherche);
       } catch (ConnectionProblemException ex) {
           ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
           return null;
