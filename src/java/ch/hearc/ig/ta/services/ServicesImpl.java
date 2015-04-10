@@ -156,7 +156,7 @@ public class ServicesImpl implements Services {
   }
   
    @Override
-    public List<Client> searchClient(String recherche) {
+    public List<Client> searchClientFullText(String recherche) {
         Connection connection = null;
       try {
           connection = initConnection();
@@ -235,6 +235,31 @@ public class ServicesImpl implements Services {
       throw new InsufficientFundException("le solde du compte est insuffisant");
     }
 
+  }
+
+  /**
+   *
+   * @param id
+   * @return Client
+   */
+  public Client searchClientById(String id) {
+        Connection connection = null;
+        try {
+          connection = initConnection();
+          Client cl = new Client();
+          cl.setIdentifiant(Integer.parseInt(id));
+          return ClientDao.research(cl).get(0);
+      } catch (ConnectionProblemException ex) {
+          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+          return null;
+      } finally {
+            try {
+            // dans tous les cas on ferme la connexion.
+            closeConnection(connection);
+            } catch (ConnectionProblemException ex) {
+                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+            }
+      }
   }
   
   

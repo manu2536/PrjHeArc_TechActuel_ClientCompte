@@ -5,6 +5,7 @@
  */
 package ch.hearc.ig.ta.servlets;
 
+import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class BankController extends HttpServlet {
           textRecherche = request.getParameter("recherche");
         }
         System.out.println("Recherche:" + textRecherche);
-        request.setAttribute("ListCustomers", new ServicesImpl().searchClient(textRecherche));
+        request.setAttribute("ListCustomers", new ServicesImpl().searchClientFullText(textRecherche));
         
         //Page cible
         request.getSession().setAttribute("currentPage", "clients");
@@ -83,6 +84,18 @@ public class BankController extends HttpServlet {
         request.getSession().setAttribute("currentPage", "administration");
         request.setAttribute("targetPage", "administration.jsp");
         request.setAttribute("targetPageTitle", "Administration");
+        break;
+        
+      case "afficherClient":
+        if(request.getParameter("id") != null){
+          String id =  request.getParameter("id");
+          Client cli = new ServicesImpl().searchClientById(id);
+          request.setAttribute("Client", cli);
+        }
+        //Page cible
+        request.getSession().setAttribute("currentPage", "clients");
+        request.setAttribute("targetPage", "detailClient.jsp");
+        request.setAttribute("targetPageTitle", "Details client");
         break;
         
       //Erreur 404

@@ -6,7 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<h1>List des clients</h1>
+<h1>Liste des clients</h1>
 
 <div> <!-- DIV Form Search -->
   <form name="formSearch" method="get" action="BankController">
@@ -27,7 +27,7 @@
         <td>${customer.nom} ${customer.prenom}</td>
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
-          <a href="afficherClient?id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
         </td>
       </tr>
     </c:forEach>
