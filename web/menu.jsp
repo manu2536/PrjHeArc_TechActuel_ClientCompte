@@ -12,7 +12,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand navbar-left" href="#">
+      <a class="navbar-brand navbar-left" href="BankController?action=dashboard">
         <img alt="Ma Banque" src="img/logo.png">
       </a>
     </div>
@@ -25,10 +25,10 @@
             currentPage = (String) session.getAttribute("currentPage");
           }
         %>
-        <li class="${currentPage == "accueil" ? 'active' : ''}"><a href="BanqueController?action=dashboard">Accueil</a></li>
-        <li class="${currentPage == "clients" ? 'active' : ''}"><a href="BanqueController?action=listClient">Clients</a></li>
-        <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BanqueController?action=virement">Virement</a></li>
-        <li class="${currentPage == "administration" ? 'active' : ''}"><a href="BanqueController?action=administration">Administration</a></li>
+        <li class="${currentPage == "accueil" ? 'active' : ''}"><a href="BankController?action=dashboard">Accueil</a></li>
+        <li class="${currentPage == "clients" ? 'active' : ''}"><a href="BankController?action=listClient">Clients</a></li>
+        <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BankController?action=virement">Virement</a></li>
+        <li class="${currentPage == "administration" ? 'active' : ''}"><a href="BankController?action=administration">Administration</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
