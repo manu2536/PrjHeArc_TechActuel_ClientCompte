@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
@@ -94,11 +89,18 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPageTitle", "Details client");
         break;
         
-      case "administration":
+      case "depot":
         //Page cible
-        request.getSession().setAttribute("currentPage", "administration");
-        request.setAttribute("targetPage", "administration.jsp");
-        request.setAttribute("targetPageTitle", "Administration");
+        request.getSession().setAttribute("currentPage", "depot");
+        request.setAttribute("targetPage", "depot.jsp");
+        request.setAttribute("targetPageTitle", "Dépôt");
+        break;
+        
+      case "retrait":
+        //Page cible
+        request.getSession().setAttribute("currentPage", "retrait");
+        request.setAttribute("targetPage", "retrait.jsp");
+        request.setAttribute("targetPageTitle", "Retrait");
         break;
         
       case "afficherClient":
