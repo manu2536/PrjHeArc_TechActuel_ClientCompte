@@ -10,7 +10,7 @@
 <div class="container">
   <h1>Page de dépôt</h1>
   <div class="col-md-12">
-    <form class="form-horizontal" method="post" action="BankController">
+    <form class="form-horizontal" method="get" action="BankController">
       <legend>Déposer par ${Client.nom} ${Client.prenom}</legend>
       <input type="hidden" name="action" value="doDepot">
       <input type="hidden" name="ClientId" value="${Client.identifiant}">
@@ -19,7 +19,7 @@
             <div class="col-md-4">
               <select id="selectbasic" name="selectCompte" class="form-control">
                 <c:forEach var="Compte" items="${Client.listeCompte}">
-                  <option value="${Compte.identifiant}"> ${Compte.numero} ${Compte.nom} </option>
+                  <option value="${Compte.identifiant}">${Compte.identifiant} ${Compte.numero} ${Compte.nom} </option>
                 </c:forEach>
               </select>
               </div>

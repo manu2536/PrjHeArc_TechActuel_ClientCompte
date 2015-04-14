@@ -1,11 +1,14 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +31,25 @@ public class BankController extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
+    // Définition de l'URL de destination (Dans certain cas modifer en BankController
+    String URLRedirection = "index.jsp";
     String action = "dashboard";
-    if (request.getParameter("action") != null) {
-      action = request.getParameter("action");
-    }
-
     //Liste contenant des messages d'erreur
     List<AlertMessage> alertMessages = new ArrayList<>();
+    
+    
+    if (request.getAttribute("RedirectionAction") != null){ 
+      // Permet de rediriger la servlet sur elle même
+      //(request.setParameter() --> n'existe pas
+      action = (String) request.getAttribute("RedirectionAction");
+      alertMessages.addAll((List<AlertMessage>) request.getSession().getAttribute("alertMessages"));
+    } else {
+      if (request.getParameter("action") != null) {
+      action = request.getParameter("action");
+      }
+    }
+
+ 
 
     switch (action) {
       case "demo":
@@ -43,7 +58,7 @@ public class BankController extends HttpServlet {
         alertMessages.add(new AlertMessage("info", "Information", "Juste pour info"));
         alertMessages.add(new AlertMessage("warning", "Attention", "Il pourrait y avoir un problème"));
         alertMessages.add(new AlertMessage("danger", "Erreur", "L'opération a échouée"));
-        request.getSession().setAttribute("alertMessages", alertMessages);
+        
 
         //Page cible
         request.getSession().setAttribute("currentPage", "demo"); //Utile uniquement si le lien est également dans le menu afin de le mettre en sélection
@@ -73,6 +88,7 @@ public class BankController extends HttpServlet {
 
         if (request.getSession().getAttribute("selectedClient") == null) {
           alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          
         }
 
         request.setAttribute("ClientVirement", cliVirement);
@@ -101,6 +117,7 @@ public class BankController extends HttpServlet {
 
         if (request.getSession().getAttribute("selectedClient") == null) {
           alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          
         }
         Client cli = (Client) request.getSession().getAttribute("selectedClient");
         int idClie = cli.getIdentifiant();
@@ -126,9 +143,33 @@ public class BankController extends HttpServlet {
         } else {
           // Erreur Redirection page clients avec message d'erreur
           alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          
           request.getSession().setAttribute("currentPage", "clients");
           request.setAttribute("targetPage", "listeClient.jsp");
           request.setAttribute("targetPageTitle", "Clients");
+        }
+        break;
+        
+      case "doDepot":
+        if(request.getAttribute("selectCompte") == null)
+          {
+            // Message d'erreur 
+          }
+        int dIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
+        float dMontant = Float.parseFloat(request.getParameter("montant"));
+        try {
+          new ServicesImpl().verser(dIdCompte, dMontant);
+          // Ce passe bien..
+          // Appelle le controleur pour affcher le client
+          alertMessages.add(new AlertMessage("success", "Succès", "Dépot de "+dMontant+"CHF effectué"));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } catch (MetierException ex) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur Dépot: "+ex));
+          request.setAttribute("RedirectionAction", "depot");
+          URLRedirection = "BankController";
+        } finally {
+          
         }
         break;
 
@@ -146,6 +187,29 @@ public class BankController extends HttpServlet {
           request.getSession().setAttribute("currentPage", "clients");
           request.setAttribute("targetPage", "listeClient.jsp");
           request.setAttribute("targetPageTitle", "Clients");
+        }
+        break;
+        
+      case "doRetrait":
+        if(request.getAttribute("selectCompte") == null)
+          {
+            // Message d'erreur 
+          }
+        int RIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
+        float RMontant = Float.parseFloat(request.getParameter("montant"));
+        try {
+          new ServicesImpl().verser(RIdCompte, RMontant);
+          // Ce passe bien..
+          // Appelle le controleur pour affcher le client
+          alertMessages.add(new AlertMessage("success", "Succès", "Retrait de "+RMontant+"CHF effectué"));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } catch (MetierException ex) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur Retrait: "+ex));
+          request.setAttribute("RedirectionAction", "depot");
+          URLRedirection = "BankController";
+        } finally {
+          
         }
         break;
 
@@ -173,7 +237,7 @@ public class BankController extends HttpServlet {
       //Erreur 404
       default:
         alertMessages.add(new AlertMessage("info", "404", "Page introuvable", "La page demandée est introuvable"));
-        request.getSession().setAttribute("alertMessages", alertMessages);
+        
 
       //Page par défaut
       case "dashboard":
@@ -183,8 +247,10 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPageTitle", "Accueil");
         break;
     }
+    //Affecte les mssg dans tous les cas
+    request.getSession().setAttribute("alertMessages", alertMessages);
     //Redirection
-    request.getRequestDispatcher("index.jsp").forward(request, response);
+    request.getRequestDispatcher(URLRedirection).forward(request, response);
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -229,18 +295,24 @@ public class BankController extends HttpServlet {
   
 private Client getClientbyRequestIDorSession(HttpServletRequest request){
     Client clDepot = null;
+    String IdClient = null;
     if(request.getParameter("id") != null ){
-        clDepot =  new ServicesImpl().searchClientById(request.getParameter("id"));
-        request.getSession().setAttribute("SelectedClient", clDepot);
+        IdClient = request.getParameter("id");
     } else {
         if(request.getSession().getAttribute("SelectedClient") == null ){
             // Pad de client dans la session
-            clDepot = null;
+            IdClient = null;
             
         } else {
             clDepot = (Client) request.getSession().getAttribute("SelectedClient");
+            IdClient = clDepot.getIdentifiant().toString();
         }    
     }
+    if(IdClient!=null){
+      // Rechargement du client (il a pu être modifié par quelqu'un d'autre....
+      clDepot =  new ServicesImpl().searchClientById(IdClient);
+    }
+    request.getSession().setAttribute("SelectedClient", clDepot);
     return clDepot;
 }  
 }

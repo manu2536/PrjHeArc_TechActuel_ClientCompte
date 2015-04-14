@@ -10,14 +10,13 @@
   <div class="col-md-12">
     <form class="form-horizontal" method="post" action="BankController">
       <legend>Déposer par ${Client.nom} ${Client.prenom}</legend>
-      <input type="hidden" name="action" value="doDepot">
-      <input type="hidden" name="ClientId" value="${Client.identifiant}">
+      <input type="hidden" name="action" value="doRetrait">
           <div class="form-group">
             <label class="col-md-2 control-label" for="selectCompte">Compte de retrait</label>
             <div class="col-md-4">
               <select id="selectbasic" name="selectCompte" class="form-control">
                 <c:forEach var="Compte" items="${Client.listeCompte}">
-                  <option value="${Compte.identifiant}"> ${Compte.numero} ${Compte.nom} </option>
+                  <option value="${Compte.identifiant}">${Compte.identifiant} ${Compte.numero} ${Compte.nom} </option>
                 </c:forEach>
               </select>
               </div>
