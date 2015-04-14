@@ -35,26 +35,22 @@ public class GamificationService {
    * @return le niveau du user
    */
   public String getLevel() {
-
     String level = "";
-
     if (score <= 50) {
       level = Level.Novice.name();
     }
-    if (score > 50 && score <= 100) {
+    else if (score > 50 && score <= 100) {
       level = Level.AccountManager.name();
     }
-
-    if (score > 100 && score <= 150) {
+   else if (score > 100 && score <= 150) {
       level = Level.TopAccountManager.name();
     }
-    if (score > 150 && score <= 200) {
+   else if (score > 150 && score <= 200) {
       level = Level.SuperAccountManager.name();
     }
-    if (score > 200) {
+   else  if (score > 200) {
       level = Level.RampageAccountManager.name();
     }
-
     return level;
   }
 
