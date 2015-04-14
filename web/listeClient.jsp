@@ -8,13 +8,7 @@
 
 <h1>Liste des clients</h1>
 
-<div> <!-- DIV Form Search -->
-  <form name="formSearch" method="get" action="BankController">
-    <input type="hidden" name="action" value="listClient"/>
-    <input type="text" name="recherche"/>
-    <button type="submit">Search</button>
-  </form>
-</div> <!-- DIV Form Search -->
+<%@include file="rechercheClient.jsp"%> 
 <div> <!-- MAIN -->
   <table class="table table-hover" style="width: 100%;">
     <tr>
@@ -28,6 +22,9 @@
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
           <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Transfert</a>
         </td>
       </tr>
     </c:forEach>

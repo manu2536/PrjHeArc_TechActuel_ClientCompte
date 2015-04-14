@@ -28,7 +28,8 @@
         <li class="${currentPage == "accueil" ? 'active' : ''}"><a href="BankController?action=dashboard">Accueil</a></li>
         <li class="${currentPage == "clients" ? 'active' : ''}"><a href="BankController?action=listClient">Clients</a></li>
         <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BankController?action=virement">Virement</a></li>
-        <li class="${currentPage == "administration" ? 'active' : ''}"><a href="BankController?action=administration">Administration</a></li>
+        <li class="${currentPage == "depot" ? 'active' : ''}"><a href="BankController?action=depot">Dépôt</a></li>
+        <li class="${currentPage == "retrait" ? 'active' : ''}"><a href="BankController?action=retrait">Retrait</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
