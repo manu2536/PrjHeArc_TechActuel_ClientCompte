@@ -204,6 +204,16 @@ public class ServicesImpl {
 
     return identifiant;
   }
+  
+  
+  public void addCompte(String nom, String solde, String taux, int idClient){
+    Compte c = new Compte();
+    c.setNom(nom);
+    c.setSolde(new Float(solde));
+    c.setTaux(new Float(taux));
+    
+    int idCompte = (int)  CompteDao.create(c, idClient);
+  }
 
   /**
    * Méthodes privées pour gérer les connexions

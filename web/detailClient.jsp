@@ -32,7 +32,8 @@
           </td>
         </tr>
       </c:forEach>
-    </table>  
+    </table>
+      <%@include file="ajouterCompte.jsp"%>
   </div>
 </div>
 

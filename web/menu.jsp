@@ -35,7 +35,7 @@
           <div class="input-group">
             <input type="text" name="recherche" class="form-control" placeholder="Rechercher un client..."/>
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+              <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
             </span>
           </div>
         </form>
