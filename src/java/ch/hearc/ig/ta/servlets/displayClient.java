@@ -38,7 +38,7 @@ public class displayClient extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
-        WebUtilities.doHeader(out, "Afficher un client");
+        WebUtilities.doHeader(out, "Afficher un client Original");
         
         try {
             Client cli = new Client();

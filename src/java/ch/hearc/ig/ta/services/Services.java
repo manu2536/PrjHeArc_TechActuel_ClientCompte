@@ -20,6 +20,7 @@ public interface Services {
   
   public void retirer(Compte compteDebit, float montant);
   
-  public List<Client> searchClient(String recherche);
+  public List<Client> searchClientFullText(String recherche);
+  
   
 }
