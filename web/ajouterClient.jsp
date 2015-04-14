@@ -1,15 +1,15 @@
 <%-- 
     Document   : ajouterClient
-    Created on : 10 déc. 2012, 11:25:40
+    Created on : 10 dï¿½c. 2012, 11:25:40
     Author     : christop.francill
+--%>
 
-
-<%@page import="utilities.WebUtilities"%>
+<%@page import="ch.hearc.ig.ta.utilities.WebUtilities"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<%
-    WebUtilities.doHeader(out, "Ajouter un client");
-%>
+
+<!--
+
         
         <form id="form1" name="form1" method="post" action="addClient">
             <p>
@@ -17,7 +17,7 @@
               <input type="text" name="nom" id="nom" />
             </p>
             <p>
-              <label for="prenom">Prénom</label>
+              <label for="prenom">Prï¿½nom</label>
               <input type="text" name="prenom" id="prenom" />
             </p>
             <p>
@@ -31,37 +31,32 @@
             <p>
               <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
               <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-              <a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a>
+              <a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour ï¿½ la liste</a>
             </p>
           </form>
-<%
-    WebUtilities.doFooter(out);
-%>
---%>
-<table>
-  <tr>
-    <td>
-      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="headingOne">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Ajouter un client
-              </a>
-            </h4>
-          </div>
-          <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
-              <form id="form1" name="form1" method="post" action="BankController">
+-->
+
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Ajouter un client
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <form id="form1" name="form1" method="post" action="BankController">
                 <input type="hidden" name="action" value="addClient">
-                      
+
                 <table>
                   <tr>
                     <td width="100px"><label for="nom">Nom</label></td>
                     <td><input type="text" name="nom" id="nom"/></td>
                   </tr>
                   <tr>
-                    <td><label for="prenom">Prénom</label></td>
+                    <td><label for="prenom">PrÃ©nom</label></td>
                     <td><input type="text" name="prenom" id="prenom" /></td>
                   </tr>
                   <tr>
@@ -75,14 +70,8 @@
                 </table>
                 <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
                 <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-                <!--<a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a>-->
-                </p>
+                <!--<a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour ï¿½ la liste</a>-->
               </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </td>
-    <td></td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>

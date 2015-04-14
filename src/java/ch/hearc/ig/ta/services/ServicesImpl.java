@@ -20,7 +20,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -203,6 +202,16 @@ public class ServicesImpl {
     int identifiant = (int) ClientDao.create(newCli);
 
     return identifiant;
+  }
+  
+  
+  public void addCompte(String nom, String solde, String taux, int idClient){
+    Compte c = new Compte();
+    c.setNom(nom);
+    c.setSolde(new Float(solde));
+    c.setTaux(new Float(taux));
+    
+    int idCompte = (int)  CompteDao.create(c, idClient);
   }
 
   /**
