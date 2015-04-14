@@ -36,9 +36,9 @@ public class ServicesImpl implements Services {
    * @param montant
    */
   public void transfert(Compte compteDebit, Compte compteCredit, float montant) {
-      Connection connection = null;
-      try{
-     //vérifier la validité du montant
+    Connection connection = null;
+    try {
+      //vérifier la validité du montant
       checkAmountValidity(montant);
       //on vérifie si le compte à créditer est solvable
       checkSolvency(compteDebit, montant);
@@ -46,12 +46,12 @@ public class ServicesImpl implements Services {
       compteDebit.setSolde(compteDebit.getSolde() - montant);
       //on crédite le compte à créditer
       compteCredit.setSolde(compteCredit.getSolde() + montant);
-     //on update les comptes en DB
+      //on update les comptes en DB
       connection = initConnection();
       CompteDao.update(compteDebit, connection);
       CompteDao.update(compteCredit, connection);
       commit(connection);
-       } catch (InvalidMontantException | InsufficientFundException ex) {
+    } catch (InvalidMontantException | InsufficientFundException ex) {
       //ce sont des exceptions métiers. A voir comment on les remonte.
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
@@ -70,7 +70,7 @@ public class ServicesImpl implements Services {
         ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
-   
+
   }
 
   /**
@@ -93,7 +93,7 @@ public class ServicesImpl implements Services {
       CompteDao.update(compteCredit, connection);
       commit(connection);
     } catch (InvalidMontantException ex) {
-        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -107,7 +107,7 @@ public class ServicesImpl implements Services {
         // dans tous les cas on ferme la connexion.
         closeConnection(connection);
       } catch (ConnectionProblemException ex) {
-       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
   }
@@ -136,7 +136,7 @@ public class ServicesImpl implements Services {
       commit(connection);
     } catch (InvalidMontantException | InsufficientFundException ex) {
       //ce sont des exceptions métiers. A voir comment on les remonte.
-     ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -154,26 +154,38 @@ public class ServicesImpl implements Services {
       }
     }
   }
-  
-   @Override
-    public List<Client> searchClient(String recherche) {
-        Connection connection = null;
+
+  @Override
+  public List<Client> searchClient(String recherche) {
+    Connection connection = null;
+    try {
+      connection = initConnection();
+      return ClientDao.researchFullText(recherche);
+    } catch (ConnectionProblemException ex) {
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
       try {
-          connection = initConnection();
-          return ClientDao.researchFullText(recherche);
+        // dans tous les cas on ferme la connexion.
+        closeConnection(connection);
       } catch (ConnectionProblemException ex) {
-          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
-          return null;
-      } finally {
-            try {
-            // dans tous les cas on ferme la connexion.
-            closeConnection(connection);
-            } catch (ConnectionProblemException ex) {
-                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
-            }
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
-          
+  }
+
+  public void addClient(String nom, String prenom, String adresse, String ville) {
+
+    Client newCli = new Client();
+    newCli.setNom(nom);
+    newCli.setPrenom();
+    newCli.setAdresse(request.getParameter("adresse"));
+    newCli.setVille(request.getParameter("ville"));
+
+    int identifiant = (int) ClientDao.create(newCli);
+
+  }
+
   /**
    * Méthodes privées pour gérer les connexions
    */
@@ -191,8 +203,6 @@ public class ServicesImpl implements Services {
     }
     return connection;
   }
-
-   
 
   private void commit(Connection connection) throws CommitException {
     try {
@@ -236,6 +246,5 @@ public class ServicesImpl implements Services {
     }
 
   }
-  
-  
+
 }

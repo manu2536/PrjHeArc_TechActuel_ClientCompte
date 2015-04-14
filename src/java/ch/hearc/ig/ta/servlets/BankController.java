@@ -78,6 +78,18 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPageTitle", "Virement");
         break;
         
+      case "addClient":
+        new ServicesImpl().addClient(request.getParameter(nom), request.getParameter(prenom),request.getParameter(adresse),request.getParameter(ville)));
+        
+        
+        
+        
+        //Page cible
+        request.getSession().setAttribute("currentPage", "virement");
+        request.setAttribute("targetPage", "virement.jsp");
+        request.setAttribute("targetPageTitle", "Virement");
+        break;
+        
       case "administration":
         //Page cible
         request.getSession().setAttribute("currentPage", "administration");
