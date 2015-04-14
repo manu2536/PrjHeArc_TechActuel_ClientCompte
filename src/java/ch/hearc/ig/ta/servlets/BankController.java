@@ -90,6 +90,16 @@ public class BankController extends HttpServlet {
         break;
         
       case "depot":
+        Client clDepot = null;
+        if(request.getParameter("id") != null ){
+            clDepot =  new ServicesImpl().searchClientById(request.getParameter("id"));
+            request.getSession().setAttribute("SelectedClient", clDepot);
+        } else {
+            if(request.getSession().getAttribute("SelectedClient") == null ){
+               //Creatio errreur
+               //recupere page d'appel'
+            }          
+        }
         //Page cible
         request.getSession().setAttribute("currentPage", "depot");
         request.setAttribute("targetPage", "depot.jsp");
