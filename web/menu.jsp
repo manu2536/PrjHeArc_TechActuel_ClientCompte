@@ -30,6 +30,15 @@
         <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BankController?action=virement">Virement</a></li>
         <li class="${currentPage == "depot" ? 'active' : ''}"><a href="BankController?action=depot">Dépôt</a></li>
         <li class="${currentPage == "retrait" ? 'active' : ''}"><a href="BankController?action=retrait">Retrait</a></li>
+        <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController">
+          <input type="hidden" name="action" value="listClient"/>
+          <div class="input-group">
+            <input type="text" name="recherche" class="form-control" placeholder="Rechercher un client..."/>
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </div>
+        </form>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
