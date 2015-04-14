@@ -8,7 +8,6 @@
 
 <h1>Liste des clients</h1>
 
-<%@include file="rechercheClient.jsp"%> 
 <div> <!-- MAIN -->
   <table class="table table-hover" style="width: 100%;">
     <tr>
