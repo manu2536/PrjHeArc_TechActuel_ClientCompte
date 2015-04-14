@@ -10,14 +10,16 @@
 <div class="container">
   <h1>Page de dépôt</h1>
   <div class="col-md-12">
-    <form class="form-horizontal" action="post" >
-
+    <form class="form-horizontal" method="post" action="BankController">
+      <legend>Déposer par ${Client.nom} ${Client.prenom}</legend>
+      <input type="hidden" name="action" value="doDepot">
+      <input type="hidden" name="ClientId" value="${Client.identifiant}">
           <div class="form-group">
             <label class="col-md-2 control-label" for="selectCompte">Compte de dépôt</label>
             <div class="col-md-4">
               <select id="selectbasic" name="selectCompte" class="form-control">
-                <c:forEach var="Compte" items="${SelectedClient.listeCompte}">
-                  <option value="${Compte.identifiant}"> ${Compte.numro} ${Compte.nom} </option>
+                <c:forEach var="Compte" items="${Client.listeCompte}">
+                  <option value="${Compte.identifiant}"> ${Compte.numero} ${Compte.nom} </option>
                 </c:forEach>
               </select>
               </div>
@@ -28,6 +30,14 @@
             <input id="textinput" name="montant" type="text" placeholder="1000" class="form-control input-md"> 
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label" for="SEND">DEPOSER</label>
+            <div class="col-md-4">
+              <button id="singlebutton" name="SEND" class="btn btn-primary">DEPÔT</button>
+            </div>
+          </div>
+        
+      <div>
 
     </form>
   </div>
