@@ -116,39 +116,54 @@ public class BankController extends HttpServlet {
         break;
 
       case "depot":
-        Client clDepot = null;
-        if(request.getParameter("id") != null ){
-            clDepot =  new ServicesImpl().searchClientById(request.getParameter("id"));
-            request.getSession().setAttribute("SelectedClient", clDepot);
+        Client clDepot = getClientbyRequestIDorSession(request);
+        if(clDepot !=null){
+          request.setAttribute("Client", clDepot);
+          //Page cible
+          request.getSession().setAttribute("currentPage", "depot");
+          request.setAttribute("targetPage", "depot.jsp");
+          request.setAttribute("targetPageTitle", "Dépôt");
         } else {
-            if(request.getSession().getAttribute("SelectedClient") == null ){
-               //Creatio errreur
-               //recupere page d'appel'
-            }          
+          // Erreur Redirection page clients avec message d'erreur
+          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "listeClient.jsp");
+          request.setAttribute("targetPageTitle", "Clients");
         }
-        //Page cible
-        request.getSession().setAttribute("currentPage", "depot");
-        request.setAttribute("targetPage", "depot.jsp");
-        request.setAttribute("targetPageTitle", "Dépôt");
         break;
 
       case "retrait":
-        //Page cible
-        request.getSession().setAttribute("currentPage", "retrait");
-        request.setAttribute("targetPage", "retrait.jsp");
-        request.setAttribute("targetPageTitle", "Retrait");
+        Client clRetrait = getClientbyRequestIDorSession(request);
+        if(clRetrait !=null){
+          request.setAttribute("Client", clRetrait);
+          //Page cible
+          request.getSession().setAttribute("currentPage", "retrait");
+          request.setAttribute("targetPage", "retrait.jsp");
+          request.setAttribute("targetPageTitle", "Retrait");
+        } else {
+          // Erreur Redirection page clients avec message d'erreur
+          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "listeClient.jsp");
+          request.setAttribute("targetPageTitle", "Clients");
+        }
         break;
 
       case "afficherClient":
-        if (request.getParameter("id") != null) {
-          String id = request.getParameter("id");
-          Client cliAfficherClient = new ServicesImpl().searchClientById(id);
+        Client cliAfficherClient = getClientbyRequestIDorSession(request);
+        if(cliAfficherClient !=null){ 
           request.setAttribute("Client", cliAfficherClient);
+          //Page cible
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "detailClient.jsp");
+          request.setAttribute("targetPageTitle", "Details client");
+        } else {           
+          // Erreur Redirection page clients avec message d'erreur
+          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "listeClient.jsp");
+          request.setAttribute("targetPageTitle", "Clients");
         }
-        //Page cible
-        request.getSession().setAttribute("currentPage", "clients");
-        request.setAttribute("targetPage", "detailClient.jsp");
-        request.setAttribute("targetPageTitle", "Details client");
         break;
 
       case "transfertCAC":
@@ -211,4 +226,21 @@ public class BankController extends HttpServlet {
     return "Short description";
   }// </editor-fold>
 
+  
+private Client getClientbyRequestIDorSession(HttpServletRequest request){
+    Client clDepot = null;
+    if(request.getParameter("id") != null ){
+        clDepot =  new ServicesImpl().searchClientById(request.getParameter("id"));
+        request.getSession().setAttribute("SelectedClient", clDepot);
+    } else {
+        if(request.getSession().getAttribute("SelectedClient") == null ){
+            // Pad de client dans la session
+            clDepot = null;
+            
+        } else {
+            clDepot = (Client) request.getSession().getAttribute("SelectedClient");
+        }    
+    }
+    return clDepot;
+}  
 }
