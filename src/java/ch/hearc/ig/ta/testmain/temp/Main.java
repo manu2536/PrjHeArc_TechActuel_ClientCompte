@@ -6,6 +6,7 @@
 
 package ch.hearc.ig.ta.testmain.temp;
 
+import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.utilities.FakeData;
 
@@ -34,6 +35,15 @@ public class Main {
   //si un nouveau virement venait pointer le bout de son nez, il faudrait l'ajouter comme cela à la liste
    Virement virement = new Virement(); 
    fakeData.getVirementList().add(virement);
+   
+   
+   //liste des clients avec leur date d'inscription
+   for(Client client : fakeData.getClientsListWithInscriptionDate()){ 
+     System.out.println("\n");
+     System.out.println("nom du client : " + client.getNom());
+     System.out.println("date d'inscription : " + client.getDateInscription());
+   }
+   
     
   }
   

@@ -2,6 +2,7 @@ package ch.hearc.ig.ta.business;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Client implements Serializable{
     private Integer identifiant;
@@ -9,6 +10,8 @@ public class Client implements Serializable{
     private String  prenom;
     private String  adresse;
     private String  ville;
+    //JWE : ajouté uniquement pour alimentationFakeData
+    private Date dateInscription;
     private ArrayList<Compte> listeCompte;
     
     public Client(Integer _identifiant,String _nom,String _prenom,String _adresse,String _ville,ArrayList<Compte> _listeCompte){
@@ -99,6 +102,14 @@ public class Client implements Serializable{
     public void setListeCompte(ArrayList<Compte> listeCompte) {
         this.listeCompte = listeCompte;
     }
+    
+     public Date getDateInscription() {
+    return dateInscription;
+  }
+
+  public void setDateInscription(Date dateInscription) {
+    this.dateInscription = dateInscription;
+  }
     
     public void addCompte(Compte cpt){
         this.listeCompte.add(cpt);

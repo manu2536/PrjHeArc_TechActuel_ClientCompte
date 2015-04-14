@@ -12,7 +12,7 @@ import java.util.Date;
  * @author jeremy.wermeill
  */
 /**
- * Cette méthode permet de représenter un virement
+ * Cette classe permet de représenter un virement
  *
  * @author jeremy.wermeill
  */

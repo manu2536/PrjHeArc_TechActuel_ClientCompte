@@ -4,12 +4,14 @@ import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.dao.ClientDao;
 import ch.hearc.ig.ta.log.ApplicationLogger;
+import com.sun.jmx.remote.internal.ArrayQueue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,10 +24,17 @@ import java.util.logging.Level;
 public class FakeData {
   
   private List<Virement> virementList;
-  
+  private List<Client> clientListWithInscriptionDate;
+  private List<Client> clientsList;
+
   public FakeData() {
-    //à l'appel de FakeData, on 'init' la liste des virements
+    
+    //on initialise la liste des clients (on ne charge ainsi qu'une fois en DB)
+     initClients();
+     //on initialise la liste des virements
      initAllVirements();
+     //on modifie la liste des clients et on ajoute à chacun des clients une date fictive d'inscription
+     initDateInscriptionIntoClients();
   }
   
   /**
@@ -36,13 +45,11 @@ public class FakeData {
    *
    */
   public void initAllVirements() { 
- //on reprend tous les clients 
- List<Client> clients = ClientDao.researchAll();
  List<String> accountNumber = generateNumeroCpt();
  List<Float> amountsList = generateTenAmounts();
  List<Date> dateList = null;
     try {
-      dateList = generateDateVirement();
+      dateList = generateDate();
     } catch (ParseException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     }
@@ -50,10 +57,10 @@ public class FakeData {
 // on parcourt la liste des clients (on prend les 10 premiers)   
  for(int i = 0; i < 10; i++){
     Virement virement = new Virement();
-    virement.setNomClientDebit(clients.get(i).getNom());
+    virement.setNomClientDebit(clientsList.get(i).getNom());
     virement.setNoCptDebit(accountNumber.get(i));
     //pour le credit on prend toujours le client +10
-    virement.setNomClientCredit(clients.get(i+10).getNom());
+    virement.setNomClientCredit(clientsList.get(i+10).getNom());
     virement.setNoCptCredit(accountNumber.get(i+10));
     virement.setMontant(amountsList.get(i));
     virement.setDateVirement(dateList.get(i));
@@ -62,6 +69,32 @@ public class FakeData {
     }
   }
   
+  /**
+   * Rempli la liste des clients 
+   */
+  public void initClients() {
+    clientsList = ClientDao.researchAll();
+  }
+  /**
+   * prépare une liste de 20 clients avec la date d'inscription
+   * Cette méthode remplie la liste des clients ayant une date d'inscription
+   */
+  public void initDateInscriptionIntoClients(){
+      List<Date> dateList = null;
+      clientListWithInscriptionDate = new ArrayList<>();
+    try {
+      //on récupère la liste de date
+      dateList = generateDate();
+    } catch (ParseException ex) {
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+    }
+  //on parcourt tous les clients et on leur ajoute une date d'inscription
+    for(int i = 0; i < 20; i ++){
+        Client client = clientsList.get(i);
+        client.setDateInscription(dateList.get(i));
+        clientListWithInscriptionDate.add(client);   
+    }
+  }
   
   /**
    * Permet de construire une liste de montants simulés
@@ -120,34 +153,64 @@ public class FakeData {
   
      /**
    * Permet de construire une liste de dates
-   * @return une liste de type List contenant des dates de virements simulées
+   * @return une liste de type List contenant des dates simulées
    */
-  private List<Date> generateDateVirement() throws ParseException{
+  private List<Date> generateDate() throws ParseException{
     
-    List<Date> dateVirementList = new ArrayList<>();
+    List<Date> dateList = new ArrayList<>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
     
-    dateVirementList.add(sdf.parse("21.12.2014"));
-    dateVirementList.add(sdf.parse("10.12.2014"));
-    dateVirementList.add(sdf.parse("09.10.2014"));
-    dateVirementList.add(sdf.parse("05.11.2013"));
-    dateVirementList.add(sdf.parse("06.05.2013"));
-    dateVirementList.add(sdf.parse("07.04.2013"));
-    dateVirementList.add(sdf.parse("20.12.2012"));
-    dateVirementList.add(sdf.parse("15.08.2012"));
-    dateVirementList.add(sdf.parse("09.06.2012"));
-    dateVirementList.add(sdf.parse("11.07.2012"));
+    dateList.add(sdf.parse("05.04.2015"));
+    dateList.add(sdf.parse("30.03.2015"));
+    dateList.add(sdf.parse("15.03.2015"));
+    dateList.add(sdf.parse("12.03.2015"));
+    dateList.add(sdf.parse("15.02.2015"));
+    dateList.add(sdf.parse("09.02.2015"));
+    dateList.add(sdf.parse("25.12.2014"));
+    dateList.add(sdf.parse("23.12.2014"));
+    dateList.add(sdf.parse("22.12.2014"));
+    dateList.add(sdf.parse("21.12.2014"));
+    dateList.add(sdf.parse("21.12.2014"));
+    dateList.add(sdf.parse("09.11.2014"));
+    dateList.add(sdf.parse("09.10.2014"));
+    dateList.add(sdf.parse("15.09.2014"));
+    dateList.add(sdf.parse("15.03.2014"));
+    dateList.add(sdf.parse("07.04.2013"));
+    dateList.add(sdf.parse("20.12.2012"));
+    dateList.add(sdf.parse("15.08.2012"));
+    dateList.add(sdf.parse("09.08.2012"));
+    dateList.add(sdf.parse("14.07.2012"));
+    dateList.add(sdf.parse("15.06.2012"));
+    dateList.add(sdf.parse("14.06.2012"));
+    dateList.add(sdf.parse("13.05.2012"));
+    dateList.add(sdf.parse("05.11.2011"));
+    dateList.add(sdf.parse("06.06.2011"));
+    dateList.add(sdf.parse("04.04.2011"));
+    dateList.add(sdf.parse("03.03.2011"));
+    dateList.add(sdf.parse("01.01.2011"));
+    dateList.add(sdf.parse("12.12.2010"));
+    dateList.add(sdf.parse("11.11.2010"));
   
     
-    return dateVirementList;
+    return dateList;
   }
   /**
-   * Retourne la liste sous forme d'arraylist, plus pratique pour la suite pour faire des addfirsts
+   * Retourne la liste des virements avec une sourcouche de données fictives
    * @return 
    */
   public List<Virement> getVirementList() {
     return virementList;
   }
+  
+  
+  /**
+   * Retourne la liste des clients avec des dates d'inscriptions fictives
+   * @return 
+   */
+    public List<Client> getClientsListWithInscriptionDate() {
+    return clientListWithInscriptionDate;
+  }
+
 
   
 }
