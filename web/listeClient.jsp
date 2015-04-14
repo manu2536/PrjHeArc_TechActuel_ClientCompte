@@ -22,9 +22,9 @@
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
           <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
-          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
-          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
-          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Transfert</a>
+          <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
+          <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
+          <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Transfert</a>
         </td>
       </tr>
     </c:forEach>
