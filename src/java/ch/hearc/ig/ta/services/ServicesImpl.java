@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author jeremy.wermeill
  */
-public class ServicesImpl implements Services {
+public class ServicesImpl {
 
   /**
    * Cette méthode permet d'effectuer un transfert d'un compte à un autre.
@@ -80,7 +80,7 @@ public class ServicesImpl implements Services {
    * @param compteCredit
    * @param montant
    */
-  @Override
+ 
   public void verser(Compte compteCredit, float montant) {
     Connection connection = null;
     try {
@@ -119,7 +119,6 @@ public class ServicesImpl implements Services {
    * @param compteDebit
    * @param montant
    */
-  @Override
   public void retirer(Compte compteDebit, float montant) {
     Connection connection = null;
     try {
@@ -155,7 +154,26 @@ public class ServicesImpl implements Services {
     }
   }
 
-  @Override
+  
+      public List<Client> searchClientFullText(String recherche) {
+        Connection connection = null;
+      try {
+          connection = initConnection();
+          return ClientDao.researchFullText(recherche);
+      } catch (ConnectionProblemException ex) {
+          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+          return null;
+      } finally {
+            try {
+            // dans tous les cas on ferme la connexion.
+            closeConnection(connection);
+            } catch (ConnectionProblemException ex) {
+                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+            }
+      }
+    }
+
+  
   public List<Client> searchClient(String recherche) {
     Connection connection = null;
     try {
@@ -174,16 +192,17 @@ public class ServicesImpl implements Services {
     }
   }
 
-  public void addClient(String nom, String prenom, String adresse, String ville) {
+  public int addClient(String nom, String prenom, String adresse, String ville) {
 
     Client newCli = new Client();
     newCli.setNom(nom);
-    newCli.setPrenom();
-    newCli.setAdresse(request.getParameter("adresse"));
-    newCli.setVille(request.getParameter("ville"));
+    newCli.setPrenom(prenom);
+    newCli.setAdresse(adresse);
+    newCli.setVille(ville);
 
     int identifiant = (int) ClientDao.create(newCli);
 
+    return identifiant;
   }
 
   /**
@@ -233,6 +252,41 @@ public class ServicesImpl implements Services {
       throw new InvalidMontantException("le montant ne peut pas être inférieur ou égal à zéro");
     }
   }
+  
+  
+  
+  /**
+   *
+   * @param id
+   * @return Client
+   */
+  public Client searchClientById(String id) {
+        Connection connection = null;
+        try {
+          connection = initConnection();
+          Client cl = new Client();
+          cl.setIdentifiant(Integer.parseInt(id));
+          return ClientDao.research(cl).get(0);
+      } catch (ConnectionProblemException ex) {
+          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+          return null;
+      } finally {
+            try {
+            // dans tous les cas on ferme la connexion.
+            closeConnection(connection);
+            } catch (ConnectionProblemException ex) {
+                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+            }
+      }
+  }
+  
+  
+  
+  
+  
+  
+  
+
 
   /**
    * Cette méthode contrôle si le compte est solvable
