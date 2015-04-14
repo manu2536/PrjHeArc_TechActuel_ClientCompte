@@ -68,6 +68,14 @@ public class BankController extends HttpServlet {
         break;
 
       case "virement":
+
+        Client cliVirement = (Client) request.getSession().getAttribute("selectedClient");
+
+        if (request.getSession().getAttribute("selectedClient") == null) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+        }
+
+        request.setAttribute("ClientVirement", cliVirement);
         //Page cible
         request.getSession().setAttribute("currentPage", "virement");
         request.setAttribute("targetPage", "virement.jsp");
@@ -88,7 +96,7 @@ public class BankController extends HttpServlet {
         break;
 
       case "addCompte":
-        
+
         ServicesImpl siAddCompte = new ServicesImpl();
 
         if (request.getSession().getAttribute("selectedClient") == null) {
@@ -131,6 +139,10 @@ public class BankController extends HttpServlet {
         request.getSession().setAttribute("currentPage", "clients");
         request.setAttribute("targetPage", "detailClient.jsp");
         request.setAttribute("targetPageTitle", "Details client");
+        break;
+
+      case "transfertCAC":
+
         break;
 
       //Erreur 404
