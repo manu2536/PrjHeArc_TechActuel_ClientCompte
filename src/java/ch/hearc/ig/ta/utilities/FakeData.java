@@ -141,7 +141,10 @@ public class FakeData {
     
     return dateVirementList;
   }
-  
+  /**
+   * Retourne la liste sous forme d'arraylist, plus pratique pour la suite pour faire des addfirsts
+   * @return 
+   */
   public List<Virement> getVirementList() {
     return virementList;
   }

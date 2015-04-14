@@ -19,7 +19,7 @@ public class Main {
   public static void main(String[] args){
     
     FakeData fakeData = new FakeData();
-    
+    //parcourir la liste et afficher...
     for(Virement virement : fakeData.getVirementList()){
       System.out.println("\n");
     
@@ -31,6 +31,10 @@ public class Main {
        System.out.println("date du transfert : " + virement.getDateVirement());
     }
   
+  //si un nouveau virement venait pointer le bout de son nez, il faudrait l'ajouter comme cela à la liste
+   Virement virement = new Virement(); 
+   fakeData.getVirementList().add(virement);
+    
   }
   
 }
