@@ -34,5 +34,6 @@
       </c:forEach>
     </table>  
   </div>
+    <%@include file="ajouterComtpe.jsp"%>
 </div>
 
