@@ -32,8 +32,8 @@
           </td>
         </tr>
       </c:forEach>
-    </table>  
+    </table>
+      <%@include file="ajouterCompte.jsp"%>
   </div>
-    <%@include file="ajouterComtpe.jsp"%>
 </div>
 

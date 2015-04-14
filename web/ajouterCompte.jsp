@@ -4,15 +4,12 @@
     Author     : christop.francill
 --%>
 
-<%@page import="utilities.WebUtilities"%>
+<%@page import="ch.hearc.ig.ta.utilities.WebUtilities"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<%
-  WebUtilities.doHeader(out, "Ajouter un compte");
 
-  int id = Integer.parseInt(request.getParameter("idCli"));
-%>
 
+<%--
 <form id="form1" name="form1" method="post" action="addCompte">
   <input type="hidden" name="clientId" id="clientId" value="<%= id%>"/>
   <p>
@@ -34,12 +31,7 @@
   </p>
 </form>
 
-<%
-  WebUtilities.doFooter(out);
-%>
-
-
-
+--%>
 
 <table>
   <tr>
@@ -78,7 +70,7 @@
                 <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
                 <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
                 <!--<a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a>-->
-                </p>
+              
               </form>
             </div>
           </div>
@@ -88,3 +80,6 @@
     <td></td>
   </tr>
 </table>
+
+
+
