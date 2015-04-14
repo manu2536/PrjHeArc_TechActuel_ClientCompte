@@ -5,7 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<h1>Bienvenue sur la page de virement</h1>
+<h1>Page de virement</h1>
 
 
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
