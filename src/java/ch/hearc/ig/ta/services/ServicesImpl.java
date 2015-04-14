@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author jeremy.wermeill
  */
-public class ServicesImpl implements Services {
+public class ServicesImpl {
 
   /**
    * Cette méthode permet d'effectuer un transfert d'un compte à un autre.
@@ -36,9 +36,9 @@ public class ServicesImpl implements Services {
    * @param montant
    */
   public void transfert(Compte compteDebit, Compte compteCredit, float montant) {
-      Connection connection = null;
-      try{
-     //vérifier la validité du montant
+    Connection connection = null;
+    try {
+      //vérifier la validité du montant
       checkAmountValidity(montant);
       //on vérifie si le compte à créditer est solvable
       checkSolvency(compteDebit, montant);
@@ -46,12 +46,12 @@ public class ServicesImpl implements Services {
       compteDebit.setSolde(compteDebit.getSolde() - montant);
       //on crédite le compte à créditer
       compteCredit.setSolde(compteCredit.getSolde() + montant);
-     //on update les comptes en DB
+      //on update les comptes en DB
       connection = initConnection();
       CompteDao.update(compteDebit, connection);
       CompteDao.update(compteCredit, connection);
       commit(connection);
-       } catch (InvalidMontantException | InsufficientFundException ex) {
+    } catch (InvalidMontantException | InsufficientFundException ex) {
       //ce sont des exceptions métiers. A voir comment on les remonte.
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
@@ -70,7 +70,7 @@ public class ServicesImpl implements Services {
         ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
-   
+
   }
 
   /**
@@ -80,7 +80,7 @@ public class ServicesImpl implements Services {
    * @param compteCredit
    * @param montant
    */
-  @Override
+ 
   public void verser(Compte compteCredit, float montant) {
     Connection connection = null;
     try {
@@ -93,7 +93,7 @@ public class ServicesImpl implements Services {
       CompteDao.update(compteCredit, connection);
       commit(connection);
     } catch (InvalidMontantException ex) {
-        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -107,7 +107,7 @@ public class ServicesImpl implements Services {
         // dans tous les cas on ferme la connexion.
         closeConnection(connection);
       } catch (ConnectionProblemException ex) {
-       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
   }
@@ -119,7 +119,6 @@ public class ServicesImpl implements Services {
    * @param compteDebit
    * @param montant
    */
-  @Override
   public void retirer(Compte compteDebit, float montant) {
     Connection connection = null;
     try {
@@ -136,7 +135,7 @@ public class ServicesImpl implements Services {
       commit(connection);
     } catch (InvalidMontantException | InsufficientFundException ex) {
       //ce sont des exceptions métiers. A voir comment on les remonte.
-     ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -154,9 +153,9 @@ public class ServicesImpl implements Services {
       }
     }
   }
+
   
-   @Override
-    public List<Client> searchClientFullText(String recherche) {
+      public List<Client> searchClientFullText(String recherche) {
         Connection connection = null;
       try {
           connection = initConnection();
@@ -173,7 +172,49 @@ public class ServicesImpl implements Services {
             }
       }
     }
-          
+
+  
+  public List<Client> searchClient(String recherche) {
+    Connection connection = null;
+    try {
+      connection = initConnection();
+      return ClientDao.researchFullText(recherche);
+    } catch (ConnectionProblemException ex) {
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      try {
+        // dans tous les cas on ferme la connexion.
+        closeConnection(connection);
+      } catch (ConnectionProblemException ex) {
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
+  public int addClient(String nom, String prenom, String adresse, String ville) {
+
+    Client newCli = new Client();
+    newCli.setNom(nom);
+    newCli.setPrenom(prenom);
+    newCli.setAdresse(adresse);
+    newCli.setVille(ville);
+
+    int identifiant = (int) ClientDao.create(newCli);
+
+    return identifiant;
+  }
+  
+  
+  public void addCompte(String nom, String solde, String taux, int idClient){
+    Compte c = new Compte();
+    c.setNom(nom);
+    c.setSolde(new Float(solde));
+    c.setTaux(new Float(taux));
+    
+    int idCompte = (int)  CompteDao.create(c, idClient);
+  }
+
   /**
    * Méthodes privées pour gérer les connexions
    */
@@ -191,8 +232,6 @@ public class ServicesImpl implements Services {
     }
     return connection;
   }
-
-   
 
   private void commit(Connection connection) throws CommitException {
     try {
@@ -223,20 +262,9 @@ public class ServicesImpl implements Services {
       throw new InvalidMontantException("le montant ne peut pas être inférieur ou égal à zéro");
     }
   }
-
-  /**
-   * Cette méthode contrôle si le compte est solvable
-   *
-   * @param compte
-   */
-  private void checkSolvency(Compte compte, float montant) throws InsufficientFundException {
-
-    if (compte.getSolde() - montant < 0) {
-      throw new InsufficientFundException("le solde du compte est insuffisant");
-    }
-
-  }
-
+  
+  
+  
   /**
    *
    * @param id
@@ -263,4 +291,24 @@ public class ServicesImpl implements Services {
   }
   
   
+  
+  
+  
+  
+  
+
+
+  /**
+   * Cette méthode contrôle si le compte est solvable
+   *
+   * @param compte
+   */
+  private void checkSolvency(Compte compte, float montant) throws InsufficientFundException {
+
+    if (compte.getSolde() - montant < 0) {
+      throw new InsufficientFundException("le solde du compte est insuffisant");
+    }
+
+  }
+
 }
