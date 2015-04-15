@@ -169,26 +169,42 @@ public class ServicesImpl {
     }
   }
 
-  
-      public List<Client> searchClientFullText(String recherche) {
-        Connection connection = null;
+  public List<Client> getClientsAll() {
+    Connection connection = null;
+    try {
+      connection = initConnection();
+      return ClientDao.researchAll();
+    } catch (ConnectionProblemException ex) {
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
       try {
-          connection = initConnection();
-          return ClientDao.researchFullText(recherche);
+        // dans tous les cas on ferme la connexion.
+        closeConnection(connection);
       } catch (ConnectionProblemException ex) {
-          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
-          return null;
-      } finally {
-            try {
-            // dans tous les cas on ferme la connexion.
-            closeConnection(connection);
-            } catch (ConnectionProblemException ex) {
-                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
-            }
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
-
+  }
   
+  public List<Client> searchClientFullText(String recherche) {
+    Connection connection = null;
+    try {
+      connection = initConnection();
+      return ClientDao.researchFullText(recherche);
+    } catch (ConnectionProblemException ex) {
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      try {
+        // dans tous les cas on ferme la connexion.
+        closeConnection(connection);
+      } catch (ConnectionProblemException ex) {
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+
   public List<Client> searchClient(String recherche) {
     Connection connection = null;
     try {
@@ -278,41 +294,31 @@ public class ServicesImpl {
       throw new InvalidMontantException("le montant ne peut pas être inférieur ou égal à zéro");
     }
   }
-  
-  
-  
+
   /**
    *
    * @param id
    * @return Client
    */
   public Client searchClientById(String id) {
-        Connection connection = null;
-        try {
-          connection = initConnection();
-          Client cl = new Client();
-          cl.setIdentifiant(Integer.parseInt(id));
-          return ClientDao.research(cl).get(0);
+    Connection connection = null;
+    try {
+      connection = initConnection();
+      Client cl = new Client();
+      cl.setIdentifiant(Integer.parseInt(id));
+      return ClientDao.research(cl).get(0);
+    } catch (ConnectionProblemException ex) {
+      ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      return null;
+    } finally {
+      try {
+        // dans tous les cas on ferme la connexion.
+        closeConnection(connection);
       } catch (ConnectionProblemException ex) {
-          ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
-          return null;
-      } finally {
-            try {
-            // dans tous les cas on ferme la connexion.
-            closeConnection(connection);
-            } catch (ConnectionProblemException ex) {
-                ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
-            }
+        ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
+    }
   }
-  
-  
-  
-  
-  
-  
-  
-
 
   /**
    * Cette méthode contrôle si le compte est solvable
@@ -325,6 +331,10 @@ public class ServicesImpl {
       throw new InsufficientFundException("le solde du compte est insuffisant");
     }
 
+  }
+  
+  public void loadAccounts(Client c){
+    ClientDao.loadAccounts(c);
   }
 
   public void forTransfert(int idCompteDebit, int idCompteCredi, float montantTransfert)throws MetierException {
