@@ -83,7 +83,7 @@ public class BankController extends HttpServlet {
         if (clVirement != null) {
           request.setAttribute("Client", clVirement);
           //Page cible
-          request.getSession().setAttribute("currentPage", "depot");
+          request.getSession().setAttribute("currentPage", "virement");
           request.setAttribute("targetPage", "virement.jsp");
           request.setAttribute("targetPageTitle", "Virement");
         } else {
