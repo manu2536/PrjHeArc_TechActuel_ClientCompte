@@ -16,7 +16,7 @@ public class Users {
     addUser(1, "fabien", "maitre", 200);
     addUser(2, "colin", "schaffner", 150);
     addUser(3, "jeremy", "wermeille", 100);
-    addUser(4, "emanuel", "rondez", 50);
+    addUser(4, "emmanuel", "rondez", 50);
     addUser(5, "francesco", "termine", 1500);
     addUser(6, "christophe", "francillon", 1000);
   }
