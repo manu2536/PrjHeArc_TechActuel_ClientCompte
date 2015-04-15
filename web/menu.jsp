@@ -27,9 +27,15 @@
         %>
         <li class="${currentPage == "accueil" ? 'active' : ''}"><a href="BankController?action=dashboard">Accueil</a></li>
         <li class="${currentPage == "clients" ? 'active' : ''}"><a href="BankController?action=listClient">Clients</a></li>
-        <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BankController?action=virement">Virement</a></li>
-        <li class="${currentPage == "depot" ? 'active' : ''}"><a href="BankController?action=depot">Dépôt</a></li>
-        <li class="${currentPage == "retrait" ? 'active' : ''}"><a href="BankController?action=retrait">Retrait</a></li>
+        <%-- Pas de client selectionné --%>
+        <c:if test="<%=session.getAttribute("SelectedClient") != null%>"> 
+          <li class="${currentPage == "client" ? 'active' : ''}"><a href="BankController?action=afficherClient">Client: ${SelectedClient.nom} ${SelectedClient.prenom}</a></li>
+          <li class="${currentPage == "client" ? 'active' : ''}"><a href="BankController?action=deselectClient" class="glyphicon glyphicon-off"></a> </li>
+          <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BankController?action=virement">Virement</a></li>
+          <li class="${currentPage == "depot" ? 'active' : ''}"><a href="BankController?action=depot">Dépôt</a></li>
+          <li class="${currentPage == "retrait" ? 'active' : ''}"><a href="BankController?action=retrait">Retrait</a></li>
+        </c:if>
+        
         <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=listClient">
           <div class="input-group">
             <input type="text" name="recherche" class="form-control" placeholder="Rechercher un client..."/>

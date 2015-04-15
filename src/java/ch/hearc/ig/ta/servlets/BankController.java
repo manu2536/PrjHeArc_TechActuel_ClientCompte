@@ -149,6 +149,12 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "listeClient.jsp");
         request.setAttribute("targetPageTitle", "Clients");
         break;
+      
+      case "deselectClient":
+        request.getSession().removeAttribute("SelectedClient");
+        forwardOrRedirect = "redirect";
+        URLRedirection = "BankController?action=dashboard";
+        break;
 
       case "virement":
         Client clVirement = getClientbyRequestIDorSession(request);
@@ -281,7 +287,7 @@ public class BankController extends HttpServlet {
         int RIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
         float RMontant = Float.parseFloat(request.getParameter("montant"));
         try {
-          new ServicesImpl().verser(RIdCompte, RMontant);
+          new ServicesImpl().retirer(RIdCompte, RMontant);
           // Ce passe bien..
           // Appelle le controleur pour affcher le client
           alertMessages.add(new AlertMessage("success", "Succès", "Retrait de " + RMontant + "CHF effectué"));
@@ -289,7 +295,7 @@ public class BankController extends HttpServlet {
           URLRedirection = "BankController";
         } catch (MetierException ex) {
           alertMessages.add(new AlertMessage("warning", "Attention", "Erreur Retrait: " + ex));
-          request.setAttribute("RedirectionAction", "depot");
+          request.setAttribute("RedirectionAction", "retrait");
           URLRedirection = "BankController";
         } finally {
 
@@ -301,7 +307,7 @@ public class BankController extends HttpServlet {
         if (cliAfficherClient != null) {
           request.setAttribute("Client", cliAfficherClient);
           //Page cible
-          request.getSession().setAttribute("currentPage", "clients");
+          request.getSession().setAttribute("currentPage", "client");
           request.setAttribute("targetPage", "detailClient.jsp");
           request.setAttribute("targetPageTitle", "Details client");
         } else {
