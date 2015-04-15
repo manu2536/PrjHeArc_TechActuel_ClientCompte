@@ -1,77 +1,54 @@
-<%-- 
-    Document   : ajouterClient
-    Created on : 10 dï¿½c. 2012, 11:25:40
-    Author     : christop.francill
---%>
-
-<%@page import="ch.hearc.ig.ta.utilities.WebUtilities"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-
-<!--
-
-        
-        <form id="form1" name="form1" method="post" action="addClient">
-            <p>
-              <label for="nom">Nom</label>
-              <input type="text" name="nom" id="nom" />
-            </p>
-            <p>
-              <label for="prenom">Prï¿½nom</label>
-              <input type="text" name="prenom" id="prenom" />
-            </p>
-            <p>
-              <label for="adresse">Adresse</label>
-              <input type="text" name="adresse" id="adresse" />
-            </p>
-            <p>
-              <label for="ville">Ville</label>
-              <input type="text" name="ville" id="ville" />
-            </p>
-            <p>
-              <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
-              <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-              <a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour ï¿½ la liste</a>
-            </p>
-          </form>
--->
-
-
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingOne">
       <h4 class="panel-title">
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Ajouter un client
+          Ajouter un Client
         </a>
       </h4>
     </div>
     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-      <form id="form1" name="form1" method="post" action="BankController">
-                <input type="hidden" name="action" value="addClient">
-
-                <table>
-                  <tr>
-                    <td width="100px"><label for="nom">Nom</label></td>
-                    <td><input type="text" name="nom" id="nom"/></td>
-                  </tr>
-                  <tr>
-                    <td><label for="prenom">PrÃ©nom</label></td>
-                    <td><input type="text" name="prenom" id="prenom" /></td>
-                  </tr>
-                  <tr>
-                    <td><label for="adresse">Adresse</label></td>
-                    <td><input type="text" name="adresse" id="adresse" /></td>
-                  </tr>
-                  <tr>
-                    <td><label for="ville">Ville</label></td>
-                    <td><input type="text" name="ville" id="ville" /></td>
-                  </tr>
-                </table>
-                <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
-                <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-                <!--<a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour ï¿½ la liste</a>-->
-              </form>
+      <div class="panel-body">
+        <div class="container">
+          <div class="col-md-12">
+            <form class="form-horizontal" method="get" action="BankController">
+              <legend>Ajouter un client</legend>
+              <input type="hidden" name="action" value="addClient">
+              <div class="form-group">
+                <label class="col-md-2 control-label" for="selectCompte">Nom</label>
+                <div class="col-md-4">
+                  <input id="textinput" name="nom" type="text" placeholder="Nom" class="form-control input-md"> 
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label" for="montant">Prénom</label>  
+                <div class="col-md-4">
+                  <input id="textinput" name="prenom" type="text" placeholder="Prénom" class="form-control input-md"> 
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label" for="montant">Adresse</label>  
+                <div class="col-md-4">
+                  <input id="textinput" name="adresse" type="text" placeholder="Adresse" class="form-control input-md"> 
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label" for="ville">Ville</label>  
+                <div class="col-md-4">
+                  <input id="textinput" name="ville" type="text" placeholder="Ville" class="form-control input-md"> 
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label" for="SEND"></label>
+                <div class="col-md-4">
+                  <button id="singlebutton" name="SEND" class="btn btn-primary">AJOUTER</button>
+                </div>
+              </div>
+              <div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

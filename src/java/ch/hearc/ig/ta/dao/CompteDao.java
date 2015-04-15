@@ -217,6 +217,66 @@ public class CompteDao {
 
         }
     }
+    
+    /*
+        public static Compte research(String nom){
+        
+        
+        boolean and = false;
+        
+        Connection cnx = null;
+        ResultSet rs = null;
+        PreparedStatement pstmt;
+        
+        
+        String query = "SELECT e.numero,MATRICULE, NOM, PRENOM FROM ELEVES e INNER JOIN classes c ON c.numero = e.num_clas WHERE c.code =? ORDER BY e.nom, e.prenom";
+        try(PreparedStatement pstmt = cnn.prepareStatement(query)){
+            
+            pstmt.setString(1, codeClasse);
+            ResultSet curseur = pstmt.executeQuery();
+            
+            while(curseur.next()){
+                
+                Etudiant e = new Etudiant();
+                e.setNumero(curseur.getLong("numero"));
+                e.setMatricule(curseur.getString("MATRICULE"));
+                e.setNom(curseur.getString("NOM"));
+                e.setPrenom(curseur.getString("PRENOM"));
+                listeEtudiant.add(e);
+            }
+            
+        }catch(SQLException ex){
+            throw new RuntimeException("Erreur sql : ", ex);
+        }
+        
+        
+        
+        try {
+            cnx = OracleConnections.getConnection();
+            
+
+            //String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
+            String sql = "select numero, nom, solde, taux from compte where nom = ?";
+            cnx.prepareStatement(sql);
+            
+            pstmt.setString(1, nom);
+            
+            Compte c = new Compte();
+            
+            ResultSet curseur = pstmt.executeQuery();
+            
+            while(curseur.next()){
+                
+                Etudiant e = new Etudiant();
+                e.setNumero(curseur.getLong("numero"));
+                e.setMatricule(curseur.getString("MATRICULE"));
+                e.setNom(curseur.getString("NOM"));
+                e.setPrenom(curseur.getString("PRENOM"));
+                listeEtudiant.add(e);
+            }
+            
+            
+    }*/
     /**
      * ancien update - laisser pour les servlets actuelles
      * @param cpt 
