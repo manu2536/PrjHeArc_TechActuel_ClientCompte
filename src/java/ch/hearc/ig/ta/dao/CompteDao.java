@@ -99,6 +99,45 @@ public class CompteDao {
         }
     }
     
+        public static Compte researchByID(int IDCompte){
+        
+        Connection cnx = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            cnx = OracleConnections.getConnection();
+
+            String sql = "select numero, nom, solde, taux from compte where numero=" + String.valueOf(IDCompte);
+
+            stmt = cnx.createStatement();
+
+            rs = stmt.executeQuery(sql.toString());
+            Compte Cpt = null;
+            while (rs.next()) {
+                Cpt= new Compte();
+                Cpt.setIdentifiant(rs.getInt("numero"));
+                Cpt.setNom(rs.getString("nom"));
+                Cpt.setSolde(rs.getFloat("solde"));
+                Cpt.setTaux(rs.getFloat("taux"));
+                
+            }
+            return Cpt;
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return null;
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                cnx.close();
+            } catch (SQLException | NullPointerException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+
+        }
+    }
+    
     public static ArrayList<Compte> research(Compte cpt){
         ArrayList<Compte> listCpt = new ArrayList<Compte>();
         

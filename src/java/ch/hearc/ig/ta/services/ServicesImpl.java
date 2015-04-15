@@ -8,8 +8,10 @@ import ch.hearc.ig.ta.dbfactory.OracleConnections;
 import ch.hearc.ig.ta.exceptions.AccountDaoException;
 import ch.hearc.ig.ta.exceptions.CommitException;
 import ch.hearc.ig.ta.exceptions.ConnectionProblemException;
+import ch.hearc.ig.ta.exceptions.IDCompteException;
 import ch.hearc.ig.ta.exceptions.InsufficientFundException;
 import ch.hearc.ig.ta.exceptions.InvalidMontantException;
+import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.exceptions.RollbackException;
 import ch.hearc.ig.ta.log.ApplicationLogger;
 import java.sql.Connection;
@@ -75,9 +77,15 @@ public class ServicesImpl {
    * @param compteCredit
    * @param montant
    */
-  public void verser(Compte compteCredit, float montant) {
+ 
+  public void verser(int IDcompteCredit, float montant) throws MetierException {
     Connection connection = null;
+    
     try {
+      Compte compteCredit = CompteDao.researchByID(IDcompteCredit);
+      if(compteCredit==null){
+        throw new IDCompteException("Le compte Id "+IDcompteCredit+" n'existe pas");
+      }
       //on contrôle la validité du montant 
       checkAmountValidity(montant);
       //modifier l'objet 
@@ -86,8 +94,9 @@ public class ServicesImpl {
       connection = initConnection();
       CompteDao.update(compteCredit, connection);
       commit(connection);
-    } catch (InvalidMontantException ex) {
+    } catch (InvalidMontantException | IDCompteException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      throw new MetierException(ex);
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -112,10 +121,14 @@ public class ServicesImpl {
    *
    * @param compteDebit
    * @param montant
-   */
-  public void retirer(Compte compteDebit, float montant) {
+   */ 
+  public void retirer(int IDcompteDebit, float montant) throws MetierException{
     Connection connection = null;
     try {
+      Compte compteDebit = CompteDao.researchByID(IDcompteDebit);
+      if(compteDebit==null){
+        throw new IDCompteException("Le compte Id "+IDcompteDebit+" n'existe pas");
+      }
       //contrôle la validité du montant 
       checkAmountValidity(montant);
       //on contrôle si le solde est suffisant pour retirer le montant
@@ -127,9 +140,11 @@ public class ServicesImpl {
       //on update le montant en db
       CompteDao.update(compteDebit, connection);
       commit(connection);
-    } catch (InvalidMontantException | InsufficientFundException ex) {
+    } catch (InvalidMontantException | InsufficientFundException | IDCompteException ex) {
       //ce sont des exceptions métiers. A voir comment on les remonte.
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+      throw new MetierException(ex);
+      
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -261,7 +276,7 @@ public class ServicesImpl {
   private void closeConnection(Connection connection) throws ConnectionProblemException {
     try {
       connection.close();
-    } catch (SQLException ex) {
+    } catch (SQLException | NullPointerException ex) {
       throw new ConnectionProblemException("An exception occured while trying to close connection : " + ex);
     }
   }
@@ -312,6 +327,17 @@ public class ServicesImpl {
   
   public void loadAccounts(Client c){
     ClientDao.loadAccounts(c);
+  }
+
+  public void forTransfert(int idCompteDebit, int idCompteCredi, float montantTransfert)throws MetierException {
+    Compte debit = new Compte();
+    Compte credit = new Compte();
+    
+    debit = CompteDao.researchByID(idCompteDebit);
+    credit = CompteDao.researchByID(idCompteCredi);
+    
+    transfert(debit, credit, montantTransfert);
+    
   }
 
 }
