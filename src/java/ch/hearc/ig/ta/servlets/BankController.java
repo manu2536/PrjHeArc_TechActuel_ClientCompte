@@ -7,8 +7,6 @@ import ch.hearc.ig.ta.utilities.AlertMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -98,31 +96,49 @@ public class BankController extends HttpServlet {
         break;
 
       case "addClient":
-        ServicesImpl si = new ServicesImpl();
-        int id1 = si.addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
+        
+        try {
+          int id1 = new ServicesImpl().addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
+          Client cli1 = new ServicesImpl().searchClientById(String.valueOf(id1));
+          request.setAttribute("Client", cli1);
 
-        Client cli1 = new ServicesImpl().searchClientById(String.valueOf(id1));
-        request.setAttribute("Client", cli1);
+          alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
+          
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "detailClient.jsp");
+          request.setAttribute("targetPageTitle", "Details client");
+        } catch (MetierException ex) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur ajout de client : " + ex));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } finally {
 
-        //Page cible
-        request.getSession().setAttribute("currentPage", "clients");
-        request.setAttribute("targetPage", "detailClient.jsp");
-        request.setAttribute("targetPageTitle", "Details client");
+        }
+
+        
         break;
 
       case "addCompte":
 
-        ServicesImpl siAddCompte = new ServicesImpl();
-
-        if (request.getSession().getAttribute("selectedClient") == null) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+        
+        Client cli = getClientbyRequestIDorSession(request);
+        int idClie = cli.getIdentifiant();
+        
+        try {
+          new ServicesImpl().addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
+          
+          alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } catch (MetierException ex) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur ajout de compte : " + ex));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } finally {
 
         }
-        Client cli = (Client) request.getSession().getAttribute("selectedClient");
-        int idClie = cli.getIdentifiant();
-        siAddCompte.addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
 
-        //Client cli = new ServicesImpl().searchClientById(String.valueOf(id1));
+       
         request.setAttribute("Client", cli);
 
         //Page cible
@@ -227,7 +243,24 @@ public class BankController extends HttpServlet {
         }
         break;
 
-      case "transfertCAC":
+      case "transfertCompteACompte":
+        Client clTransfert = getClientbyRequestIDorSession(request);
+        if (clTransfert != null) {
+          request.setAttribute("Client", clTransfert);
+          //Page cible
+          request.getSession().setAttribute("currentPage", "virement");
+          request.setAttribute("targetPage", "virement.jsp");
+          request.setAttribute("targetPageTitle", "Virement");
+        } else {
+          // Erreur Redirection page clients avec message d'erreur
+          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "listeClient.jsp");
+          request.setAttribute("targetPageTitle", "Clients");
+        }
+        break;
+
+      case "dotransfertCompteACompte":
         if (request.getAttribute("selectCompte") == null) {
           // Message d'erreur 
         }
@@ -248,7 +281,30 @@ public class BankController extends HttpServlet {
         } finally {
 
         }
-        
+
+        break;
+
+      case "virementCACompteEtranger":
+        if (request.getAttribute("selectCompte") == null) {
+          // Message d'erreur 
+        }
+        int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
+        int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
+        float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
+        try {
+          new ServicesImpl().forTransfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+          // Ce passe bien..
+          // Appelle le controleur pour affcher le client
+          alertMessages.add(new AlertMessage("success", "Succès", "Virement de " + montantVirement + "CHF effectué"));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } catch (MetierException ex) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur virement: " + ex));
+          request.setAttribute("RedirectionAction", "virement");
+          URLRedirection = "BankController";
+        } finally {
+
+        }
 
         break;
 

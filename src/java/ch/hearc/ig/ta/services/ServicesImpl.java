@@ -28,6 +28,8 @@ import java.util.logging.Level;
  * @author jeremy.wermeill
  */
 public class ServicesImpl {
+  
+  public ServicesImpl(){}
 
   /**
    * Cette méthode permet d'effectuer un transfert d'un compte à un autre.
@@ -205,7 +207,7 @@ public class ServicesImpl {
     }
   }
 
-  public int addClient(String nom, String prenom, String adresse, String ville) {
+  public int addClient(String nom, String prenom, String adresse, String ville) throws MetierException{
 
     Client newCli = new Client();
     newCli.setNom(nom);
@@ -219,13 +221,14 @@ public class ServicesImpl {
   }
   
   
-  public void addCompte(String nom, String solde, String taux, int idClient){
+  public int addCompte(String nom, String solde, String taux, int idClient) throws MetierException{
     Compte c = new Compte();
     c.setNom(nom);
     c.setSolde(new Float(solde));
     c.setTaux(new Float(taux));
     
     int idCompte = (int)  CompteDao.create(c, idClient);
+    return idCompte;
   }
 
   /**
@@ -333,6 +336,7 @@ public class ServicesImpl {
     
     transfert(debit, credit, montantTransfert);
     
-  }
+  } 
+  
 
 }
