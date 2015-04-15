@@ -53,13 +53,20 @@ public class BankController extends HttpServlet {
         break;
 
       case "listClient":
-        //Test : http://localhost:8080/crud/BankController?action=listClient&recherche=non
-        String textRecherche = "non";
+        List<Client> listeClients;
+        ServicesImpl service = new ServicesImpl();
+        //Si client recherché
         if (request.getParameter("recherche") != null) {
-          textRecherche = request.getParameter("recherche");
+          String recherche = request.getParameter("recherche");
+          request.getSession().setAttribute("searchedValue", recherche);
+          listeClients = service.searchClientFullText(recherche);
+
+          //Si aucune recherche
+        } else {
+          listeClients = service.getClientsAll();
         }
-        System.out.println("Recherche:" + textRecherche);
-        request.setAttribute("ListCustomers", new ServicesImpl().searchClientFullText(textRecherche));
+
+        request.setAttribute("ListCustomers", listeClients);
 
         //Page cible
         request.getSession().setAttribute("currentPage", "clients");
@@ -133,6 +140,7 @@ public class BankController extends HttpServlet {
         if (request.getParameter("id") != null) {
           String id = request.getParameter("id");
           Client cliAfficherClient = new ServicesImpl().searchClientById(id);
+          new ServicesImpl().loadAccounts(cliAfficherClient);
           request.setAttribute("Client", cliAfficherClient);
         }
         //Page cible

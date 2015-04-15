@@ -6,7 +6,20 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<h1>Liste des clients</h1>
+
+
+<c:choose>
+  <%-- Sans recherche --%>
+  <c:when test="${empty searchedValue}">
+    <h1>Liste de tous les clients</h1>
+  </c:when>
+    
+  <%-- Avec recherche --%>
+  <c:otherwise>
+    <h1>Liste des clients correspondants à "${searchedValue}"</h1>
+  </c:otherwise>
+</c:choose>
+
 
 <div> <!-- MAIN -->
   <table class="table table-hover" style="width: 100%;">
