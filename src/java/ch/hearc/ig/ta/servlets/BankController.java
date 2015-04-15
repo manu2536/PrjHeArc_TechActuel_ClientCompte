@@ -149,6 +149,12 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "listeClient.jsp");
         request.setAttribute("targetPageTitle", "Clients");
         break;
+      
+      case "deselectClient":
+        request.getSession().removeAttribute("SelectedClient");
+        forwardOrRedirect = "redirect";
+        URLRedirection = "BankController?action=dashboard";
+        break;
 
       case "virement":
         Client clVirement = getClientbyRequestIDorSession(request);
@@ -301,7 +307,7 @@ public class BankController extends HttpServlet {
         if (cliAfficherClient != null) {
           request.setAttribute("Client", cliAfficherClient);
           //Page cible
-          request.getSession().setAttribute("currentPage", "clients");
+          request.getSession().setAttribute("currentPage", "client");
           request.setAttribute("targetPage", "detailClient.jsp");
           request.setAttribute("targetPageTitle", "Details client");
         } else {
