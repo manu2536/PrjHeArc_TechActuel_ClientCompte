@@ -324,4 +324,15 @@ public class ServicesImpl {
 
   }
 
+  public void forTransfert(int idCompteDebit, int idCompteCredi, float montantTransfert)throws MetierException {
+    Compte debit = new Compte();
+    Compte credit = new Compte();
+    
+    debit = CompteDao.researchByID(idCompteDebit);
+    credit = CompteDao.researchByID(idCompteCredi);
+    
+    transfert(debit, credit, montantTransfert);
+    
+  }
+
 }
