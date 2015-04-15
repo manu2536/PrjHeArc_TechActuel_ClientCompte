@@ -2,6 +2,7 @@ package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.dao.ClientDao;
+import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
@@ -104,13 +105,13 @@ public class BankController extends HttpServlet {
         break;
 
       case "addClient":
-        
+
         try {
           int id1 = new ServicesImpl().addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
           Client cli1 = new ServicesImpl().searchClientById(String.valueOf(id1));
           request.setAttribute("Client", cli1);
           alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
-          
+
           request.getSession().setAttribute("currentPage", "clients");
           request.setAttribute("targetPage", "detailClient.jsp");
           request.setAttribute("targetPageTitle", "Details client");
@@ -122,18 +123,16 @@ public class BankController extends HttpServlet {
 
         }
 
-        
         break;
 
       case "addCompte":
 
-        
         Client cli = getClientbyRequestIDorSession(request);
         int idClie = cli.getIdentifiant();
-        
+
         try {
           new ServicesImpl().addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
-          
+
           alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
           request.setAttribute("RedirectionAction", "afficherClient");
           URLRedirection = "BankController";
@@ -145,7 +144,6 @@ public class BankController extends HttpServlet {
 
         }
 
-       
         request.setAttribute("Client", cli);
 
         //Page cible
@@ -292,24 +290,32 @@ public class BankController extends HttpServlet {
         break;
 
       case "virementCACompteEtranger":
-        if (request.getAttribute("selectCompte") == null) {
-          // Message d'erreur 
-        }
+
         int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
         int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
         float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
-        try {
-          new ServicesImpl().forTransfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
-          // Ce passe bien..
-          // Appelle le controleur pour affcher le client
-          alertMessages.add(new AlertMessage("success", "Succès", "Virement de " + montantVirement + "CHF effectué"));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur virement: " + ex));
+
+        if (CompteDao.researchByID(idCompteCreditVirement) == null) {
+
+          alertMessages.add(new AlertMessage("danger", "Erreur", "Le numéro de compte (credit) n'existe pas !"));
           request.setAttribute("RedirectionAction", "virement");
           URLRedirection = "BankController";
-        } finally {
+
+        } else {
+          try {
+            new ServicesImpl().forTransfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+          // Ce passe bien..
+            // Appelle le controleur pour affcher le client
+            alertMessages.add(new AlertMessage("success", "Succès", "Virement de " + montantVirement + "CHF effectué"));
+            request.setAttribute("RedirectionAction", "afficherClient");
+            URLRedirection = "BankController";
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur virement: " + ex));
+            request.setAttribute("RedirectionAction", "virement");
+            URLRedirection = "BankController";
+          } finally {
+
+          }
 
         }
 
