@@ -41,7 +41,7 @@ public class BankController extends HttpServlet {
     String forwardOrRedirect = "forward";
     
     //Action par défaut
-    String action = "dashboard";
+    String action = "login";
     
     //Si utilisateur est connecté
     Boolean authentified = false;
@@ -72,8 +72,8 @@ public class BankController extends HttpServlet {
     }
 
     //Si pas authentifié, page login (sauf pour traitement page login)
-    if(!authentified && !action.equals("login")){
-      if(!action.equals("dologin")){
+    if(!authentified){
+      if(!action.equals("login") && !action.equals("dologin")){
         alertMessages.add(new AlertMessage("warning", "Connexion requise", "Vous devez vous connecter pour accéder à cette page"));
         action = "login";
       }
