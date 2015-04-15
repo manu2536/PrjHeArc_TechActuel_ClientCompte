@@ -39,6 +39,10 @@
           </div>
         </form>
       </ul>
+        
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-righ"><a href="BankController?action=logout">Déconnexion</a></li>
+      </ul>
     </div><!--/.nav-collapse -->
   </div>
 </nav>

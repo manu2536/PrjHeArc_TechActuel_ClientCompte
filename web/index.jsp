@@ -16,8 +16,6 @@
     alertMessages = (ArrayList<AlertMessage>) session.getAttribute("alertMessages");
   }
   
-  
-
   //Page cible
   String targetPage = "dashboard.jsp";
   if(request.getParameter("targetPage") != null){
@@ -59,13 +57,13 @@
     <div class="container-fluid">
       <%--Si message d'erreur, l'afficher --%>
       <c:if test="${not empty alertMessages}">
-        <div class="container alert">
+        <div class="container alert collapse in" id="alert-container" data-toggle="collapse">
           <c:forEach var="alertMessage" items="${alertMessages}">
             <div class="alert alert-${alertMessage.getType()} alert-dismissible fade in" role="alert">
               <b>${alertMessage.getTitre()}</b> 
               <c:if test="${not empty alertMessage.getCode()}">Erreur ${alertMessage.getCode()} : </c:if>
               ${alertMessage.getMessage()}
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <button type="button" class="close btn-close-alert" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
           </c:forEach>
         </div>
@@ -85,5 +83,21 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src=".//assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+      jQuery(document).ready(function($) {
+        //Lors du clic sur bouton fermer message
+        $('.btn-close-alert').on('click', function () {
+          $(this).parent().collapse('hide');
+        });
+        
+        //Lorsqu'un message est fermé
+        $('#alert-container').on('hidden.bs.collapse', function () {
+          //Si plus de message, supprime le conteneur
+          if($('#alert-container').children(':visible').length == 0) {
+            $('#alert-container').remove();
+          }
+        });
+      });
+    </script>
   </body>
 </html>

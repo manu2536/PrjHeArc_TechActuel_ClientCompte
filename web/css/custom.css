@@ -14,3 +14,7 @@ a.navbar-brand{
 a.navbar-brand > img{
   height: 50px;
 }
+
+.login-page input{
+  margin-bottom: 15px;
+}

@@ -4,11 +4,10 @@ import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
+import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +30,34 @@ public class BankController extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    // Définition de l'URL de destination (Dans certain cas modifer en BankController
+    // Définition de l'URL de destination
+    // - Pour un forward, mettre le nom du fichier, par ex : login.jsp
+    // - Pour une redirection, utiliser de préférence le frontController avec une action, par ex : BankController?action=login
     String URLRedirection = "index.jsp";
+    
+    //Forward ou redirect
+    String forwardOrRedirect = "forward";
+    
+    //Action par défaut
     String action = "dashboard";
+    
+    //Si utilisateur est connecté
+    Boolean authentified = false;
+    if(request.getSession().getAttribute("authUser") != null){
+      if(Users.userExists((String)request.getSession().getAttribute("authUser"))){
+        authentified = true;
+      }
+    }
+    
+    
+    
     //Liste contenant des messages d'erreur
     List<AlertMessage> alertMessages = new ArrayList<>();
+    if(request.getSession().getAttribute("alertMessages") != null){
+      alertMessages = (List<AlertMessage>) request.getSession().getAttribute("alertMessages");
+    }
 
+    /*A revoir car remplacé par variable forwardOrRedirect */
     if (request.getAttribute("RedirectionAction") != null) {
       // Permet de rediriger la servlet sur elle même
       //(request.setParameter() --> n'existe pas
@@ -48,6 +69,13 @@ public class BankController extends HttpServlet {
       }
     }
 
+    //Si pas authentifié, page login (sauf pour traitement page login)
+    if(!authentified && !action.equals("login")){
+      if(!action.equals("dologin")){
+        alertMessages.add(new AlertMessage("warning", "Connexion requise", "Vous devez vous connecter pour accéder à cette page"));
+        action = "login";
+      }
+    }
     switch (action) {
       case "demo":
         //Demo de toutes les types de messages d'erreur
@@ -61,6 +89,41 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "demo.jsp");
         request.setAttribute("targetPageTitle", "Demo");
 
+        break;
+        
+      case "login":
+        forwardOrRedirect = "redirect";
+        if(!authentified){
+          //Page cible
+          URLRedirection = "login.jsp";
+          
+        }else{
+          URLRedirection = "BankController?action=dashboard";
+        }
+        
+        break;
+        
+      //Lors de la connexion
+      case "dologin":
+        URLRedirection = "BankController?action=login";
+        forwardOrRedirect = "redirect";
+        if(request.getParameter("username") != null && request.getParameter("password") != null){
+          if(Users.verifyUser(request.getParameter("username"), request.getParameter("password"))){
+            //On sauve le login en session
+            request.getSession().setAttribute("authUser", request.getParameter("username"));
+            alertMessages.add(new AlertMessage("info", "Bienvenue", "dans l'application MyBank"));
+            URLRedirection = "BankController?action=dashboard";
+          }else{
+            alertMessages.add(new AlertMessage("danger", "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect"));
+          }
+        }
+        break;
+        
+      case "logout":
+        request.getSession().invalidate();
+        alertMessages.add(new AlertMessage("success", "Déconnexion", "effectuée avec succès"));
+        URLRedirection = "login.jsp";
+        forwardOrRedirect = "redirect";
         break;
 
       case "listClient":
@@ -273,8 +336,16 @@ public class BankController extends HttpServlet {
     }
     //Affecte les mssg dans tous les cas
     request.getSession().setAttribute("alertMessages", alertMessages);
+    
     //Redirection
-    request.getRequestDispatcher(URLRedirection).forward(request, response);
+    //Forward = garde les paramètres dans l'url
+    if(forwardOrRedirect.equals("forward")){
+      request.getRequestDispatcher(URLRedirection).forward(request, response);
+      
+    //Redirection = recharge une nouvelle page
+    }else if(forwardOrRedirect.equals("redirect")){
+      response.sendRedirect(URLRedirection);
+    }
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
