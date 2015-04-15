@@ -3,14 +3,15 @@
     Created on : 14 avr. 2015, 12:18:26
     Author     : Fabien Maître
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="container">
   <h1>Page de retrait</h1>
   <div class="col-md-12">
     <form class="form-horizontal" method="post" action="BankController">
-      <legend>Déposer par ${Client.nom} ${Client.prenom}</legend>
-      <input type="hidden" name="action" value="doRetrait">
+      <legend>Retrait par ${Client.nom} ${Client.prenom}</legend>
+      <input type="hidden" name="action" value="doRetrait"/>
+      <input type="hidden" name="ClientId" value="${Client.identifiant}"/>
           <div class="form-group">
             <label class="col-md-2 control-label" for="selectCompte">Compte de retrait</label>
             <div class="col-md-4">
@@ -19,7 +20,7 @@
                   <option value="${Compte.identifiant}">${Compte.identifiant} ${Compte.numero} ${Compte.nom} </option>
                 </c:forEach>
               </select>
-              </div>
+            </div>
           </div>
           <div class="form-group">
             <label class="col-md-2 control-label" for="montant">Montant [CHF]</label>  
@@ -33,9 +34,6 @@
               <button id="singlebutton" name="SEND" class="btn btn-primary">RETRAIT</button>
             </div>
           </div>
-        
-      <div>
-
     </form>
   </div>
 </div>
