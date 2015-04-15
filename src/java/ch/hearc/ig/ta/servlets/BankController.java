@@ -1,6 +1,7 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.dao.ClientDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
@@ -108,7 +109,6 @@ public class BankController extends HttpServlet {
           int id1 = new ServicesImpl().addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
           Client cli1 = new ServicesImpl().searchClientById(String.valueOf(id1));
           request.setAttribute("Client", cli1);
-
           alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
           
           request.getSession().setAttribute("currentPage", "clients");
