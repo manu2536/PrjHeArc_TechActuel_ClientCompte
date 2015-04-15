@@ -334,6 +334,7 @@ public class BankController extends HttpServlet {
     if (IdClient != null) {
       // Rechargement du client (il a pu être modifié par quelqu'un d'autre....
       clDepot = new ServicesImpl().searchClientById(IdClient);
+      new ServicesImpl().loadAccounts(clDepot);
     }
     request.getSession().setAttribute("SelectedClient", clDepot);
     return clDepot;
