@@ -261,7 +261,7 @@ public class ServicesImpl {
     return connection;
   }
 
-  private void commit(Connection connection) throws CommitException {
+  public void commit(Connection connection) throws CommitException {
     try {
       connection.commit();
     } catch (SQLException ex) {
