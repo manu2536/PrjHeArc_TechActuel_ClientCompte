@@ -12,19 +12,21 @@ public class Compte implements Serializable {
   private String nom;
   private Float solde;
   private Float taux;
+  
+  public Compte() {
+    this.identifiant = -1;
+    this.numero = "-1";
+    this.nom = "";
+    this.solde = 0f;
+    this.taux = 0f;
+  }
 
   public Compte(Integer _identifiant, String _nom, Float _solde, Float _taux) {
+    this();
     this.identifiant = _identifiant;
     this.nom = _nom;
     this.solde = _solde;
     this.taux = _taux;
-  }
-
-  public Compte() {
-    this.identifiant = null;
-    this.nom = null;
-    this.solde = null;
-    this.taux = null;
   }
 
   @Override
@@ -32,6 +34,29 @@ public class Compte implements Serializable {
     return String.valueOf(identifiant) + "," + nom + "," + String.valueOf(solde) + "," + String.valueOf(taux);
   }
 
+  @Override
+  public boolean equals(Object obj){
+    if (obj == null) return false;
+    if (obj == this) return true;
+    if (!(obj instanceof Compte))return false;
+    Compte objCompte = (Compte)obj;
+    
+    Boolean equals = false;
+    if(objCompte.getIdentifiant().compareTo(this.getIdentifiant()) == 0){
+      if(objCompte.getNumero().equals(this.getNumero())){
+        if(objCompte.getNom().equals(this.getNom())){
+          if(objCompte.getSolde().compareTo(this.getSolde()) == 0){
+            if(objCompte.getTaux().compareTo(this.getTaux()) == 0){
+              equals = true;
+            }
+          }
+        }
+      }
+    }
+      
+    return equals;
+  }
+  
   public void print() {
     System.out.println(this.toString());
   }

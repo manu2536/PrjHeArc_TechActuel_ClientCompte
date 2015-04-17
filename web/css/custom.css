@@ -6,6 +6,14 @@ body {
     padding-top: 50px;
 }
 
+div#alert-container{
+  margin-bottom: 0px;
+}
+
+div.alert{
+  margin-bottom: 0px;
+}
+
 a.navbar-brand{
   padding: 0px;
   padding-right: 14px;

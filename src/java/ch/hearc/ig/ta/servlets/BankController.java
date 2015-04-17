@@ -1,8 +1,6 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
-import ch.hearc.ig.ta.dao.ClientDao;
-import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
@@ -249,8 +247,6 @@ public class BankController extends HttpServlet {
         float dMontant = Float.parseFloat(request.getParameter("montant"));
         try {
           new ServicesImpl().verser(dIdCompte, dMontant);
-          // Ce passe bien..
-          // Appelle le controleur pour affcher le client
           alertMessages.add(new AlertMessage("success", "Succès", "Dépot de " + dMontant + "CHF effectué"));
           request.setAttribute("RedirectionAction", "afficherClient");
           URLRedirection = "BankController";
@@ -288,8 +284,6 @@ public class BankController extends HttpServlet {
         float RMontant = Float.parseFloat(request.getParameter("montant"));
         try {
           new ServicesImpl().retirer(RIdCompte, RMontant);
-          // Ce passe bien..
-          // Appelle le controleur pour affcher le client
           alertMessages.add(new AlertMessage("success", "Succès", "Retrait de " + RMontant + "CHF effectué"));
           request.setAttribute("RedirectionAction", "afficherClient");
           URLRedirection = "BankController";
@@ -337,59 +331,48 @@ public class BankController extends HttpServlet {
         break;
 
       case "dotransfertCompteACompte":
-        if (request.getAttribute("selectCompte") == null) {
-          // Message d'erreur 
-        }
-        int idCompteDebit = (int) Integer.parseInt(request.getParameter("compteDebit"));
-        int idCompteCredi = (int) Integer.parseInt(request.getParameter("compteCredit"));
-        float montantTransfert = Float.parseFloat(request.getParameter("montant"));
-        try {
-          new ServicesImpl().forTransfert(idCompteDebit, idCompteCredi, montantTransfert);
-          // Ce passe bien..
-          // Appelle le controleur pour affcher le client
-          alertMessages.add(new AlertMessage("success", "Succès", "Transfert de " + montantTransfert + "CHF effectué"));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur transfert: " + ex));
-          request.setAttribute("RedirectionAction", "virement");
-          URLRedirection = "BankController";
-        } finally {
+        URLRedirection = "BankController?action=virement";
+        forwardOrRedirect = "redirect";
+        
+        if (request.getParameter("compteDebit") != null && request.getParameter("compteCredit") != null && request.getParameter("montant") != null) {
+          int idCompteDebit = (int) Integer.parseInt(request.getParameter("compteDebit"));
+          int idCompteCredit = (int) Integer.parseInt(request.getParameter("compteCredit"));
+          float montantTransfert = Float.parseFloat(request.getParameter("montant"));
+          
+          try{
+            new ServicesImpl().transfert(idCompteDebit, idCompteCredit, montantTransfert);
+            alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
 
+          }catch(MetierException ex){
+            alertMessages.add(new AlertMessage("danger", "Erreur de transfert", ex.getMessage()));
+          }
+        }else{
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
+        
 
         break;
 
       case "virementCACompteEtranger":
+        URLRedirection = "BankController?action=virement";
+        forwardOrRedirect = "redirect";
+        
+        if(request.getParameter("compteDebitVirement") != null && request.getParameter("creditVirement") != null && request.getParameter("montantVirement") != null) {
+          int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
+          int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
+          float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
 
-        int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
-        int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
-        float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
-
-        if (CompteDao.researchByID(idCompteCreditVirement) == null) {
-
-          alertMessages.add(new AlertMessage("danger", "Erreur", "Le numéro de compte (credit) n'existe pas !"));
-          request.setAttribute("RedirectionAction", "virement");
-          URLRedirection = "BankController";
-
-        } else {
           try {
-            new ServicesImpl().forTransfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
-          // Ce passe bien..
-            // Appelle le controleur pour affcher le client
-            alertMessages.add(new AlertMessage("success", "Succès", "Virement de " + montantVirement + "CHF effectué"));
-            request.setAttribute("RedirectionAction", "afficherClient");
-            URLRedirection = "BankController";
+            new ServicesImpl().transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+            alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué"));
+
           } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur virement: " + ex));
-            request.setAttribute("RedirectionAction", "virement");
-            URLRedirection = "BankController";
-          } finally {
-
+            alertMessages.add(new AlertMessage("danger", "Erreur de virement", ex.getMessage()));
           }
-
+          
+        }else{
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
-
         break;
 
       //Erreur 404

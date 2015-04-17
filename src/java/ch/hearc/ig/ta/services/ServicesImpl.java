@@ -24,8 +24,9 @@ import java.util.logging.Level;
  * @author jeremy.wermeill
  */
 public class ServicesImpl {
-  
-  public ServicesImpl(){}
+
+  public ServicesImpl() {
+  }
 
   /**
    * Cette méthode permet d'effectuer un transfert d'un compte à un autre.
@@ -34,7 +35,7 @@ public class ServicesImpl {
    * @param compteCredit
    * @param montant
    */
-  public void transfert(Compte compteDebit, Compte compteCredit, float montant) {
+  public void transfert(Compte compteDebit, Compte compteCredit, float montant) throws MetierException{
     Connection connection = null;
     try {
       //vérifier la validité du montant
@@ -69,7 +70,26 @@ public class ServicesImpl {
         ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       }
     }
+  }
 
+  public void transfert(int compteDebit, int compteCredit, float montant) throws MetierException{
+    Compte debit;
+    Compte credit;
+    
+    debit = CompteDao.researchByID(compteDebit);
+    if(debit == null){
+      throw new MetierException("Compte à débiter innexistant");  
+    }
+    credit = CompteDao.researchByID(compteCredit); 
+    if(credit == null){
+      throw new MetierException("Compte à créditer innexistant");  
+    }
+    
+    if(debit.equals(credit)){
+      throw new MetierException("Les comptes à débiter et à créditer doivent être différents");  
+    }
+
+    transfert(debit, credit, montant);
   }
 
   /**
@@ -79,14 +99,13 @@ public class ServicesImpl {
    * @param compteCredit
    * @param montant
    */
- 
   public void verser(int IDcompteCredit, float montant) throws MetierException {
     Connection connection = null;
-    
+
     try {
       Compte compteCredit = CompteDao.researchByID(IDcompteCredit);
-      if(compteCredit==null){
-        throw new IDCompteException("Le compte Id "+IDcompteCredit+" n'existe pas");
+      if (compteCredit == null) {
+        throw new IDCompteException("Le compte Id " + IDcompteCredit + " n'existe pas");
       }
       //on contrôle la validité du montant 
       checkAmountValidity(montant);
@@ -123,13 +142,13 @@ public class ServicesImpl {
    *
    * @param compteDebit
    * @param montant
-   */ 
-  public void retirer(int IDcompteDebit, float montant) throws MetierException{
+   */
+  public void retirer(int IDcompteDebit, float montant) throws MetierException {
     Connection connection = null;
     try {
       Compte compteDebit = CompteDao.researchByID(IDcompteDebit);
-      if(compteDebit==null){
-        throw new IDCompteException("Le compte Id "+IDcompteDebit+" n'existe pas");
+      if (compteDebit == null) {
+        throw new IDCompteException("Le compte Id " + IDcompteDebit + " n'existe pas");
       }
       //contrôle la validité du montant 
       checkAmountValidity(montant);
@@ -146,7 +165,7 @@ public class ServicesImpl {
       //ce sont des exceptions métiers. A voir comment on les remonte.
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       throw new MetierException(ex);
-      
+
     } catch (ConnectionProblemException | CommitException | AccountDaoException ex) {
       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
       try {
@@ -182,7 +201,7 @@ public class ServicesImpl {
       }
     }
   }
-  
+
   public List<Client> searchClientFullText(String recherche) {
     Connection connection = null;
     try {
@@ -219,7 +238,7 @@ public class ServicesImpl {
     }
   }
 
-  public int addClient(String nom, String prenom, String adresse, String ville) throws MetierException{
+  public int addClient(String nom, String prenom, String adresse, String ville) throws MetierException {
 
     Client newCli = new Client();
     newCli.setNom(nom);
@@ -231,15 +250,14 @@ public class ServicesImpl {
 
     return identifiant;
   }
-  
-  
-  public int addCompte(String nom, String solde, String taux, int idClient) throws MetierException{
+
+  public int addCompte(String nom, String solde, String taux, int idClient) throws MetierException {
     Compte c = new Compte();
     c.setNom(nom);
     c.setSolde(new Float(solde));
     c.setTaux(new Float(taux));
-    
-    int idCompte = (int)  CompteDao.create(c, idClient);
+
+    int idCompte = (int) CompteDao.create(c, idClient);
     return idCompte;
   }
 
@@ -328,21 +346,8 @@ public class ServicesImpl {
     }
 
   }
-  
-  public void loadAccounts(Client c){
+
+  public void loadAccounts(Client c) {
     ClientDao.loadAccounts(c);
   }
-
-  public void forTransfert(int idCompteDebit, int idCompteCredi, float montantTransfert)throws MetierException {
-    Compte debit = new Compte();
-    Compte credit = new Compte();
-    
-    debit = CompteDao.researchByID(idCompteDebit);
-    credit = CompteDao.researchByID(idCompteCredi);
-    
-    transfert(debit, credit, montantTransfert);
-    
-  } 
-  
-
 }
