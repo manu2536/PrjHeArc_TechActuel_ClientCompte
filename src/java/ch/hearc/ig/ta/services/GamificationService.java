@@ -22,8 +22,8 @@ public class GamificationService {
   /**
    * permet d'incrémenter le score du banquier
    */
-  public void incrementScore() {
-    score++;
+  public void incrementScore(int nbPoint) {
+    score += nbPoint;
   }
 
   /**
