@@ -14,6 +14,8 @@ import ch.hearc.ig.ta.exceptions.InvalidMontantException;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.exceptions.RollbackException;
 import ch.hearc.ig.ta.log.ApplicationLogger;
+import ch.hearc.ig.ta.utilities.authentification.User;
+import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -349,5 +351,10 @@ public class ServicesImpl {
 
   public void loadAccounts(Client c) {
     ClientDao.loadAccounts(c);
+  }
+  
+  /*Retourne l'objet user à partir de son username*/
+  public User getUser(String username){
+    return Users.getUser(username);
   }
 }

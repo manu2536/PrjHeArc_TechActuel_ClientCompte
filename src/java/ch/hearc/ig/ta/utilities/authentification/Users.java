@@ -14,11 +14,11 @@ public class Users {
   static{
     users = new HashMap<>();
     addUser(1, "fabien", "maitre", 200);
-    addUser(2, "colin", "schaffner", 150);
-    addUser(3, "jeremy", "wermeille", 100);
+    addUser(2, "colin", "schaffner", 475);
+    addUser(3, "jeremy", "wermeille", 145);
     addUser(4, "emmanuel", "rondez", 50);
-    addUser(5, "francesco", "termine", 1500);
-    addUser(6, "christophe", "francillon", 1000);
+    addUser(5, "francesco", "termine", 1470);
+    addUser(6, "christophe", "francillon", 890);
   }
 
   private static Map<String, User> getUsers(){
@@ -45,5 +45,13 @@ public class Users {
       result = true;
     }
     return result;
+  }
+  
+  public static User getUser(final String username){
+    User user = null;
+    if(userExists(username)){
+      user = getUsers().get(username);
+    }
+    return user;
   }
 }

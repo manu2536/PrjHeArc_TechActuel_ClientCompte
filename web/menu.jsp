@@ -47,6 +47,7 @@
       </ul>
         
       <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-righ ${currentPage == "profil" ? 'active' : ''}"><a href="BankController?action=profil">${authUser}</a></li>
         <li class="navbar-righ"><a href="BankController?action=logout">Déconnexion</a></li>
       </ul>
     </div><!--/.nav-collapse -->

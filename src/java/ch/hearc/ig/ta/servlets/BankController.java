@@ -2,8 +2,10 @@ package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.exceptions.MetierException;
+import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
+import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -375,6 +377,17 @@ public class BankController extends HttpServlet {
         }
         break;
 
+      case "profil":
+        User user = new ServicesImpl().getUser((String)request.getSession().getAttribute("authUser"));
+        request.setAttribute("User", user);
+        request.setAttribute("Level", new GamificationService().getLevel(user));
+        
+        //Page cible
+        request.getSession().setAttribute("currentPage", "profil");
+        request.setAttribute("targetPage", "profil.jsp");
+        request.setAttribute("targetPageTitle", "Profil");
+        break;
+       
       //Erreur 404
       default:
         alertMessages.add(new AlertMessage("info", "404", "Page introuvable", "La page demandée est introuvable"));

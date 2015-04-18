@@ -14,6 +14,10 @@ div.alert{
   margin-bottom: 0px;
 }
 
+.login-page .alert{
+  margin-bottom: 20px;
+}
+
 a.navbar-brand{
   padding: 0px;
   padding-right: 14px;

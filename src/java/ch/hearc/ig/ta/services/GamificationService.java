@@ -1,9 +1,6 @@
 package ch.hearc.ig.ta.services;
 
-import ch.hearc.ig.ta.business.Client;
-import ch.hearc.ig.ta.business.Virement;
-import java.util.Arrays;
-import java.util.List;
+import ch.hearc.ig.ta.utilities.authentification.User;
 
 /**
  *
@@ -32,26 +29,11 @@ public class GamificationService {
   /**
    * Permet de déterminer le niveau du gulu en fonction de son score
    *
+   * @param user
    * @return le niveau du user
    */
-  public String getLevel() {
-    String level = "";
-    if (score <= 50) {
-      level = Level.Novice.name();
-    }
-    else if (score > 50 && score <= 100) {
-      level = Level.AccountManager.name();
-    }
-   else if (score > 100 && score <= 150) {
-      level = Level.TopAccountManager.name();
-    }
-   else if (score > 150 && score <= 200) {
-      level = Level.SuperAccountManager.name();
-    }
-   else  if (score > 200) {
-      level = Level.RampageAccountManager.name();
-    }
-    return level;
+  public Level getLevel(User user) {
+    return Level.getLevel(user.getPoints());
   }
 
   /**
