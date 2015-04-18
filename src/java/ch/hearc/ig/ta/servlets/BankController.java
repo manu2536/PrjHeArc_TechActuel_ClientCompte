@@ -38,26 +38,24 @@ public class BankController extends HttpServlet {
     // - Pour un forward, mettre le nom du fichier, par ex : login.jsp
     // - Pour une redirection, utiliser de préférence le frontController avec une action, par ex : BankController?action=login
     String URLRedirection = "index.jsp";
-    
+
     //Forward ou redirect
     String forwardOrRedirect = "forward";
-    
+
     //Action par défaut
     String action = "login";
-    
+
     //Si utilisateur est connecté
     Boolean authentified = false;
-    if(request.getSession().getAttribute("authUser") != null){
-      if(Users.userExists((String)request.getSession().getAttribute("authUser"))){
+    if (request.getSession().getAttribute("authUser") != null) {
+      if (Users.userExists((String) request.getSession().getAttribute("authUser"))) {
         authentified = true;
       }
     }
-    
-    
-    
+
     //Liste contenant des messages d'erreur
     List<AlertMessage> alertMessages = new ArrayList<>();
-    if(request.getSession().getAttribute("alertMessages") != null){
+    if (request.getSession().getAttribute("alertMessages") != null) {
       alertMessages = (List<AlertMessage>) request.getSession().getAttribute("alertMessages");
     }
 
@@ -74,8 +72,8 @@ public class BankController extends HttpServlet {
     }
 
     //Si pas authentifié, page login (sauf pour traitement page login)
-    if(!authentified){
-      if(!action.equals("login") && !action.equals("dologin")){
+    if (!authentified) {
+      if (!action.equals("login") && !action.equals("dologin")) {
         alertMessages.add(new AlertMessage("warning", "Connexion requise", "Vous devez vous connecter pour accéder à cette page"));
         action = "login";
       }
@@ -94,25 +92,25 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPageTitle", "Demo");
 
         break;
-        
+
       case "login":
         forwardOrRedirect = "redirect";
-        if(!authentified){
+        if (!authentified) {
           //Page cible
           URLRedirection = "login.jsp";
-          
-        }else{
+
+        } else {
           URLRedirection = "BankController?action=dashboard";
         }
-        
+
         break;
-        
+
       //Lors de la connexion
       case "dologin":
         URLRedirection = "BankController?action=login";
         forwardOrRedirect = "redirect";
-        if(request.getParameter("username") != null && request.getParameter("password") != null){
-          if(Users.verifyUser(request.getParameter("username"), request.getParameter("password"))){
+        if (request.getParameter("username") != null && request.getParameter("password") != null) {
+          if (Users.verifyUser(request.getParameter("username"), request.getParameter("password"))) {
             //On sauve le login en session
             request.getSession().setAttribute("authUser", request.getParameter("username"));
             alertMessages.add(new AlertMessage("info", "Bienvenue", "dans l'application MyBank"));
@@ -120,12 +118,12 @@ public class BankController extends HttpServlet {
             List<Virement> listVirement = fakedata.getVirementList();
             request.getSession().setAttribute("listVirement", listVirement);
             URLRedirection = "BankController?action=dashboard";
-          }else{
+          } else {
             alertMessages.add(new AlertMessage("danger", "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect"));
           }
         }
         break;
-        
+
       case "logout":
         request.getSession().invalidate();
         alertMessages.add(new AlertMessage("success", "Déconnexion", "effectuée avec succès"));
@@ -154,7 +152,7 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "listeClient.jsp");
         request.setAttribute("targetPageTitle", "Clients");
         break;
-      
+
       case "deselectClient":
         request.getSession().removeAttribute("SelectedClient");
         forwardOrRedirect = "redirect";
@@ -320,6 +318,46 @@ public class BankController extends HttpServlet {
         }
         break;
 
+      case "updateClient":
+        Client clientModifier = getClientbyRequestIDorSession(request);
+        request.setAttribute("Client", clientModifier);
+        //Page cible
+        request.getSession().setAttribute("currentPage", "client");
+        request.setAttribute("targetPage", "updateClient.jsp");
+        request.setAttribute("targetPageTitle", "Details client");
+        break;
+
+      case "doUpdateClient":
+
+        try {
+          
+          Client clientAModif = new Client();
+          clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
+          clientAModif.setNom(request.getParameter("nom"));
+          clientAModif.setPrenom(request.getParameter("prenom"));
+          clientAModif.setAdresse(request.getParameter("adresse"));
+          clientAModif.setVille(request.getParameter("ville"));
+         
+          
+          new ServicesImpl().updateClient(clientAModif);
+
+          request.setAttribute("Client", clientAModif);
+          alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
+
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "detailClient.jsp");
+          request.setAttribute("targetPageTitle", "Details client");
+                  
+        } catch (MetierException ex) {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
+          request.setAttribute("RedirectionAction", "afficherClient");
+          URLRedirection = "BankController";
+        } finally {
+
+        }
+
+        break;
+
       case "transfertCompteACompte":
         Client clTransfert = getClientbyRequestIDorSession(request);
         if (clTransfert != null) {
@@ -340,31 +378,30 @@ public class BankController extends HttpServlet {
       case "dotransfertCompteACompte":
         URLRedirection = "BankController?action=virement";
         forwardOrRedirect = "redirect";
-        
+
         if (request.getParameter("compteDebit") != null && request.getParameter("compteCredit") != null && request.getParameter("montant") != null) {
           int idCompteDebit = (int) Integer.parseInt(request.getParameter("compteDebit"));
           int idCompteCredit = (int) Integer.parseInt(request.getParameter("compteCredit"));
           float montantTransfert = Float.parseFloat(request.getParameter("montant"));
-          
-          try{
+
+          try {
             new ServicesImpl().transfert(idCompteDebit, idCompteCredit, montantTransfert);
             alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
 
-          }catch(MetierException ex){
+          } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de transfert", ex.getMessage()));
           }
-        }else{
+        } else {
           alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
-        
 
         break;
 
       case "virementCACompteEtranger":
         URLRedirection = "BankController?action=virement";
         forwardOrRedirect = "redirect";
-        
-        if(request.getParameter("compteDebitVirement") != null && request.getParameter("creditVirement") != null && request.getParameter("montantVirement") != null) {
+
+        if (request.getParameter("compteDebitVirement") != null && request.getParameter("creditVirement") != null && request.getParameter("montantVirement") != null) {
           int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
           int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
           float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
@@ -376,23 +413,23 @@ public class BankController extends HttpServlet {
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de virement", ex.getMessage()));
           }
-          
-        }else{
+
+        } else {
           alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
         break;
 
       case "profil":
-        User user = new ServicesImpl().getUser((String)request.getSession().getAttribute("authUser"));
+        User user = new ServicesImpl().getUser((String) request.getSession().getAttribute("authUser"));
         request.setAttribute("User", user);
         request.setAttribute("Level", new GamificationService().getLevel(user));
-        
+
         //Page cible
         request.getSession().setAttribute("currentPage", "profil");
         request.setAttribute("targetPage", "profil.jsp");
         request.setAttribute("targetPageTitle", "Profil");
         break;
-       
+
       //Erreur 404
       default:
         alertMessages.add(new AlertMessage("info", "404", "Page introuvable", "La page demandée est introuvable"));
@@ -407,14 +444,14 @@ public class BankController extends HttpServlet {
     }
     //Affecte les mssg dans tous les cas
     request.getSession().setAttribute("alertMessages", alertMessages);
-    
+
     //Redirection
     //Forward = garde les paramètres dans l'url
-    if(forwardOrRedirect.equals("forward")){
+    if (forwardOrRedirect.equals("forward")) {
       request.getRequestDispatcher(URLRedirection).forward(request, response);
-      
-    //Redirection = recharge une nouvelle page
-    }else if(forwardOrRedirect.equals("redirect")){
+
+      //Redirection = recharge une nouvelle page
+    } else if (forwardOrRedirect.equals("redirect")) {
       response.sendRedirect(URLRedirection);
     }
   }

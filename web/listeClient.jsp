@@ -13,7 +13,7 @@
   <c:when test="${empty searchedValue}">
     <h1>Liste de tous les clients</h1>
   </c:when>
-    
+
   <%-- Avec recherche --%>
   <c:otherwise>
     <h1>Liste des clients correspondants à "${searchedValue}"</h1>
@@ -24,19 +24,30 @@
 <div> <!-- MAIN -->
   <table class="table table-hover" style="width: 100%;">
     <tr>
+      <th></th>
       <th> Nom </th>
       <th> Adresse </th>
       <th> Operation </th>
     </tr>
     <c:forEach var="customer" items="${ListCustomers}">
       <tr>
+        <td>
+
+          <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateClient&id=${customer.identifiant}">
+            
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
+             
+          </form>
+        </td>
         <td>${customer.nom} ${customer.prenom}</td>
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
-          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
           <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Virement</a>
           <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
           <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
+
+          <!--<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>-->
         </td>
       </tr>
     </c:forEach>
