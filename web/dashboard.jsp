@@ -7,3 +7,4 @@
 <h1>Bienvenue sur le dashboard</h1>
 Cette page sert de page d'accueil
 <%@include file="ajouterClient.jsp"%>
+<%@include file="chartStat.jsp"%>

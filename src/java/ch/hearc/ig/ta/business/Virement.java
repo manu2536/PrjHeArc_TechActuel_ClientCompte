@@ -5,6 +5,7 @@
  */
 package ch.hearc.ig.ta.business;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -63,6 +64,23 @@ public class Virement {
 
   public void setMontant(Float montant) {
     this.montant = montant;
+  }
+
+  public String getYear() {
+    SimpleDateFormat sdfy = new SimpleDateFormat("yyyy");
+    return sdfy.format(dateVirement);
+  }
+
+  public Integer getMonth() {
+    SimpleDateFormat sdfy = new SimpleDateFormat("MM");
+    String month = sdfy.format(dateVirement);
+    Integer monthInt = Integer.valueOf(month);
+    return monthInt -1;
+  }
+
+  public String getDay() {
+    SimpleDateFormat sdfy = new SimpleDateFormat("dd");
+    return sdfy.format(dateVirement);
   }
 
   public Date getDateVirement() {

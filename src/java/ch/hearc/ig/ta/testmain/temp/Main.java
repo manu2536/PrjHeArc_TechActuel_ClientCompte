@@ -30,19 +30,23 @@ public class Main {
        System.out.println("numéro client crédité " + virement.getNoCptCredit());
        System.out.println("montant transféré : " + virement.getMontant());
        System.out.println("date du transfert : " + virement.getDateVirement());
+       System.out.println("date jour " + virement.getDay());
+       System.out.println("date mois " + virement.getMonth());
+       System.out.println("date année " + virement.getYear());
     }
   
-  //si un nouveau virement venait pointer le bout de son nez, il faudrait l'ajouter comme cela à la liste
-   Virement virement = new Virement(); 
-   fakeData.getVirementList().add(virement);
-   
-   
-   //liste des clients avec leur date d'inscription
-   for(Client client : fakeData.getClientsListWithInscriptionDate()){ 
-     System.out.println("\n");
-     System.out.println("nom du client : " + client.getNom());
-     System.out.println("date d'inscription : " + client.getDateInscription());
-   }
+//  //si un nouveau virement venait pointer le bout de son nez, il faudrait l'ajouter comme cela à la liste
+//   Virement virement = new Virement(); 
+//   fakeData.getVirementList().add(virement);
+//   
+//   
+//   
+//   //liste des clients avec leur date d'inscription
+//   for(Client client : fakeData.getClientsListWithInscriptionDate()){ 
+//     System.out.println("\n");
+//     System.out.println("nom du client : " + client.getNom());
+//     System.out.println("date d'inscription : " + client.getDateInscription());
+//   }
    
     
   }

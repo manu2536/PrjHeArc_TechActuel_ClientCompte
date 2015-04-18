@@ -1,10 +1,12 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
+import ch.hearc.ig.ta.utilities.FakeData;
 import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.io.IOException;
@@ -114,6 +116,9 @@ public class BankController extends HttpServlet {
             //On sauve le login en session
             request.getSession().setAttribute("authUser", request.getParameter("username"));
             alertMessages.add(new AlertMessage("info", "Bienvenue", "dans l'application MyBank"));
+            FakeData fakedata = new FakeData();
+            List<Virement> listVirement = fakedata.getVirementList();
+            request.getSession().setAttribute("listVirement", listVirement);
             URLRedirection = "BankController?action=dashboard";
           }else{
             alertMessages.add(new AlertMessage("danger", "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect"));
