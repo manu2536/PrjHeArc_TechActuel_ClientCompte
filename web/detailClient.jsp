@@ -8,20 +8,22 @@
 
 <div class="container">
   <h1>Details client</h1>
-  <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
-            <div class="input-group">
+  
+  <!--<form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
+    <div class="input-group">
 
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
-              </span>
-            </div>
-          </form> 
-
-  <div>
+      <span class="input-group-btn">
+        
+      </span>
+    </div>
+  </form> -->
+ 
     <fieldset>
-      <legend>${Client.nom} ${Client.prenom}</legend>
+      <form  name="editClient" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
+      <legend>${Client.nom} ${Client.prenom} <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button></legend>
       ${Client.adresse}<br/>
       ${Client.ville}<br/>
+      </form>
     </fieldset>
     <div> <!-- Affichage compte -->
       <table>
@@ -45,5 +47,4 @@
       </table>
       <%@include file="ajouterCompte.jsp"%>
     </div>
-  </div>
 </div>
