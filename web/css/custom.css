@@ -1,0 +1,32 @@
+/* 
+    Created on : 10 avr. 2015, 02:05:54
+    Author     : fabien.maitre1
+*/
+body {
+    padding-top: 50px;
+}
+
+div#alert-container{
+  margin-bottom: 0px;
+}
+
+div.alert{
+  margin-bottom: 0px;
+}
+
+.login-page .alert{
+  margin-bottom: 20px;
+}
+
+a.navbar-brand{
+  padding: 0px;
+  padding-right: 14px;
+}
+
+a.navbar-brand > img{
+  height: 50px;
+}
+
+.login-page input{
+  margin-bottom: 15px;
+}
