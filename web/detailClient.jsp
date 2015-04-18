@@ -40,7 +40,14 @@
             <td>${account.taux}</td>
             <td>${account.solde}</td>
             <td>
-              <a href="BankController?action=afficherCompte&id=${account.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Voir</a>
+              <a href="BankController?action=afficherCompte&id=${account.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
+            </td>
+            <td>
+              <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateAcccount&id=${account.identifiant}">
+            
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
+             
+          </form>
             </td>
           </tr>
         </c:forEach>

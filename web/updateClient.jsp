@@ -20,29 +20,25 @@
       <div class="form-group">
         <label class="col-md-2 control-label" for="selectCompte">Nom</label>
         <div class="col-md-4">
-          <input id="textinput" name="nom" type="text" value="${Client.nom}" class="form-control input-md">
-          <!--<input id="textinput" name="nom" type="text" placeholder="${Client.nom}" class="form-control input-md">-->
+          <input id="textinput" name="nom" type="text" value="${Client.nom}" class="form-control input-md" required class="form-control input-md">
         </div>
       </div>
       <div class="form-group">
         <label class="col-md-2 control-label" for="montant">Prénom</label>  
         <div class="col-md-4">
-          <input id="textinput" name="prenom" type="text" value="${Client.prenom}" class="form-control input-md">
-          <!--<input id="textinput" name="prenom" type="text" placeholder="${Client.prenom}" class="form-control input-md">--> 
+          <input id="textinput" name="prenom" type="text" value="${Client.prenom}" class="form-control input-md" required class="form-control input-md">
         </div>
       </div>
       <div class="form-group">
         <label class="col-md-2 control-label" for="montant">Adresse</label>  
         <div class="col-md-4">
-          <input id="textinput" name="adresse" type="text" value="${Client.adresse}" class="form-control input-md">
-          <!--<input id="textinput" name="adresse" type="text" placeholder="${Client.adresse}" class="form-control input-md">--> 
+          <input id="textinput" name="adresse" type="text" value="${Client.adresse}" class="form-control input-md" required class="form-control input-md">
         </div>
       </div>
       <div class="form-group">
         <label class="col-md-2 control-label" for="ville">Ville</label>  
         <div class="col-md-4">
-          <input id="textinput" name="ville" type="text" value="${Client.ville}" class="form-control input-md">
-          <!--<input id="textinput" name="ville" type="text" placeholder="${Client.ville}" class="form-control input-md">--> 
+          <input id="textinput" name="ville" type="text" value="${Client.ville}" class="form-control input-md" required class="form-control input-md">
         </div>
       </div>
       <div class="form-group">
