@@ -8,6 +8,14 @@
 
 <div class="container">
   <h1>Details client</h1>
+  <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
+            <div class="input-group">
+
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
+              </span>
+            </div>
+          </form> 
 
   <div>
     <fieldset>

@@ -262,6 +262,11 @@ public class ServicesImpl {
     int idCompte = (int) CompteDao.create(c, idClient);
     return idCompte;
   }
+  
+  
+  public void updateClient(Client c) throws MetierException{
+    ClientDao.update(c);
+  }
 
   /**
    * Méthodes privées pour gérer les connexions
