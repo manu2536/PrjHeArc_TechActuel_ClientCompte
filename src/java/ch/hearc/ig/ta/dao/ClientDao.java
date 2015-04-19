@@ -308,34 +308,7 @@ public class ClientDao {
       }
     }
   }
-  
-  /*public static boolean delete(int id) {
-    Connection cnx = null;
-    PreparedStatement pstmt = null;
 
-    try {
-      cnx = OracleConnections.getConnection();
-
-      StringBuilder sql = new StringBuilder("DELETE FROM client WHERE numero = ?");
-      pstmt = (OraclePreparedStatement) cnx.prepareStatement(sql.toString());
-
-      pstmt.setLong(1, id);
-      pstmt.executeUpdate();
-      cnx.commit();
-      return true;
-    } catch (SQLException ex) {
-      System.out.println("Error DELETE SQL: " + ex.getMessage());
-      return false;
-    } finally {
-      try {
-        pstmt.close();
-        cnx.close();
-      } catch (SQLException ex) {
-        System.out.println("Error DELETE CLOSE: " + ex.getMessage());
-      }
-    }
-  }
-  */
   public static void loadAccounts(Client c){
     c.setListeCompte(CompteDao.research(c.getIdentifiant()));
   }
