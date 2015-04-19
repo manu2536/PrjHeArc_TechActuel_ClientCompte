@@ -89,16 +89,16 @@ public class Main {
 //     i++;
 //   }
 //    System.out.println(i);
-    
-    GamificationService services = new GamificationService();
-    Map<Integer,Integer> maps = services.getNbCompteOuvertsByMonth(fakeData.getComptes());
-  
-    for (Map.Entry<Integer, Integer> entry : maps.entrySet()) {
-      Integer integer = entry.getKey();
-      Integer integer1 = entry.getValue();
-      
-      System.out.println("mois " + integer +  "valeur " + integer1);
-    }
+//    
+//    GamificationService services = new GamificationService();
+//    Map<Integer,Integer> maps = services.getNbCompteOuvertsByMonth(fakeData.getComptes());
+//  
+//    for (Map.Entry<Integer, Integer> entry : maps.entrySet()) {
+//      Integer integer = entry.getKey();
+//      Integer integer1 = entry.getValue();
+//      
+//      System.out.println("mois " + integer +  "valeur " + integer1);
+//    }
     
   }
   

@@ -4,6 +4,7 @@ import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -46,46 +47,50 @@ public class GamificationService {
   }
 
   /**
-   * Retourne une liste d'objets user triés dans l'ordre décroissant en
-   * fonction de leur points.
-   * @return  une liste de users triés
+   * Retourne une liste d'objets user triés dans l'ordre décroissant en fonction
+   * de leur points.
+   *
+   * @return une liste de users triés
    */
-  public List<User> getUsersWithScores(){
-  
-  Map<String,User> users = Users.getUsers();
-  ArrayList<User> userList= new ArrayList<>();
+  public List<User> getUsersWithScores() {
+
+    Map<String, User> users = Users.getUsers();
+    ArrayList<User> userList = new ArrayList<>();
     for (Map.Entry<String, User> entry : users.entrySet()) {
       User user = entry.getValue();
       userList.add(user);
     }
-     Collections.sort(userList);
-     
-     return userList;
-  
+    Collections.sort(userList);
+
+    return userList;
+
   }
-  
-  public Map<Integer,Integer> getNbCompteOuvertsByMonth(List<Compte> comptes){
-  Date date = new Date();
-  
-  Compte fakeCompte = new Compte();
-  fakeCompte.setDateOuverture(date);
-  Map<Integer,Integer> mapMoisCpOuverts = new HashMap();
-  for(Compte compte : comptes){
-    //on limite à l'année acutelle
-   if(compte.getYear().equals(fakeCompte.getYear())){
-     
-     if(mapMoisCpOuverts.get(compte.getMonth()) == null){
-       mapMoisCpOuverts.put(compte.getMonth(), 1);
-     }else{
-        int value = mapMoisCpOuverts.get(compte.getMonth());
-        value ++;
-        mapMoisCpOuverts.remove(compte.getMonth());
-        mapMoisCpOuverts.put(compte.getMonth(),value);
-     }
-     }
-  
+
+  public String getLimitedYear() {
+    Date date = new Date();
+    SimpleDateFormat sdfy = new SimpleDateFormat("yyyy");
+    return sdfy.format(date);
+
   }
-  return mapMoisCpOuverts;
+
+  public Map<Integer, Integer> getNbCompteOuvertsByMonth(List<Compte> comptes, String username) {
+    Map<Integer, Integer> mapMoisCpOuverts = new HashMap();
+    for (Compte compte : comptes) {
+      //on limite à l'année acutelle et à l'utilisateur de session
+      if (compte.getYear().equals(getLimitedYear()) && compte.getUserName().equals(username)) {
+
+        if (mapMoisCpOuverts.get(compte.getMonth()) == null) {
+          mapMoisCpOuverts.put(compte.getMonth(), 1);
+        } else {
+          int value = mapMoisCpOuverts.get(compte.getMonth());
+          value++;
+          mapMoisCpOuverts.remove(compte.getMonth());
+          mapMoisCpOuverts.put(compte.getMonth(), value);
+        }
+      }
+
+    }
+    return mapMoisCpOuverts;
   }
-  
+
 }
