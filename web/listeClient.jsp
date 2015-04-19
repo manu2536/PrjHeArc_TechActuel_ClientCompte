@@ -31,17 +31,57 @@
         <td>${customer.nom} ${customer.prenom}</td>
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
-          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
-          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>
-          <a href="BankController?action=deleteClient&id=${customer.identifiant}" class="glyphicon glyphicon-trash btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>
-          <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Virement</a>
-          <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
-          <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
-          
-
-          <!--<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>-->
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><span class="glyphicon glyphicon-eye-open"></span></a>
+          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><span class="glyphicon glyphicon-pencil"></span></a>
+          <button class="btn btn-info btn-mini" data-toggle="modal" data-target="#deleteConfirm" data-nomclient="${customer.prenom} ${customer.nom}" data-idclient="${customer.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
+          <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini">Virement</a>
+          <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini">Depôt</a>
+          <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini">Retrait</a>
         </td>
       </tr>
     </c:forEach>
   </tbody>
 </table>
+    
+    
+ <!-- Modal -->
+<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="Confirmation de suppression" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
+      </div>
+      <div class="modal-body">
+        La suppression du client implique également la suppression de tous les comptes lui étant rattachés. 
+        <br>
+        Voulez-vous vraiment supprimer <b><span class="nomClient">ce client</span></b> et l'ensemble de ses comptes?
+      </div>
+      <div class="modal-footer">
+        <form action="BankController?action=doDeleteClient" method="post">
+          <input type="hidden" id="id" name="id" value="" />
+          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          <input type="submit" id="btnConfirmDelete" class="btn btn-primary" value="Supprimer"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+ 
+<script>
+ jQuery(document).ready(function($) {
+   //Ouverture confirmation suppression
+   $('#deleteConfirm').on('show.bs.modal', function (event) {
+     var button = $(event.relatedTarget); // Button that triggered the modal
+     var nomClient = button.data('nomclient'); // Extract info from data-nomClient attribute
+     var idClient = button.data('idclient'); // Extract info from data-nomClient attribute
+     var modal = $(this);
+     
+     //Renseigne le nom du client sélectionné
+     modal.find('.nomClient').text(nomClient);
+     //Renseigne l'id du client sélectionné
+     modal.find('#id').val(idClient);
+   });
+ });
+</script>

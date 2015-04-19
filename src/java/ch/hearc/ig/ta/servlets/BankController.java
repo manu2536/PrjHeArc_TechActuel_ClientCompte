@@ -505,15 +505,12 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPageTitle", "Accueil");
         break;
 
-      case "deleteClient":
-
+      case "doDeleteClient":
         URLRedirection = "BankController?action=listClient";
         forwardOrRedirect = "redirect";
 
         if (request.getParameter("id") != null) {
-
           try {
-            //int id = new Integer(request.getParameter("id"));
             Client c = new Client();
             c.setIdentifiant(new Integer(request.getParameter("id")));
             new ServicesImpl().deleteClient(c);
@@ -529,8 +526,6 @@ public class BankController extends HttpServlet {
         break;
 
       case "deleteCompte":
-
-        
         URLRedirection = "BankController?action=afficherClient";
         forwardOrRedirect = "redirect";
 
