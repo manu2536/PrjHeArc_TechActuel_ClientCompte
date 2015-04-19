@@ -334,36 +334,39 @@ public class BankController extends HttpServlet {
 
       case "doUpdateClient":
 
-        try {
-          
-          Client clientAModif = new Client();
-          clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
-          clientAModif.setNom(request.getParameter("nom"));
-          clientAModif.setPrenom(request.getParameter("prenom"));
-          clientAModif.setAdresse(request.getParameter("adresse"));
-          clientAModif.setVille(request.getParameter("ville"));
-         
-          
-          new ServicesImpl().updateClient(clientAModif);
+          if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
+            Client clientAModif = new Client();
+            clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
+            clientAModif.setNom(request.getParameter("nom"));
+            clientAModif.setPrenom(request.getParameter("prenom"));
+            clientAModif.setAdresse(request.getParameter("adresse"));
+            clientAModif.setVille(request.getParameter("ville"));
 
-          request.setAttribute("Client", clientAModif);
-          alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
+            try {
+              new ServicesImpl().updateClient(clientAModif);
 
-          request.getSession().setAttribute("currentPage", "clients");
-          request.setAttribute("targetPage", "detailClient.jsp");
-          request.setAttribute("targetPageTitle", "Details client");
-                  
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } finally {
+              request.setAttribute("Client", clientAModif);
+              alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
+              request.getSession().setAttribute("currentPage", "clients");
+              request.setAttribute("targetPage", "detailClient.jsp");
+              request.setAttribute("targetPageTitle", "Details client");
 
-        }
+            } catch (MetierException ex) {
 
-        break;
+              alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
 
-      case "transfertCompteACompte":
+            } finally {
+
+            }
+
+          } else {
+            alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+          }
+
+          break;
+
+        
+        case "transfertCompteACompte":
         Client clTransfert = getClientbyRequestIDorSession(request);
         if (clTransfert != null) {
           request.setAttribute("Client", clTransfert);
@@ -451,54 +454,60 @@ public class BankController extends HttpServlet {
     request.getSession().setAttribute("alertMessages", alertMessages);
 
     //Redirection
-    //Forward = garde les paramètres dans l'url
-    if (forwardOrRedirect.equals("forward")) {
-      request.getRequestDispatcher(URLRedirection).forward(request, response);
+        //Forward = garde les paramètres dans l'url
+        if (forwardOrRedirect.equals("forward")) {
+          request.getRequestDispatcher(URLRedirection).forward(request, response);
 
-      //Redirection = recharge une nouvelle page
-    } else if (forwardOrRedirect.equals("redirect")) {
-      response.sendRedirect(URLRedirection);
+          //Redirection = recharge une nouvelle page
+        } else if (forwardOrRedirect.equals("redirect")) {
+          response.sendRedirect(URLRedirection);
+        }
     }
-  }
 
-  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-  /**
-   * Handles the HTTP <code>GET</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet
+    (HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
-  }
+      processRequest(request, response);
+    }
 
-  /**
-   * Handles the HTTP <code>POST</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost
+    (HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
-  }
+      processRequest(request, response);
+    }
 
-  /**
-   * Returns a short description of the servlet.
-   *
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo() {
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo
+    
+      () {
     return "Short description";
-  }// </editor-fold>
+    }// </editor-fold>
+
+  
 
   private Client getClientbyRequestIDorSession(HttpServletRequest request) {
     Client clDepot = null;

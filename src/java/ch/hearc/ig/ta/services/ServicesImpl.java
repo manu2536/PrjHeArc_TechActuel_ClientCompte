@@ -265,7 +265,16 @@ public class ServicesImpl {
   
   
   public void updateClient(Client c) throws MetierException{
-    ClientDao.update(c);
+    
+    
+    
+    if(c.getIdentifiant() == null){
+      throw new MetierException("id Client non trouvé");  
+    }else{
+      ClientDao.update(c);
+    }
+    
+
   }
 
   /**
