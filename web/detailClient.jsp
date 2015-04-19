@@ -4,7 +4,7 @@
     Author     : emmanuel.rondez
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="container">
   <h1>Details client</h1>
@@ -28,8 +28,8 @@
 
     <%-- Avec recherche --%>
     <c:otherwise>
-      <div> <!-- Affichage compte -->
-        <table>
+      <div with="300px"> <!-- Affichage compte -->
+        <table class="table">
           <tr>
             <th>Nom</th>
             <th>Taux</th>
@@ -39,8 +39,9 @@
           <c:forEach var="account" items="${Client.listeCompte}">
             <tr>
               <td>${account.nom}</td>
-              <td>${account.taux}</td>
-              <td>${account.solde}</td>
+              <td><fmt:formatNumber pattern="0.00" value="${account.taux}"/></td>
+              <td><fmt:formatNumber pattern="0.00" value="${account.solde}"/></td>
+             
               <td>
                 <a href="BankController?action=updateAccount&id=${account.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" >
                   <i class="icon-white icon-eye-open"></i></a>

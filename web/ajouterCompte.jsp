@@ -27,7 +27,7 @@
                 <div class="col-md-4">
                   <div class="input-group">
                     <span class="input-group-addon">CHF</span>
-                    <input id="solde" name="solde" type="text" placeholder="Solde du compte" required pattern="^[0-9]*.[0-9][05]$" class="form-control input-md">
+                    <input id="solde" name="solde" type="text" placeholder="50.00" required pattern="^[0-9]*.[0-9][05]$" class="form-control input-md">
                   </div>
                 </div>
               </div>
@@ -36,7 +36,7 @@
                 <label class="col-md-2 control-label" for="taux">Taux</label>  
                 <div class="col-md-4">
                   <div class="input-group">
-                    <input id="taux" name="taux" type="text" placeholder="Taux" required pattern="^[0-9]*.[0-9][0-9]$" class="form-control input-md">
+                    <input id="taux" name="taux" type="text" placeholder="0.25" required pattern="^[0-9]*.[0-9][0-9]$" class="form-control input-md">
                     <span class="input-group-addon">%</span>
                   </div>
                 </div>
