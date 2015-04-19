@@ -8,6 +8,7 @@ package ch.hearc.ig.ta.testmain.temp;
 
 import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.business.Virement;
+import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.utilities.FakeData;
 
 /**
@@ -48,6 +49,10 @@ public class Main {
 //     System.out.println("date d'inscription : " + client.getDateInscription());
 //   }
    
+    
+    GamificationService service = new GamificationService();
+    
+    service.getUsersWithScores();
     
   }
   

@@ -1,6 +1,12 @@
 package ch.hearc.ig.ta.services;
 
 import ch.hearc.ig.ta.utilities.authentification.User;
+import ch.hearc.ig.ta.utilities.authentification.Users;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -37,21 +43,22 @@ public class GamificationService {
   }
 
   /**
-   * TOP 5 des clients ayant fait le virement le plus élevé
-   *
-   * @param clientList
-   * @return
+   * Retourne une liste d'objets user triés dans l'ordre décroissant en
+   * fonction de leur points.
+   * @return  une liste de users triés
    */
-//  public List<Client> topFive(List<Virement> virementList) {
-//
-//    float[] montants = new float[virementList.size()];
-//    for (int i = 0; i <= virementList.size(); i++) {
-//      montants[i] = virementList.get(i).get
-//    }
-//
-//    Arrays.sort(clientList);
-//
-//    return null;
-//  }
-
+  public List<User> getUsersWithScores(){
+  
+  Map<String,User> users = Users.getUsers();
+  ArrayList<User> userList= new ArrayList<>();
+    for (Map.Entry<String, User> entry : users.entrySet()) {
+      User user = entry.getValue();
+      userList.add(user);
+    }
+     Collections.sort(userList);
+     
+     return userList;
+  
+  }
+  
 }

@@ -8,3 +8,4 @@
 Cette page sert de page d'accueil
 <%@include file="ajouterClient.jsp"%>
 <%@include file="chartStat.jsp"%>
+<%@include file="chartUserStat.jsp"%>

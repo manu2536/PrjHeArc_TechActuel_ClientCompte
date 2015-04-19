@@ -20,8 +20,8 @@ public class Users {
     addUser(5, "francesco", "termine", 1470);
     addUser(6, "christophe", "francillon", 890);
   }
-
-  private static Map<String, User> getUsers(){
+//JWE : mise en public car j'ai besoin d'y accéder par le gamification service
+  public static Map<String, User> getUsers(){
     return users;
   }
   

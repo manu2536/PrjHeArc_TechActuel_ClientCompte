@@ -114,9 +114,14 @@ public class BankController extends HttpServlet {
             //On sauve le login en session
             request.getSession().setAttribute("authUser", request.getParameter("username"));
             alertMessages.add(new AlertMessage("info", "Bienvenue", "dans l'application MyBank"));
+            //chargement des données à afficher dans le dashboard
             FakeData fakedata = new FakeData();
             List<Virement> listVirement = fakedata.getVirementList();
             request.getSession().setAttribute("listVirement", listVirement);
+            //chargement de la liste des users 
+            GamificationService gamificationService = new GamificationService();
+            List<User> users = gamificationService.getUsersWithScores();
+            request.getSession().setAttribute("listUsers", users);
             URLRedirection = "BankController?action=dashboard";
           } else {
             alertMessages.add(new AlertMessage("danger", "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect"));
