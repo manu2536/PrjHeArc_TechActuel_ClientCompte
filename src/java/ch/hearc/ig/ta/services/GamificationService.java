@@ -74,6 +74,23 @@ public class GamificationService {
     return sdfy.format(date);
 
   }
+  
+  public Map<Integer, Integer> addCompteToMapOpenedAccount(Map<Integer,Integer> mapMoisCpOuverts, String username){
+  
+    Date date = new Date();
+   Compte compte = new Compte();
+   compte.setDateOuverture(date);
+   
+       if (mapMoisCpOuverts.get(compte.getMonth()) == null) {
+          mapMoisCpOuverts.put(compte.getMonth(), 1);
+        } else {
+          int value = mapMoisCpOuverts.get(compte.getMonth());
+          value++;
+          mapMoisCpOuverts.remove(compte.getMonth());
+          mapMoisCpOuverts.put(compte.getMonth(), value);
+        }      
+       return mapMoisCpOuverts;
+  }
 
   public Map<Integer, Integer> getNbCompteOuvertsByMonth(List<Compte> comptes, String username) {
     Map<Integer, Integer> mapMoisCpOuverts = new HashMap();
