@@ -18,22 +18,26 @@
 </c:choose>
 
 <table class="table table-hover">
-  <tr>
-    <th>Nom / Prénom</th>
-    <th>Adresse</th>
-    <th>Opérations</th>
-  </tr>
-  <c:forEach var="customer" items="${ListCustomers}">
+  <thead>
     <tr>
-      <td>${customer.nom} ${customer.prenom}</td>
-      <td>${customer.adresse} ${customer.ville}</td>
-      <td>
-        <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
-        <a href="BankController?action=updateClient&id=${customer.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>          
-        <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Virement</a>
-        <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
-        <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
-      </td>
+      <th>Nom / Prénom</th>
+      <th>Adresse</th>
+      <th>Opérations</th>
     </tr>
-  </c:forEach>
+  </thead>
+  <tbody>
+    <c:forEach var="customer" items="${ListCustomers}">
+      <tr>
+        <td>${customer.nom} ${customer.prenom}</td>
+        <td>${customer.adresse} ${customer.ville}</td>
+        <td>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
+          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>          
+          <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Virement</a>
+          <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
+          <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
+        </td>
+      </tr>
+    </c:forEach>
+  </tbody>
 </table>

@@ -1,9 +1,9 @@
 package ch.hearc.ig.ta.services;
 
+import ch.hearc.ig.ta.utilities.Level;
 import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +27,10 @@ public class GamificationService {
 
   /**
    * permet d'incrémenter le score du banquier
+   * @param nbPoint
    */
-  public void incrementScore(int nbPoint) {
-    score += nbPoint;
+  public void incrementScore(int nbPoint, User user) {
+    user.addPoints(nbPoint);
   }
 
   /**

@@ -6,6 +6,7 @@ import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.GamificationService;
+import ch.hearc.ig.ta.utilities.Level;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
 import ch.hearc.ig.ta.utilities.FakeData;
@@ -183,10 +184,15 @@ public class BankController extends HttpServlet {
         
         if (request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
           try {
-            int id1 = new ServicesImpl().addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
-            Client cli1 = new ServicesImpl().searchClientById(String.valueOf(id1));
+            ServicesImpl services = new ServicesImpl();
+            int id1 = services.addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
+            Client cli1 = services.searchClientById(String.valueOf(id1));
             alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
 
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(10, authUser);
+            
             //Mise à jour session client sélectionné
             request.getSession().setAttribute("SelectedClient", cli1);
 
@@ -248,8 +254,13 @@ public class BankController extends HttpServlet {
           int idClie = cli.getIdentifiant();
 
           try {
-            new ServicesImpl().addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
+            ServicesImpl services = new ServicesImpl();
+            services.addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
             alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
+            
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(5, authUser);
             
             //Recharge liste comptes client session
             new ServicesImpl().loadAccounts(cli);
@@ -296,6 +307,10 @@ public class BankController extends HttpServlet {
             ServicesImpl services = new ServicesImpl();
             Virement virement = services.transfert(idCompteDebit, idCompteCredit, montantTransfert);
             
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(3, authUser);
+            
             //Ajout du virement à la liste
             if(virement != null){
               List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
@@ -324,6 +339,10 @@ public class BankController extends HttpServlet {
           try {
             ServicesImpl services = new ServicesImpl();
             Virement virement = services.transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+            
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(3, authUser);
             
             //Ajout du virement à la liste
             if(virement != null){
@@ -423,7 +442,8 @@ public class BankController extends HttpServlet {
       case "profil":
         User user = new ServicesImpl().getUser((String) request.getSession().getAttribute("authUser"));
         request.setAttribute("User", user);
-        request.setAttribute("Level", new GamificationService().getLevel(user));
+        request.setAttribute("UserLevel", new GamificationService().getLevel(user));
+        request.setAttribute("Levels", Level.values());
 
         //Page cible
         request.getSession().setAttribute("currentPage", "profil");
