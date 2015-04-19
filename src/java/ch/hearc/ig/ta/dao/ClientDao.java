@@ -314,4 +314,49 @@ public class ClientDao {
   public static void loadAccounts(Client c){
     c.setListeCompte(CompteDao.research(c.getIdentifiant()));
   }
+  
+  public static Client searchClientByIdCompte(int idCompte){
+
+     Client client = null;
+    Connection cnx = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      cnx = OracleConnections.getConnection();
+
+      //String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
+      StringBuilder sql = new StringBuilder();
+      sql.append("select cli.numero as numCli, cli.nom as nomCli, cli.prenom as prenomCli, cli.adresse as adresseCli, cli.ville as villeCli from compte com")
+              .append(" inner join client cli on cli.numero = com.numero_client ")
+              .append("where com.numero = ")
+              .append(idCompte);
+      stmt = cnx.createStatement();
+      rs = stmt.executeQuery(sql.toString());
+
+      while (rs.next()) {
+        client = new Client();
+        client.setIdentifiant(rs.getInt("numCli"));
+        client.setNom(rs.getString("nomCli"));
+        client.setPrenom(rs.getString("prenomCli"));
+        client.setAdresse(rs.getString("adresseCli"));
+        client.setVille(rs.getString("villeCli"));
+      }
+      return client;
+    } catch (SQLException ex) {
+      System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+      return null;
+    } finally {
+      try {
+        rs.close();
+        stmt.close();
+        cnx.close();
+      } catch (SQLException ex) {
+        System.out.println("Error SELECT SQL: " + ex.getMessage());
+      }
+
+    }
+    
+    
+  }
 }

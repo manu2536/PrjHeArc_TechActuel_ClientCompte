@@ -7,6 +7,7 @@ import ch.hearc.ig.ta.log.ApplicationLogger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ public class FakeData {
     //on initialise la liste des virements
     initAllVirements();
     //on modifie la liste des clients et on ajoute à chacun des clients une date fictive d'inscription
-   // initDateInscriptionIntoClients();
+    initDateInscriptionIntoClients();
   }
 
   /**
@@ -162,37 +163,40 @@ public class FakeData {
     List<Date> dateList = new ArrayList<>();
     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-//    dateList.add(sdf.parse("11.11.2010"));
-//    dateList.add(sdf.parse("12.12.2010"));
-//    dateList.add(sdf.parse("01.01.2011"));
-//    dateList.add(sdf.parse("03.03.2011"));
-//    dateList.add(sdf.parse("04.04.2011"));
-//    dateList.add(sdf.parse("06.06.2011"));
-//    dateList.add(sdf.parse("05.11.2011"));
-//    dateList.add(sdf.parse("13.05.2012"));
-//    dateList.add(sdf.parse("14.06.2012"));
-//    dateList.add(sdf.parse("15.06.2012"));
-//    dateList.add(sdf.parse("14.07.2012"));
-//    dateList.add(sdf.parse("09.08.2012"));
-//    dateList.add(sdf.parse("15.08.2012"));
-//    dateList.add(sdf.parse("20.12.2012"));
-//    dateList.add(sdf.parse("07.04.2013"));
-//    dateList.add(sdf.parse("15.03.2014"));
-//    dateList.add(sdf.parse("15.09.2014"));
-//    dateList.add(sdf.parse("09.10.2014"));
-//    dateList.add(sdf.parse("09.11.2014"));
-//    dateList.add(sdf.parse("21.12.2014"));
+    dateList.add(sdf.parse("11.11.2010"));
+    dateList.add(sdf.parse("12.12.2010"));
+    dateList.add(sdf.parse("01.01.2011"));
+    dateList.add(sdf.parse("03.03.2011"));
+    dateList.add(sdf.parse("04.04.2011"));
+    dateList.add(sdf.parse("06.06.2011"));
+    dateList.add(sdf.parse("05.11.2011"));
+    dateList.add(sdf.parse("13.05.2012"));
+    dateList.add(sdf.parse("14.06.2012"));
+    dateList.add(sdf.parse("15.06.2012"));
+    dateList.add(sdf.parse("14.07.2012"));
+    dateList.add(sdf.parse("09.08.2012"));
+    dateList.add(sdf.parse("15.08.2012"));
+    dateList.add(sdf.parse("20.12.2012"));
+    dateList.add(sdf.parse("07.04.2013"));
+    dateList.add(sdf.parse("15.03.2014"));
+    dateList.add(sdf.parse("15.09.2014"));
+    dateList.add(sdf.parse("15.09.2009"));
+    dateList.add(sdf.parse("09.10.2014"));
+    dateList.add(sdf.parse("09.11.2014"));
     dateList.add(sdf.parse("21.12.2014"));
-    dateList.add(sdf.parse("22.12.2014"));
-    dateList.add(sdf.parse("22.12.2014"));
-    dateList.add(sdf.parse("23.12.2014"));
-    dateList.add(sdf.parse("23.12.2014"));
-    dateList.add(sdf.parse("15.02.2015"));
-    dateList.add(sdf.parse("12.03.2015"));
-    dateList.add(sdf.parse("15.03.2015"));
-    dateList.add(sdf.parse("30.03.2015"));
     dateList.add(sdf.parse("05.04.2015"));
-
+    dateList.add(sdf.parse("30.03.2015"));
+    dateList.add(sdf.parse("15.03.2015"));
+    dateList.add(sdf.parse("12.03.2015"));
+    dateList.add(sdf.parse("15.02.2015"));
+    dateList.add(sdf.parse("23.12.2014"));
+    dateList.add(sdf.parse("23.12.2014"));
+    dateList.add(sdf.parse("22.12.2014"));
+    dateList.add(sdf.parse("22.12.2014"));
+    dateList.add(sdf.parse("21.12.2014"));
+    
+    Collections.sort(dateList, Collections.reverseOrder());
+   
     return dateList;
   }
 

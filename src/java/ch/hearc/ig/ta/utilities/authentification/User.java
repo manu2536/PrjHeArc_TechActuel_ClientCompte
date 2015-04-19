@@ -4,7 +4,7 @@ package ch.hearc.ig.ta.utilities.authentification;
  *
  * @author Fabien Maître
  */
-public class User {
+public class User implements Comparable<User>{
   private int id;
   private String login;
   private String password;
@@ -57,6 +57,13 @@ public class User {
 
   public void setPoints(int points) {
     this.points = points;
+  }
+
+  @Override
+  public int compareTo(User compareUser) {
+  int comparePoints = ((User) compareUser).getPoints();
+  
+  return this.points - comparePoints;
   }
   
   
