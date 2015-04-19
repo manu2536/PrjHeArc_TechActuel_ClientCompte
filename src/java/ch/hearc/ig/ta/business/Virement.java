@@ -17,7 +17,7 @@ import java.util.Date;
  *
  * @author jeremy.wermeill
  */
-public class Virement {
+public class Virement implements Comparable<Virement> {
 
   private String noCptDebit;
   private String noCptCredit;
@@ -65,6 +65,17 @@ public class Virement {
   public void setMontant(Float montant) {
     this.montant = montant;
   }
+  /**
+   * A utiliser pour de l'affichage uniquement
+   * @return une date formattée de type jj.mm.aaaa
+   */
+  public String getFormatedDate(){
+    SimpleDateFormat sdfy = new SimpleDateFormat("MM");
+    String month = sdfy.format(dateVirement);
+  
+   String formatedDate = getDay() + "." + month + "."  + getYear();
+   return formatedDate;
+  }
 
   public String getYear() {
     SimpleDateFormat sdfy = new SimpleDateFormat("yyyy");
@@ -89,6 +100,12 @@ public class Virement {
 
   public void setDateVirement(Date dateVirement) {
     this.dateVirement = dateVirement;
+  }
+
+  @Override
+  public int compareTo(Virement comparedVirement) {
+    return comparedVirement.getDateVirement().compareTo(this.dateVirement);
+ // return this.dateVirement.compareTo(comparedVirement.getDateVirement());
   }
 
 }
