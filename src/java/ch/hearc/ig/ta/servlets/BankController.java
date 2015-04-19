@@ -291,7 +291,15 @@ public class BankController extends HttpServlet {
           float montantTransfert = Float.parseFloat(request.getParameter("montant"));
 
           try {
-            new ServicesImpl().transfert(idCompteDebit, idCompteCredit, montantTransfert);
+            ServicesImpl services = new ServicesImpl();
+            Virement virement = services.transfert(idCompteDebit, idCompteCredit, montantTransfert);
+            
+            //Ajout du virement à la liste
+            if(virement != null){
+              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
+              request.getSession().setAttribute("listVirement", virements);
+            }
+            
             alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
 
           } catch (MetierException ex) {
@@ -312,7 +320,15 @@ public class BankController extends HttpServlet {
           float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
 
           try {
-            new ServicesImpl().transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+            ServicesImpl services = new ServicesImpl();
+            Virement virement = services.transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+            
+            //Ajout du virement à la liste
+            if(virement != null){
+              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
+              request.getSession().setAttribute("listVirement", virements);
+            }
+            
             alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué"));
 
           } catch (MetierException ex) {
