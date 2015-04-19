@@ -10,10 +10,10 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>JSP Page</title>
+    <title>Modification d'un client</title>
   </head>
   <body>
-    <form class="form-horizontal" method="get" action="BankController">
+    <form class="form-horizontal" method="post" action="BankController">
       <legend>Modifier ${Client.prenom} ${Client.nom}</legend>
       <input type="hidden" name="action" value="doUpdateClient">
       <input type="hidden" name="id" value="${Client.identifiant}">
@@ -47,7 +47,6 @@
           <button id="singlebutton" name="SEND" class="btn btn-primary">VALIDER</button>
         </div>
       </div>
-      <div>
     </form>
   </body>
 </html>

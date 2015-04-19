@@ -19,11 +19,11 @@
   </form> -->
  
     <fieldset>
-      <form  name="editClient" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
-      <legend>${Client.nom} ${Client.prenom} <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button></legend>
+      
+        <!--<a href="BankController?action=updateClient&id=${Client.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>-->
+      <legend>${Client.nom} ${Client.prenom} <span> <a href="BankController?action=updateClient&id=${Client.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ></a></span></legend>
       ${Client.adresse}<br/>
       ${Client.ville}<br/>
-      </form>
     </fieldset>
     <div> <!-- Affichage compte -->
       <table>
@@ -40,14 +40,15 @@
             <td>${account.taux}</td>
             <td>${account.solde}</td>
             <td>
-              <a href="BankController?action=afficherCompte&id=${account.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
+              <!--<span><a href="BankController?action=afficherCompte&id=${account.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a></span>-->
             </td>
             <td>
-              <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateAcccount&id=${account.identifiant}">
+              <span><a href="BankController?action=updateAccount&id=${account.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a></span>
+              <!--<form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateAcccount&id=${account.identifiant}">
             
                 <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
              
-          </form>
+          </form>-->
             </td>
           </tr>
         </c:forEach>

@@ -265,16 +265,19 @@ public class ServicesImpl {
   
   
   public void updateClient(Client c) throws MetierException{
-    
-    
-    
     if(c.getIdentifiant() == null){
       throw new MetierException("id Client non trouvé");  
     }else{
       ClientDao.update(c);
     }
-    
-
+  }
+  
+  public void updateCompte(Compte c) throws MetierException{
+    if(c.getIdentifiant() == null){
+      throw new MetierException("id Compte non trouvé");  
+    }else{
+      CompteDao.update(c);
+    }
   }
 
   /**
