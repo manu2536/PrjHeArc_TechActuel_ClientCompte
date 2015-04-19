@@ -6,12 +6,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML>
-<html>
-
-<head>  
   <script type="text/javascript">
-  window.onload = function () {
-    var chart = new CanvasJS.Chart("chartContainer",
+    var chartContainer2 = new CanvasJS.Chart("chartContainer2",
     {
       theme: "theme4",
       title:{
@@ -44,14 +40,8 @@
       
       ]
     });
-
-chart.render();
-}
+chartContainer2.render();
 </script>
-<script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script></head>
-<body>
-  <div id="chartContainer" style="height: 300px; width: 50%;">
+<script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script>
+  <div id="chartContainer2" style="height: 300px; width: 50%;">
   </div>
-</body>
-
-</html>

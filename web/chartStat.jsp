@@ -6,8 +6,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
+<div>
 <html>
-
 <head>  
 	<script type="text/javascript" >
 	window.onload = function () {
@@ -53,11 +53,13 @@
 
 chart.render();
 }
+
 </script>
-<script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script>
+<script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script>>
 </head>
 <body>
 	<div id="chartContainer" style="height: 350px; width: 50%;">
 	</div>
 </body>
 </html>
+</div>

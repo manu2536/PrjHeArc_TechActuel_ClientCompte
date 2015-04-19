@@ -4,13 +4,7 @@
     Author     : jeremy.wermeill
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML>
-<html>
-
-<head>  
-  <script type="text/javascript">
-  window.onload = function () {
+<script language ="javascript">
         var chart = new CanvasJS.Chart("chartContainer", {
             title: {
                 text: "Comparaison des scores",
@@ -44,7 +38,6 @@
                 color: "#3374B7",
                 type: "bar",
                 dataPoints: [
-                  
                    <c:forEach var="user" items="${listUsers}"> 
                      <c:choose>
                        <c:when test="${user.login == authUser}">
@@ -59,14 +52,5 @@
             }
             ]
         });
-
         chart.render();
-    }
   </script>
-  <script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script>
-</head>
-<body>
-  <div id="chartContainer" style="height: 300px; width: 50%;">
-  </div>
-</body> 
-</html>
