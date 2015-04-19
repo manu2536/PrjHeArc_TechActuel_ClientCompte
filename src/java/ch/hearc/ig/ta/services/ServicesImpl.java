@@ -76,16 +76,16 @@ public class ServicesImpl {
     }
   }
   
-  public Virement prepareVirementForList(int compteDebit, int compteCredit, float montant){
+  public Virement prepareVirementForList(Compte compteDebit, Compte compteCredit, float montant){
     
-     Client clientDebit = ClientDao.searchClientByIdCompte(compteDebit);
-     Client clientCredit = ClientDao.searchClientByIdCompte(compteCredit);
+     Client clientDebit = ClientDao.searchClientByIdCompte(compteDebit.getIdentifiant());
+     Client clientCredit = ClientDao.searchClientByIdCompte(compteCredit.getIdentifiant());
      
      Virement virement = new Virement();
      virement.setNomClientDebit(clientDebit.getNom());
      virement.setNomClientCredit(clientCredit.getNom());
-     virement.setNoCptDebit(String.valueOf(compteDebit));
-     virement.setNoCptCredit(String.valueOf(compteCredit));
+     virement.setNoCptDebit(compteDebit.getNumero());
+     virement.setNoCptCredit(compteCredit.getNumero());
      virement.setMontant(montant);
      Date date = new Date();
      //date du jour
@@ -133,7 +133,7 @@ public class ServicesImpl {
     }
     transfert(debit, credit, montant);
     //si tout s'est bien passé on retourne le virement
-    virement = prepareVirementForList(compteDebit, compteCredit, montant);
+    virement = prepareVirementForList(debit, credit, montant);
     return virement;
     
   }
@@ -142,8 +142,9 @@ public class ServicesImpl {
    * Cette méthode permet de verser un montant dans un compte TODO : remonter
    * l'exception correctement
    *
-   * @param compteCredit
+   * @param IDcompteCredit
    * @param montant
+   * @throws ch.hearc.ig.ta.exceptions.MetierException
    */
   public void verser(int IDcompteCredit, float montant) throws MetierException {
     Connection connection = null;
@@ -151,7 +152,7 @@ public class ServicesImpl {
     try {
       Compte compteCredit = CompteDao.researchByID(IDcompteCredit);
       if (compteCredit == null) {
-        throw new IDCompteException("Le compte Id " + IDcompteCredit + " n'existe pas");
+        throw new IDCompteException("Le compte de crédit (ID " + IDcompteCredit + ") n'existe pas");
       }
       //on contrôle la validité du montant 
       checkAmountValidity(montant);
@@ -186,8 +187,9 @@ public class ServicesImpl {
    * Cette méthode permet de retirer un montant d'un compte TODO: voir ou
    * remonter l'exception
    *
-   * @param compteDebit
+   * @param IDcompteDebit
    * @param montant
+   * @throws ch.hearc.ig.ta.exceptions.MetierException
    */
   public void retirer(int IDcompteDebit, float montant) throws MetierException {
     Connection connection = null;
@@ -309,16 +311,19 @@ public class ServicesImpl {
   
   
   public void updateClient(Client c) throws MetierException{
-    
-    
-    
     if(c.getIdentifiant() == null){
       throw new MetierException("id Client non trouvé");  
     }else{
       ClientDao.update(c);
     }
-    
-
+  }
+  
+  public void updateCompte(Compte c) throws MetierException{
+    if(c.getIdentifiant() == null){
+      throw new MetierException("id Compte non trouvé");  
+    }else{
+      CompteDao.update(c);
+    }
   }
 
   /**
