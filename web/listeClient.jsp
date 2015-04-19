@@ -3,10 +3,7 @@
     Created on : 8 avr. 2015, 22:20:49
     Author     : emmanuel.rondez
 --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
 
 <c:choose>
   <%-- Sans recherche --%>
@@ -20,21 +17,17 @@
   </c:otherwise>
 </c:choose>
 
-
-<div> <!-- MAIN -->
-  <table class="table table-hover" style="width: 100%;">
+<table class="table table-hover">
+  <thead>
     <tr>
-      <th></th>
-      <th> Nom </th>
-      <th> Adresse </th>
-      <th> Operation </th>
+      <th>Nom / Prénom</th>
+      <th>Adresse</th>
+      <th>Opérations</th>
     </tr>
+  </thead>
+  <tbody>
     <c:forEach var="customer" items="${ListCustomers}">
       <tr>
-        <td>
-
-          
-        </td>
         <td>${customer.nom} ${customer.prenom}</td>
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
@@ -50,5 +43,5 @@
         </td>
       </tr>
     </c:forEach>
-  </table>
-</div>
+  </tbody>
+</table>

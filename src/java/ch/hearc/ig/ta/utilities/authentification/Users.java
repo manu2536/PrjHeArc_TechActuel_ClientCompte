@@ -17,7 +17,7 @@ public class Users {
     addUser(2, "colin", "schaffner", 475);
     addUser(3, "jeremy", "wermeille", 145);
     addUser(4, "emmanuel", "rondez", 50);
-    addUser(5, "francesco", "termine", 1470);
+    addUser(5, "francesco", "termine", 5685);
     addUser(6, "christophe", "francillon", 890);
   }
 //JWE : mise en public car j'ai besoin d'y accéder par le gamification service

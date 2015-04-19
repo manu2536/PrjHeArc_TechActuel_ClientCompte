@@ -1,11 +1,10 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
-import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.business.Virement;
-import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.GamificationService;
+import ch.hearc.ig.ta.utilities.Level;
 import ch.hearc.ig.ta.services.ServicesImpl;
 import ch.hearc.ig.ta.utilities.AlertMessage;
 import ch.hearc.ig.ta.utilities.FakeData;
@@ -14,6 +13,7 @@ import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,30 +46,23 @@ public class BankController extends HttpServlet {
 
     //Action par défaut
     String action = "login";
-
-    //Si utilisateur est connecté
-    Boolean authentified = false;
-    if (request.getSession().getAttribute("authUser") != null) {
-      if (Users.userExists((String) request.getSession().getAttribute("authUser"))) {
-        authentified = true;
-      }
+    
+    //Récupération de l'action
+    if (request.getParameter("action") != null) {
+      action = request.getParameter("action");
     }
-
+    
     //Liste contenant des messages d'erreur
     List<AlertMessage> alertMessages = new ArrayList<>();
     if (request.getSession().getAttribute("alertMessages") != null) {
       alertMessages = (List<AlertMessage>) request.getSession().getAttribute("alertMessages");
     }
 
-    /*A revoir car remplacé par variable forwardOrRedirect */
-    if (request.getAttribute("RedirectionAction") != null) {
-      // Permet de rediriger la servlet sur elle même
-      //(request.setParameter() --> n'existe pas
-      action = (String) request.getAttribute("RedirectionAction");
-      alertMessages.addAll((List<AlertMessage>) request.getSession().getAttribute("alertMessages"));
-    } else {
-      if (request.getParameter("action") != null) {
-        action = request.getParameter("action");
+    //Si utilisateur est connecté
+    Boolean authentified = false;
+    if (request.getSession().getAttribute("authUser") != null) {
+      if (Users.userExists((String) request.getSession().getAttribute("authUser"))) {
+        authentified = true;
       }
     }
 
@@ -80,6 +73,7 @@ public class BankController extends HttpServlet {
         action = "login";
       }
     }
+    
     switch (action) {
       case "demo":
         //Demo de toutes les types de messages d'erreur
@@ -123,7 +117,11 @@ public class BankController extends HttpServlet {
             //chargement de la liste des users 
             GamificationService gamificationService = new GamificationService();
             List<User> users = gamificationService.getUsersWithScores();
+            Map<Integer,Integer> mapCpOpenByMonth = gamificationService.getNbCompteOuvertsByMonth(fakedata.getComptes(), request.getParameter("username"));
             request.getSession().setAttribute("listUsers", users);
+            request.getSession().setAttribute("mapCpOpenByMonth", mapCpOpenByMonth);
+            //on passe aussi l'année pour pouvoir effectuer des comparaisons 
+            request.getSession().setAttribute("annee", gamificationService.getLimitedYear());
             URLRedirection = "BankController?action=dashboard";
           } else {
             alertMessages.add(new AlertMessage("danger", "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect"));
@@ -166,6 +164,120 @@ public class BankController extends HttpServlet {
         URLRedirection = "BankController?action=dashboard";
         break;
 
+      case "afficherClient":
+        Client cliAfficherClient = getClientbyRequestIDorSession(request);
+        if (cliAfficherClient != null) {
+          request.setAttribute("Client", cliAfficherClient);
+          //Page cible
+          request.getSession().setAttribute("currentPage", "client");
+          request.setAttribute("targetPage", "detailClient.jsp");
+          request.setAttribute("targetPageTitle", "Details client");
+        } else {
+          // Erreur Redirection page clients avec message d'erreur
+          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
+          request.getSession().setAttribute("currentPage", "clients");
+          request.setAttribute("targetPage", "listeClient.jsp");
+          request.setAttribute("targetPageTitle", "Clients");
+        }
+        break;
+
+      case "doAddClient":
+        forwardOrRedirect = "redirect";
+        URLRedirection = "BankController?action=dashboard";
+        
+        if (request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
+          try {
+            ServicesImpl services = new ServicesImpl();
+            int id1 = services.addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
+            Client cli1 = services.searchClientById(String.valueOf(id1));
+            alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
+
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(10, authUser);
+            
+            //Mise à jour session client sélectionné
+            request.getSession().setAttribute("SelectedClient", cli1);
+
+            //Redirection page client
+            URLRedirection = "BankController?action=afficherClient";
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Erreur d'ajout du client", ex.getMessage()));
+          }
+          
+        }else{
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
+        
+        break;
+        
+      case "updateClient":
+        Client clientModifier = getClientbyRequestIDorSession(request);
+        request.setAttribute("Client", clientModifier);
+        //Page cible
+        request.getSession().setAttribute("currentPage", "client");
+        request.setAttribute("targetPage", "updateClient.jsp");
+        request.setAttribute("targetPageTitle", "Details client");
+        break;
+
+      case "doUpdateClient":
+        forwardOrRedirect = "redirect";
+        URLRedirection = "BankController?action=afficherClient";
+        
+        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
+          Client clientAModif = new Client();
+          clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
+          clientAModif.setNom(request.getParameter("nom"));
+          clientAModif.setPrenom(request.getParameter("prenom"));
+          clientAModif.setAdresse(request.getParameter("adresse"));
+          clientAModif.setVille(request.getParameter("ville"));
+
+          try {
+            new ServicesImpl().updateClient(clientAModif);
+            alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
+            //Mise à jour session client sélectionné
+            request.getSession().setAttribute("SelectedClient", clientAModif);
+            
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification du client : " + ex));
+          }
+
+        } else {
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
+        break;
+
+      case "doAddCompte":
+        forwardOrRedirect = "redirect";
+        URLRedirection = "BankController?action=afficherClient";
+        
+        Client cli = getClientbyRequestIDorSession(request);
+        if (cli != null && request.getParameter("nom") != null && request.getParameter("solde") != null && request.getParameter("taux") != null) {
+          int idClie = cli.getIdentifiant();
+
+          try {
+            ServicesImpl services = new ServicesImpl();
+            services.addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
+            
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(5, authUser);
+            
+            //Recharge liste comptes client session
+            new ServicesImpl().loadAccounts(cli);
+            request.getSession().setAttribute("SelectedClient", cli);
+            
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Erreur d'ajout du compte", ex.getMessage()));
+          }
+          
+        }else{
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
+        break;
+
       case "virement":
         Client clVirement = getClientbyRequestIDorSession(request);
         if (clVirement != null) {
@@ -182,56 +294,74 @@ public class BankController extends HttpServlet {
           request.setAttribute("targetPage", "listeClient.jsp");
           request.setAttribute("targetPageTitle", "Clients");
         }
-
         break;
 
-      case "addClient":
 
-        try {
-          int id1 = new ServicesImpl().addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
-          Client cli1 = new ServicesImpl().searchClientById(String.valueOf(id1));
-          request.setAttribute("Client", cli1);
-          alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
-
-          request.getSession().setAttribute("currentPage", "clients");
-          request.setAttribute("targetPage", "detailClient.jsp");
-          request.setAttribute("targetPageTitle", "Details client");
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur ajout de client : " + ex));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } finally {
-
-        }
-
-        break;
-
-      case "addCompte":
-        
-        URLRedirection = "BankController?action=afficherClient";
+      case "doTransfertCompteACompte":
+        URLRedirection = "BankController?action=virement";
         forwardOrRedirect = "redirect";
 
-        Client cli = getClientbyRequestIDorSession(request);
-        int idClie = cli.getIdentifiant();
+        if (request.getParameter("compteDebit") != null && request.getParameter("compteCredit") != null && request.getParameter("montant") != null) {
+          int idCompteDebit = (int) Integer.parseInt(request.getParameter("compteDebit"));
+          int idCompteCredit = (int) Integer.parseInt(request.getParameter("compteCredit"));
+          float montantTransfert = Float.parseFloat(request.getParameter("montant"));
 
-        try {
-          new ServicesImpl().addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
-          alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
-          
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur ajout de compte : " + ex));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } finally {
+          try {
+            ServicesImpl services = new ServicesImpl();
+            Virement virement = services.transfert(idCompteDebit, idCompteCredit, montantTransfert);
+            
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(3, authUser);
+            
+            //Ajout du virement à la liste
+            if(virement != null){
+              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
+              request.getSession().setAttribute("listVirement", virements);
+            }
+            
+            alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
 
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de transfert", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
+        break;
 
-        request.setAttribute("Client", cli);
+      case "doVirementCompteEtranger":
+        URLRedirection = "BankController?action=virement";
+        forwardOrRedirect = "redirect";
 
-        //Page cible
-        request.getSession().setAttribute("currentPage", "clients");
-        request.setAttribute("targetPage", "detailClient.jsp");
-        request.setAttribute("targetPageTitle", "Details client");
+        if (request.getParameter("compteDebitVirement") != null && request.getParameter("creditVirement") != null && request.getParameter("montantVirement") != null) {
+          int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
+          int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
+          float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
+
+          try {
+            ServicesImpl services = new ServicesImpl();
+            Virement virement = services.transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
+            
+            //Ajout des points
+            User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
+            new GamificationService().incrementScore(3, authUser);
+            
+            //Ajout du virement à la liste
+            if(virement != null){
+              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
+              request.getSession().setAttribute("listVirement", virements);
+            }
+            
+            alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de virement", ex.getMessage()));
+          }
+
+        } else {
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
         break;
 
       case "depot":
@@ -253,22 +383,23 @@ public class BankController extends HttpServlet {
         break;
 
       case "doDepot":
-        if (request.getAttribute("selectCompte") == null) {
-          // Message d'erreur 
-        }
-        int dIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
-        float dMontant = Float.parseFloat(request.getParameter("montant"));
-        try {
-          new ServicesImpl().verser(dIdCompte, dMontant);
-          alertMessages.add(new AlertMessage("success", "Succès", "Dépot de " + dMontant + "CHF effectué"));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur Dépot: " + ex));
-          request.setAttribute("RedirectionAction", "depot");
-          URLRedirection = "BankController";
-        } finally {
+        URLRedirection = "BankController?action=depot";
+        forwardOrRedirect = "redirect";
+        
+        if (request.getParameter("selectCompte") != null && request.getParameter("montant") != null) {
+          int dIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
+          float dMontant = Float.parseFloat(request.getParameter("montant"));
+          
+          try {
+            new ServicesImpl().verser(dIdCompte, dMontant);
+            alertMessages.add(new AlertMessage("success", "Succès", "Dépot de CHF " + dMontant + " effectué"));
 
+          }catch(MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de dépôt", ex.getMessage()));
+          }
+          
+        }else{
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
         break;
 
@@ -290,186 +421,32 @@ public class BankController extends HttpServlet {
         break;
 
       case "doRetrait":
-        if (request.getAttribute("selectCompte") == null) {
-          // Message d'erreur 
-        }
-        int RIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
-        float RMontant = Float.parseFloat(request.getParameter("montant"));
-        try {
-          new ServicesImpl().retirer(RIdCompte, RMontant);
-          alertMessages.add(new AlertMessage("success", "Succès", "Retrait de " + RMontant + "CHF effectué"));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
-        } catch (MetierException ex) {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Erreur Retrait: " + ex));
-          request.setAttribute("RedirectionAction", "retrait");
-          URLRedirection = "BankController";
-        } finally {
-
-        }
-        break;
-
-      case "afficherClient":
-        Client cliAfficherClient = getClientbyRequestIDorSession(request);
-        if (cliAfficherClient != null) {
-          request.setAttribute("Client", cliAfficherClient);
-          //Page cible
-          request.getSession().setAttribute("currentPage", "client");
-          request.setAttribute("targetPage", "detailClient.jsp");
-          request.setAttribute("targetPageTitle", "Details client");
-        } else {
-          // Erreur Redirection page clients avec message d'erreur
-          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
-          request.getSession().setAttribute("currentPage", "clients");
-          request.setAttribute("targetPage", "listeClient.jsp");
-          request.setAttribute("targetPageTitle", "Clients");
-        }
-        break;
-
-      case "updateClient":
-        Client clientModifier = getClientbyRequestIDorSession(request);
-        request.setAttribute("Client", clientModifier);
-        //Page cible
-        request.getSession().setAttribute("currentPage", "client");
-        request.setAttribute("targetPage", "updateClient.jsp");
-        request.setAttribute("targetPageTitle", "Details client");
-        break;
-
-      case "doUpdateClient":
-
-        URLRedirection = "BankController?action=afficherClient";
+        URLRedirection = "BankController?action=retrait";
         forwardOrRedirect = "redirect";
-
-        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
-          Client clientAModif = new Client();
-          clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
-          clientAModif.setNom(request.getParameter("nom"));
-          clientAModif.setPrenom(request.getParameter("prenom"));
-          clientAModif.setAdresse(request.getParameter("adresse"));
-          clientAModif.setVille(request.getParameter("ville"));
-
+        
+        if (request.getParameter("selectCompte") != null && request.getParameter("montant") != null) {
+          int RIdCompte = (int) Integer.parseInt(request.getParameter("selectCompte"));
+          float RMontant = Float.parseFloat(request.getParameter("montant"));
+          
           try {
-            new ServicesImpl().updateClient(clientAModif);
-            alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
+            new ServicesImpl().retirer(RIdCompte, RMontant);
+            alertMessages.add(new AlertMessage("success", "Succès", "Retrait de CHF " + RMontant + " effectué"));
 
           } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
-          } finally {
+            alertMessages.add(new AlertMessage("danger", "Erreur de retrait", ex.getMessage()));
           }
-        } else {
+          
+        }else{
           alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
-
-        break;
-
-      case "updateAccount":
-
-        Compte compteModifier = CompteDao.researchByID(new Integer(request.getParameter("id")));
-        request.setAttribute("Compte", compteModifier);
-        //Page cible
-        request.getSession().setAttribute("currentPage", "compte");
-        request.setAttribute("targetPage", "updateAccount.jsp");
-        request.setAttribute("targetPageTitle", "Details compte");
-
-        break;
-
-      case "doUpdateCompte":
-
-        URLRedirection = "BankController?action=afficherClient";
-        forwardOrRedirect = "redirect";
-
-        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("taux") != null && request.getParameter("solde") != null) {
-          Compte compteAmodif = new Compte();
-          compteAmodif.setIdentifiant(new Integer(request.getParameter("id")));
-          compteAmodif.setNom(request.getParameter("nom"));
-          compteAmodif.setTaux(new Float(request.getParameter("taux")));
-          compteAmodif.setSolde(new Float(request.getParameter("solde")));
-
-          try {
-            new ServicesImpl().updateCompte(compteAmodif);
-            alertMessages.add(new AlertMessage("success", "Succès", "Compte modifié"));
-          } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
-          } finally {
-          }
-        } else {
-          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
-        }
-        break;
-
-      case "transfertCompteACompte":
-        Client clTransfert = getClientbyRequestIDorSession(request);
-        if (clTransfert != null) {
-          request.setAttribute("Client", clTransfert);
-          //Page cible
-          request.getSession().setAttribute("currentPage", "virement");
-          request.setAttribute("targetPage", "virement.jsp");
-          request.setAttribute("targetPageTitle", "Virement");
-        } else {
-          // Erreur Redirection page clients avec message d'erreur
-          alertMessages.add(new AlertMessage("warning", "Attention", "Aucun client sélectionné"));
-          request.getSession().setAttribute("currentPage", "clients");
-          request.setAttribute("targetPage", "listeClient.jsp");
-          request.setAttribute("targetPageTitle", "Clients");
-        }
-        break;
-
-      case "dotransfertCompteACompte":
-        URLRedirection = "BankController?action=virement";
-        forwardOrRedirect = "redirect";
-
-        if (request.getParameter("compteDebit") != null && request.getParameter("compteCredit") != null && request.getParameter("montant") != null) {
-          int idCompteDebit = (int) Integer.parseInt(request.getParameter("compteDebit"));
-          int idCompteCredit = (int) Integer.parseInt(request.getParameter("compteCredit"));
-          float montantTransfert = Float.parseFloat(request.getParameter("montant"));
-
-          try {
-            ServicesImpl services = new ServicesImpl();
-            Virement virement = services.transfert(idCompteDebit, idCompteCredit, montantTransfert);
-            alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
-            if (virement != null) {
-              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
-              request.getSession().setAttribute("listVirement", virements);
-            }
-          } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("danger", "Erreur de transfert", ex.getMessage()));
-          }
-        } else {
-          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
-        }
-
-        break;
-
-      case "virementCACompteEtranger":
-        URLRedirection = "BankController?action=virement";
-        forwardOrRedirect = "redirect";
-
-        if (request.getParameter("compteDebitVirement") != null && request.getParameter("creditVirement") != null && request.getParameter("montantVirement") != null) {
-          int idCompteDebitVirement = (int) Integer.parseInt(request.getParameter("compteDebitVirement"));
-          int idCompteCreditVirement = (int) Integer.parseInt(request.getParameter("creditVirement"));
-          float montantVirement = Float.parseFloat(request.getParameter("montantVirement"));
-
-          try {
-            ServicesImpl services = new ServicesImpl();
-            Virement virement = services.transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
-            alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué"));
-            if (virement != null) {
-              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
-              request.getSession().setAttribute("listVirement", virements);
-            }
-          } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("danger", "Erreur de virement", ex.getMessage()));
-          }
-
-        } else {
-          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
-        }
+        
         break;
 
       case "profil":
         User user = new ServicesImpl().getUser((String) request.getSession().getAttribute("authUser"));
         request.setAttribute("User", user);
-        request.setAttribute("Level", new GamificationService().getLevel(user));
+        request.setAttribute("UserLevel", new GamificationService().getLevel(user));
+        request.setAttribute("Levels", Level.values());
 
         //Page cible
         request.getSession().setAttribute("currentPage", "profil");
@@ -543,11 +520,11 @@ public class BankController extends HttpServlet {
 
     //Redirection
     //Forward = garde les paramètres dans l'url
-    if (forwardOrRedirect.equals("forward")) {
+    if(forwardOrRedirect.equals("forward")) {
       request.getRequestDispatcher(URLRedirection).forward(request, response);
 
-      //Redirection = recharge une nouvelle page
-    } else if (forwardOrRedirect.equals("redirect")) {
+    //Redirect = recharge une nouvelle page en effaçant l'URL
+    }else if(forwardOrRedirect.equals("redirect")) {
       response.sendRedirect(URLRedirection);
     }
   }
@@ -591,6 +568,7 @@ public class BankController extends HttpServlet {
     return "Short description";
   }// </editor-fold>
 
+  //Récupère le client en paramètre GET/POST ou de SESSION
   private Client getClientbyRequestIDorSession(HttpServletRequest request) {
     Client clDepot = null;
     String IdClient = null;

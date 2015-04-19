@@ -10,38 +10,42 @@
     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
       <div class="panel-body">
         <div class="container">
-          <h1>Ajouter un compte</h1>
           <div class="col-md-12">
-            <form class="form-horizontal" method="get" action="BankController">
-              <legend>Ajouter un compte pour ${Client.nom} ${Client.prenom}</legend>
-              <input type="hidden" name="action" value="addCompte">
-              <input type="hidden" name="ClientId" value="${Client.identifiant}">
+            <h1>Ajouter un compte</h1>
+            <form class="form-horizontal" method="post" action="BankController">
+              <input type="hidden" name="action" value="doAddCompte">
+              <input type="hidden" name="idClient" value="${Client.identifiant}">
+              <legend>Pour ${Client.prenom} ${Client.nom}</legend>
               <div class="form-group">
-                <label class="col-md-2 control-label" for="selectCompte">Nom</label>
+                <label class="col-md-2 control-label" for="nom">Nom</label>
                 <div class="col-md-4">
-                  <input id="textinput" name="nom" type="text" placeholder="Nom du compte" class="form-control input-md"> 
+                  <input id="nom" name="nom" type="text" placeholder="Nom du compte" required class="form-control input-md"> 
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label" for="montant">Solde</label>  
+                <label class="col-md-2 control-label" for="solde">Solde</label>  
                 <div class="col-md-4">
-                  <input id="textinput" name="solde" type="text" placeholder="Solde du compte" class="form-control input-md"> 
+                  <div class="input-group">
+                    <span class="input-group-addon">CHF</span>
+                    <input id="solde" name="solde" type="text" placeholder="Solde du compte" required pattern="^[0-9]*.[0-9][05]$" class="form-control input-md">
+                  </div>
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-2 control-label" for="montant">Taux</label>  
+                <label class="col-md-2 control-label" for="taux">Taux</label>  
                 <div class="col-md-4">
-                  <input id="textinput" name="taux" type="text" placeholder="Taux" class="form-control input-md"> 
+                  <div class="input-group">
+                    <input id="taux" name="taux" type="text" placeholder="Taux" required pattern="^[0-9]*.[0-9][0-9]$" class="form-control input-md">
+                    <span class="input-group-addon">%</span>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label" for="SEND"></label>
-                <div class="col-md-4">
-                  <button id="singlebutton" name="SEND" class="btn btn-primary">AJOUTER </button>
+                <div class="col-md-offset-2 col-md-10">
+                  <button id="SEND" name="SEND" class="btn btn-primary">Ajouter</button>
                 </div>
               </div>
-              <div>
             </form>
           </div>
         </div>

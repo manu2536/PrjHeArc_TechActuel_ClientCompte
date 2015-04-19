@@ -8,48 +8,57 @@
 
 <div class="container">
   <h1>Details client</h1>
+  <fieldset>
+    <form  name="editClient" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
+      <legend>${Client.prenom} ${Client.nom} <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button></legend>
+      Adresse : ${Client.adresse}<br/>
+      Ville : ${Client.ville}<br/>
+    </form>
+  </fieldset>
+  <br>
+  <br>
+    
   
-  <!--<form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateClient&id=${Client.identifiant}">
-    <div class="input-group">
+  <legend>Liste des comptes</legend>
+  <c:choose>
+    <%-- Aucun compte --%>
+    <c:when test="${empty Client.listeCompte}">
+      Aucun compte ouvert
+    </c:when>
 
-      <span class="input-group-btn">
-        
-      </span>
-    </div>
-  </form> -->
- 
-    <fieldset>
-      
-        <!--<a href="BankController?action=updateClient&id=${Client.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>-->
-      <legend>${Client.nom} ${Client.prenom} <span> <a href="BankController?action=updateClient&id=${Client.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ></a></span></legend>
-      ${Client.adresse}<br/>
-      ${Client.ville}<br/>
-    </fieldset>
-    <div> <!-- Affichage compte -->
-      <table>
-        <tr>
-          <th>Nom</th>
-          <th>Taux</th>
-          <th>Solde</th>
-        </tr>
-
-
-        <c:forEach var="account" items="${Client.listeCompte}">
+    <%-- Avec recherche --%>
+    <c:otherwise>
+      <div> <!-- Affichage compte -->
+        <table>
           <tr>
-            <td>${account.nom}</td>
-            <td>${account.taux}</td>
-            <td>${account.solde}</td>
-            <td>
-              <!--<span><a href="BankController?action=afficherCompte&id=${account.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a></span>-->
-            </td>
-            <td>
-              <span><a href="BankController?action=updateAccount&id=${account.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a></span>
-               <a href="BankController?action=deleteCompte&id=${account.identifiant}" class="glyphicon glyphicon-trash btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>
-          
-            </td>
+            <th>Nom</th>
+            <th>Taux</th>
+            <th>Solde</th>
           </tr>
-        </c:forEach>
-      </table>
-      <%@include file="ajouterCompte.jsp"%>
-    </div>
+
+          <c:forEach var="account" items="${Client.listeCompte}">
+            <tr>
+              <td>${account.nom}</td>
+              <td>${account.taux}</td>
+              <td>${account.solde}</td>
+              <td>
+                <a href="BankController?action=afficherCompte&id=${account.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
+              </td>
+              <td>
+                <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateAcccount&id=${account.identifiant}">
+
+                  <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
+
+                </form>
+              </td>
+            </tr>
+          </c:forEach>
+        </table>
+      </div>
+    </c:otherwise>
+  </c:choose>
+      
+  <br>
+  <br>
+  <%@include file="ajouterCompte.jsp"%>
 </div>
