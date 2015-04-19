@@ -98,8 +98,9 @@ public class ServicesImpl {
    * Cette méthode permet de verser un montant dans un compte TODO : remonter
    * l'exception correctement
    *
-   * @param compteCredit
+   * @param IDcompteCredit
    * @param montant
+   * @throws ch.hearc.ig.ta.exceptions.MetierException
    */
   public void verser(int IDcompteCredit, float montant) throws MetierException {
     Connection connection = null;
@@ -107,7 +108,7 @@ public class ServicesImpl {
     try {
       Compte compteCredit = CompteDao.researchByID(IDcompteCredit);
       if (compteCredit == null) {
-        throw new IDCompteException("Le compte Id " + IDcompteCredit + " n'existe pas");
+        throw new IDCompteException("Le compte de crédit (ID " + IDcompteCredit + ") n'existe pas");
       }
       //on contrôle la validité du montant 
       checkAmountValidity(montant);
@@ -142,8 +143,9 @@ public class ServicesImpl {
    * Cette méthode permet de retirer un montant d'un compte TODO: voir ou
    * remonter l'exception
    *
-   * @param compteDebit
+   * @param IDcompteDebit
    * @param montant
+   * @throws ch.hearc.ig.ta.exceptions.MetierException
    */
   public void retirer(int IDcompteDebit, float montant) throws MetierException {
     Connection connection = null;
