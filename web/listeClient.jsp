@@ -40,17 +40,11 @@
         <td>
           <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="glyphicon glyphicon-eye-open"></i></a>
           <a href="BankController?action=updateClient&id=${customer.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>
-          
-          
-          <!--<form class="navbar-form navbar-right" name="editClient" method="post" action="BankController?action=updateClient&id=${customer.identifiant}">
-            
-                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
-             
-          </form>-->
-          
           <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Virement</a>
           <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Depôt</a>
           <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini"><i class="icon-white icon-eye-open"></i>Retrait</a>
+          <a href="BankController?action=deleteClient&id=${customer.identifiant}" class="glyphicon glyphicon-trash btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>
+          
 
           <!--<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>-->
         </td>

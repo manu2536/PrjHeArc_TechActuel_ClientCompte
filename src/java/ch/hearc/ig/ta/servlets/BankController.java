@@ -207,16 +207,17 @@ public class BankController extends HttpServlet {
         break;
 
       case "addCompte":
+        
+        URLRedirection = "BankController?action=afficherClient";
+        forwardOrRedirect = "redirect";
 
         Client cli = getClientbyRequestIDorSession(request);
         int idClie = cli.getIdentifiant();
 
         try {
           new ServicesImpl().addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
-
           alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
-          request.setAttribute("RedirectionAction", "afficherClient");
-          URLRedirection = "BankController";
+          
         } catch (MetierException ex) {
           alertMessages.add(new AlertMessage("warning", "Attention", "Erreur ajout de compte : " + ex));
           request.setAttribute("RedirectionAction", "afficherClient");
@@ -335,69 +336,68 @@ public class BankController extends HttpServlet {
         break;
 
       case "doUpdateClient":
-        
+
         URLRedirection = "BankController?action=afficherClient";
         forwardOrRedirect = "redirect";
 
-          if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
-            Client clientAModif = new Client();
-            clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
-            clientAModif.setNom(request.getParameter("nom"));
-            clientAModif.setPrenom(request.getParameter("prenom"));
-            clientAModif.setAdresse(request.getParameter("adresse"));
-            clientAModif.setVille(request.getParameter("ville"));
+        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("prenom") != null && request.getParameter("adresse") != null && request.getParameter("ville") != null) {
+          Client clientAModif = new Client();
+          clientAModif.setIdentifiant(new Integer(request.getParameter("id")));
+          clientAModif.setNom(request.getParameter("nom"));
+          clientAModif.setPrenom(request.getParameter("prenom"));
+          clientAModif.setAdresse(request.getParameter("adresse"));
+          clientAModif.setVille(request.getParameter("ville"));
 
-            try {
-              new ServicesImpl().updateClient(clientAModif);
-              alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
+          try {
+            new ServicesImpl().updateClient(clientAModif);
+            alertMessages.add(new AlertMessage("success", "Succès", "Client modifié"));
 
-            } catch (MetierException ex) {
-              alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
-            } finally {
-            }
-          } else {
-            alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
+          } finally {
           }
+        } else {
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
 
-          break;
-        
-      case "updateAccount" :
-        
+        break;
+
+      case "updateAccount":
+
         Compte compteModifier = CompteDao.researchByID(new Integer(request.getParameter("id")));
         request.setAttribute("Compte", compteModifier);
         //Page cible
         request.getSession().setAttribute("currentPage", "compte");
         request.setAttribute("targetPage", "updateAccount.jsp");
         request.setAttribute("targetPageTitle", "Details compte");
-        
+
         break;
-        
-      case "doUpdateCompte" :
-        
-         URLRedirection = "BankController?action=afficherClient";
+
+      case "doUpdateCompte":
+
+        URLRedirection = "BankController?action=afficherClient";
         forwardOrRedirect = "redirect";
-        
-        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("taux") != null && request.getParameter("solde") != null) {
-            Compte compteAmodif = new Compte();
-            compteAmodif.setIdentifiant(new Integer(request.getParameter("id")));
-            compteAmodif.setNom(request.getParameter("nom"));
-            compteAmodif.setTaux(new Float(request.getParameter("taux")));
-            compteAmodif.setSolde(new Float(request.getParameter("solde")));
 
-            try {
-              new ServicesImpl().updateCompte(compteAmodif);
-              alertMessages.add(new AlertMessage("success", "Succès", "Compte modifié"));
-            } catch (MetierException ex) {
-              alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
-            } finally {
-            }
-          } else {
-            alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("taux") != null && request.getParameter("solde") != null) {
+          Compte compteAmodif = new Compte();
+          compteAmodif.setIdentifiant(new Integer(request.getParameter("id")));
+          compteAmodif.setNom(request.getParameter("nom"));
+          compteAmodif.setTaux(new Float(request.getParameter("taux")));
+          compteAmodif.setSolde(new Float(request.getParameter("solde")));
+
+          try {
+            new ServicesImpl().updateCompte(compteAmodif);
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte modifié"));
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
+          } finally {
           }
+        } else {
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
         break;
 
-        
-        case "transfertCompteACompte":
+      case "transfertCompteACompte":
         Client clTransfert = getClientbyRequestIDorSession(request);
         if (clTransfert != null) {
           request.setAttribute("Client", clTransfert);
@@ -427,9 +427,9 @@ public class BankController extends HttpServlet {
             ServicesImpl services = new ServicesImpl();
             Virement virement = services.transfert(idCompteDebit, idCompteCredit, montantTransfert);
             alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
-            if(virement!=null){
-             List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
-            request.getSession().setAttribute("listVirement", virements);
+            if (virement != null) {
+              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
+              request.getSession().setAttribute("listVirement", virements);
             }
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de transfert", ex.getMessage()));
@@ -453,9 +453,9 @@ public class BankController extends HttpServlet {
             ServicesImpl services = new ServicesImpl();
             Virement virement = services.transfert(idCompteDebitVirement, idCompteCreditVirement, montantVirement);
             alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué"));
-            if(virement != null){
-            List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
-            request.getSession().setAttribute("listVirement", virements);
+            if (virement != null) {
+              List<Virement> virements = services.addVirementToList((List<Virement>) request.getSession().getAttribute("listVirement"), virement);
+              request.getSession().setAttribute("listVirement", virements);
             }
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de virement", ex.getMessage()));
@@ -488,65 +488,108 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "dashboard.jsp");
         request.setAttribute("targetPageTitle", "Accueil");
         break;
+
+      case "deleteClient":
+
+        URLRedirection = "BankController?action=listClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null) {
+
+          try {
+            //int id = new Integer(request.getParameter("id"));
+            Client c = new Client();
+            c.setIdentifiant(new Integer(request.getParameter("id")));
+            new ServicesImpl().deleteClient(c);
+            alertMessages.add(new AlertMessage("success", "Succès", "Client supprimé"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Client inexistant ou faux"));
+        }
+
+        break;
+
+      case "deleteCompte":
+
+        
+        URLRedirection = "BankController?action=afficherClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null) {
+
+          try {
+            //int id = new Integer(request.getParameter("id"));
+            Compte c = new Compte();
+            c.setIdentifiant(new Integer(request.getParameter("id")));
+            new ServicesImpl().deleteCompte(c);
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte supprimé"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Compte inexistant ou faux"));
+        }
+
+        break;
+
     }
+
     //Affecte les mssg dans tous les cas
     request.getSession().setAttribute("alertMessages", alertMessages);
 
     //Redirection
-        //Forward = garde les paramètres dans l'url
-        if (forwardOrRedirect.equals("forward")) {
-          request.getRequestDispatcher(URLRedirection).forward(request, response);
+    //Forward = garde les paramètres dans l'url
+    if (forwardOrRedirect.equals("forward")) {
+      request.getRequestDispatcher(URLRedirection).forward(request, response);
 
-          //Redirection = recharge une nouvelle page
-        } else if (forwardOrRedirect.equals("redirect")) {
-          response.sendRedirect(URLRedirection);
-        }
+      //Redirection = recharge une nouvelle page
+    } else if (forwardOrRedirect.equals("redirect")) {
+      response.sendRedirect(URLRedirection);
     }
+  }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet
-    (HttpServletRequest request, HttpServletResponse response)
+  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+  /**
+   * Handles the HTTP <code>GET</code> method.
+   *
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-      processRequest(request, response);
-    }
+    processRequest(request, response);
+  }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost
-    (HttpServletRequest request, HttpServletResponse response)
+  /**
+   * Handles the HTTP <code>POST</code> method.
+   *
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-      processRequest(request, response);
-    }
+    processRequest(request, response);
+  }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo
-    
-      () {
+  /**
+   * Returns a short description of the servlet.
+   *
+   * @return a String containing servlet description
+   */
+  @Override
+  public String getServletInfo() {
     return "Short description";
-    }// </editor-fold>
-
-  
+  }// </editor-fold>
 
   private Client getClientbyRequestIDorSession(HttpServletRequest request) {
     Client clDepot = null;

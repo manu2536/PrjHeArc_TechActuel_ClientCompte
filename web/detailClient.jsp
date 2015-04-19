@@ -44,11 +44,8 @@
             </td>
             <td>
               <span><a href="BankController?action=updateAccount&id=${account.identifiant}" class="glyphicon glyphicon-pencil btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a></span>
-              <!--<form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=updateAcccount&id=${account.identifiant}">
-            
-                <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-pencil" aria-hidden="false"></span></button>
-             
-          </form>-->
+               <a href="BankController?action=deleteCompte&id=${account.identifiant}" class="glyphicon glyphicon-trash btn btn-info btn-mini" ><i class="icon-white icon-eye-open"></i></a>
+          
             </td>
           </tr>
         </c:forEach>

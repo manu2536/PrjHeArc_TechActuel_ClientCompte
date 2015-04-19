@@ -48,5 +48,15 @@
         </div>
       </div>
     </form>
+        <form class="form-horizontal" method="post" action="BankController">
+          <input type="hidden" name="action" value="afficherClient">
+          <div class="form-group">
+        <label class="col-md-2 control-label" for="SEND"></label>
+        <div class="col-md-4">
+          <button id="singlebutton" name="SEND" class="btn btn-primary">ANNULER</button>
+        </div>
+      </div>
+          
+        </form>
   </body>
 </html>
