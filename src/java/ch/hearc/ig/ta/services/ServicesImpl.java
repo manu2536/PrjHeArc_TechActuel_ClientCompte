@@ -2,6 +2,7 @@ package ch.hearc.ig.ta.services;
 
 import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.business.Compte;
+import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.dao.ClientDao;
 import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.dbfactory.OracleConnections;
@@ -18,6 +19,7 @@ import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -73,25 +75,67 @@ public class ServicesImpl {
       }
     }
   }
+  
+  public Virement prepareVirementForList(int compteDebit, int compteCredit, float montant){
+    
+     Client clientDebit = ClientDao.searchClientByIdCompte(compteDebit);
+     Client clientCredit = ClientDao.searchClientByIdCompte(compteCredit);
+     
+     Virement virement = new Virement();
+     virement.setNomClientDebit(clientDebit.getNom());
+     virement.setNomClientCredit(clientCredit.getNom());
+     virement.setNoCptDebit(String.valueOf(compteDebit));
+     virement.setNoCptCredit(String.valueOf(compteCredit));
+     virement.setMontant(montant);
+     Date date = new Date();
+     //date du jour
+     virement.setDateVirement(date);
+     
+     return virement;
+  }
+  /**
+   * Permet d'ajouter un virement à la liste en première positiion
+   * Permet aussi de limiter la liste des virements à 10 virements
+   * @param virements
+   * @param virement
+   * @return 
+   */
+  public List<Virement> addVirementToList(List<Virement> virements, Virement virement){
+   if(virements.size() >= 10){
+     //on enlève le dixième élément
+     virements.remove(9);
+   }
+   //dans tous les cas le nouvel élément ira en première position
+     virements.add(0, virement);
+     
+     return virements;
+      
+   }
 
-  public void transfert(int compteDebit, int compteCredit, float montant) throws MetierException{
+  public Virement transfert(int compteDebit, int compteCredit, float montant) throws MetierException{
     Compte debit;
     Compte credit;
+    Virement virement = null;
     
     debit = CompteDao.researchByID(compteDebit);
     if(debit == null){
       throw new MetierException("Compte à débiter innexistant");  
     }
+   
     credit = CompteDao.researchByID(compteCredit); 
     if(credit == null){
       throw new MetierException("Compte à créditer innexistant");  
     }
     
+    
     if(debit.equals(credit)){
       throw new MetierException("Les comptes à débiter et à créditer doivent être différents");  
     }
-
     transfert(debit, credit, montant);
+    //si tout s'est bien passé on retourne le virement
+    virement = prepareVirementForList(compteDebit, compteCredit, montant);
+    return virement;
+    
   }
 
   /**

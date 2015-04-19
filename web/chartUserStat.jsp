@@ -48,7 +48,7 @@
                    <c:forEach var="user" items="${listUsers}"> 
                      <c:choose>
                        <c:when test="${user.login == authUser}">
-                       { y: ${user.points}, label: "vous", indexLabel:"${user.points}", color: "green"},
+                       { y: ${user.points}, label: "vous", indexLabel:"${user.points}", color: "#5CB85C"},
                        </c:when> 
                      <c:otherwise>
                           { y: ${user.points}, label: "${user.login}", indexLabel:"${user.points}"},
