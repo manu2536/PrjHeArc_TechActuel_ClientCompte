@@ -6,8 +6,10 @@
 
 package ch.hearc.ig.ta.testmain.temp;
 
-import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.business.Compte;
+import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.utilities.FakeData;
+import java.util.Map;
 
 /**
  *
@@ -61,12 +63,12 @@ public class Main {
 //   
 //   
 //   //liste des clients avec leur date d'inscription
-   for(Client client : fakeData.getClientsListWithInscriptionDate()){ 
-     System.out.println("\n");
-     System.out.println("nom du client : " + client.getNom());
-     System.out.println("date d'inscription : " + client.getDateInscription());
-   }
-   
+//   for(Client client : fakeData.getClientsListWithInscriptionDate()){ 
+//     System.out.println("\n");
+//     System.out.println("nom du client : " + client.getNom());
+//     System.out.println("date d'inscription : " + client.getDateInscription());
+//   }
+//   
 //    
 //    GamificationService service = new GamificationService();
 //    
@@ -76,8 +78,30 @@ public class Main {
 //    
 //    for(Client client : fakeData.getClientsListWithInscriptionDate()){}
     
-    
+//    int i = 0;
+//   for(Compte compte : fakeData.getComptes()){
+//   
+//     
+//     System.out.println("\n");
+//     System.out.println("nom du comte : " + compte.getNom());
+//     System.out.println("utilisateur qui a ouvert le compte : " + compte.getUserName());
+//     System.out.println("date d'ouverture : "  + compte.getFormatedDate());
+//     i++;
+//   }
+//    System.out.println(i);
+//    
+//    GamificationService services = new GamificationService();
+//    Map<Integer,Integer> maps = services.getNbCompteOuvertsByMonth(fakeData.getComptes());
+//  
+//    for (Map.Entry<Integer, Integer> entry : maps.entrySet()) {
+//      Integer integer = entry.getKey();
+//      Integer integer1 = entry.getValue();
+//      
+//      System.out.println("mois " + integer +  "valeur " + integer1);
+//    }
     
   }
   
+  
+   
 }

@@ -1,9 +1,7 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
-import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.business.Virement;
-import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.utilities.Level;
@@ -15,6 +13,7 @@ import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -118,7 +117,11 @@ public class BankController extends HttpServlet {
             //chargement de la liste des users 
             GamificationService gamificationService = new GamificationService();
             List<User> users = gamificationService.getUsersWithScores();
+            Map<Integer,Integer> mapCpOpenByMonth = gamificationService.getNbCompteOuvertsByMonth(fakedata.getComptes(), request.getParameter("username"));
             request.getSession().setAttribute("listUsers", users);
+            request.getSession().setAttribute("mapCpOpenByMonth", mapCpOpenByMonth);
+            //on passe aussi l'année pour pouvoir effectuer des comparaisons 
+            request.getSession().setAttribute("annee", gamificationService.getLimitedYear());
             URLRedirection = "BankController?action=dashboard";
           } else {
             alertMessages.add(new AlertMessage("danger", "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect"));

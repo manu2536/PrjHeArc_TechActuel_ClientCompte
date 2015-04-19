@@ -1,6 +1,9 @@
 package ch.hearc.ig.ta.business;
 
+import ch.hearc.ig.ta.utilities.authentification.User;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /*Test*/
@@ -11,6 +14,12 @@ public class Compte implements Serializable {
   private String numero;
   private String nom;
   private Float solde;
+  // JWE : ajouté pour les statistiques
+  private Date dateOuverture;
+  // JWE : ajouté pour les statistiques également
+  private String userName;
+
+
   private Float taux;
   
   public Compte() {
@@ -103,5 +112,50 @@ public class Compte implements Serializable {
 
   public void setNumero(String numero) {
     this.numero = numero;
+  }
+  
+    public Date getDateOuverture() {
+    return dateOuverture;
+  }
+
+  public void setDateOuverture(Date dateOuverture) {
+    this.dateOuverture = dateOuverture;
+  }
+  
+    /**
+   * A utiliser pour de l'affichage uniquement
+   * @return une date formattée de type jj.mm.aaaa
+   */
+  public String getFormatedDate(){
+    SimpleDateFormat sdfy = new SimpleDateFormat("MM");
+    String month = sdfy.format(dateOuverture);
+  
+   String formatedDate = getDay() + "." + month + "."  + getYear();
+   return formatedDate;
+  }
+
+  public String getYear() {
+    SimpleDateFormat sdfy = new SimpleDateFormat("yyyy");
+    return sdfy.format(dateOuverture);
+  }
+
+  public Integer getMonth() {
+    SimpleDateFormat sdfy = new SimpleDateFormat("MM");
+    String month = sdfy.format(dateOuverture);
+    Integer monthInt = Integer.valueOf(month);
+    return monthInt -1;
+  }
+
+  public String getDay() {
+    SimpleDateFormat sdfy = new SimpleDateFormat("dd");
+    return sdfy.format(dateOuverture);
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 }
