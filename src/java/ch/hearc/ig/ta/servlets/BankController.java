@@ -520,19 +520,16 @@ public class BankController extends HttpServlet {
             alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
           }
         } else {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Client inexistant ou faux"));
+          alertMessages.add(new AlertMessage("warning", "Attention", "ID du client requis"));
         }
-
         break;
 
-      case "deleteCompte":
+      case "doDeleteCompte":
         URLRedirection = "BankController?action=afficherClient";
         forwardOrRedirect = "redirect";
 
         if (request.getParameter("id") != null) {
-
           try {
-            //int id = new Integer(request.getParameter("id"));
             Compte c = new Compte();
             c.setIdentifiant(new Integer(request.getParameter("id")));
             new ServicesImpl().deleteCompte(c);
@@ -542,9 +539,8 @@ public class BankController extends HttpServlet {
             alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
           }
         } else {
-          alertMessages.add(new AlertMessage("warning", "Attention", "Compte inexistant ou faux"));
+          alertMessages.add(new AlertMessage("warning", "Attention", "ID du compte requis"));
         }
-
         break;
 
     }

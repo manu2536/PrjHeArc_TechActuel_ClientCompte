@@ -31,9 +31,9 @@
         <td>${customer.nom} ${customer.prenom}</td>
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
-          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><span class="glyphicon glyphicon-eye-open"></span></a>
-          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="btn btn-info btn-mini"><span class="glyphicon glyphicon-pencil"></span></a>
-          <button class="btn btn-info btn-mini" data-toggle="modal" data-target="#deleteConfirm" data-nomclient="${customer.prenom} ${customer.nom}" data-idclient="${customer.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
+          <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini" title="Afficher"><span class="glyphicon glyphicon-eye-open"></span></a>
+          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
+          <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteConfirm" data-nomclient="${customer.prenom} ${customer.nom}" data-idclient="${customer.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
           <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini">Virement</a>
           <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini">Depôt</a>
           <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini">Retrait</a>
@@ -44,7 +44,7 @@
 </table>
     
     
- <!-- Modal -->
+<!-- Modal confirmation suppression client -->
 <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="Confirmation de suppression" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -75,7 +75,7 @@
    $('#deleteConfirm').on('show.bs.modal', function (event) {
      var button = $(event.relatedTarget); // Button that triggered the modal
      var nomClient = button.data('nomclient'); // Extract info from data-nomClient attribute
-     var idClient = button.data('idclient'); // Extract info from data-nomClient attribute
+     var idClient = button.data('idclient'); 
      var modal = $(this);
      
      //Renseigne le nom du client sélectionné
