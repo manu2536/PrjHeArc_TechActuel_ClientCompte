@@ -76,16 +76,16 @@ public class ServicesImpl {
     }
   }
   
-  public Virement prepareVirementForList(int compteDebit, int compteCredit, float montant){
+  public Virement prepareVirementForList(Compte compteDebit, Compte compteCredit, float montant){
     
-     Client clientDebit = ClientDao.searchClientByIdCompte(compteDebit);
-     Client clientCredit = ClientDao.searchClientByIdCompte(compteCredit);
+     Client clientDebit = ClientDao.searchClientByIdCompte(compteDebit.getIdentifiant());
+     Client clientCredit = ClientDao.searchClientByIdCompte(compteCredit.getIdentifiant());
      
      Virement virement = new Virement();
      virement.setNomClientDebit(clientDebit.getNom());
      virement.setNomClientCredit(clientCredit.getNom());
-     virement.setNoCptDebit(String.valueOf(compteDebit));
-     virement.setNoCptCredit(String.valueOf(compteCredit));
+     virement.setNoCptDebit(compteDebit.getNumero());
+     virement.setNoCptCredit(compteCredit.getNumero());
      virement.setMontant(montant);
      Date date = new Date();
      //date du jour
@@ -133,7 +133,7 @@ public class ServicesImpl {
     }
     transfert(debit, credit, montant);
     //si tout s'est bien passé on retourne le virement
-    virement = prepareVirementForList(compteDebit, compteCredit, montant);
+    virement = prepareVirementForList(debit, credit, montant);
     return virement;
     
   }
