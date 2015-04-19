@@ -35,7 +35,7 @@
             },
             data: [
             {
-                indexLabelFontSize: 14,
+                indexLabelFontSize: 12,
                 toolTipContent: "<span style='\"'color: {color};'\"'><strong>{label}</strong></span><span style='\"'font-size: 20px; color:black '\"'><strong>{y}</strong></span>",
                 indexLabelPlacement: "inside",
                 indexLabelFontColor: "white",
@@ -48,10 +48,10 @@
                    <c:forEach var="user" items="${listUsers}"> 
                      <c:choose>
                        <c:when test="${user.login == authUser}">
-                       { y: ${user.points}, label: "vous", indexLabel:"${user.points}", color: "#5CB85C"},
+                       { y: ${user.points}, label: "vous", color: "green"},
                        </c:when> 
                      <c:otherwise>
-                          { y: ${user.points}, label: "${user.login}", indexLabel:"${user.points}"},
+                          { y: ${user.points}, label: "${user.login}"},
                      </c:otherwise>
                      </c:choose>
                    </c:forEach>	

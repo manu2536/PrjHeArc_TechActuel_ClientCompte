@@ -263,12 +263,14 @@ public class BankController extends HttpServlet {
             
             //Ajout des points
             User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
-            new GamificationService().incrementScore(5, authUser);
+            GamificationService gamificationService = new GamificationService();
+            gamificationService.incrementScore(5, authUser);
             
             //Recharge liste comptes client session
             new ServicesImpl().loadAccounts(cli);
             request.getSession().setAttribute("SelectedClient", cli);
-            
+            Map<Integer,Integer> mapCpOpenByMonth = gamificationService.addCompteToMapOpenedAccount((Map<Integer,Integer>)request.getSession().getAttribute("mapCpOpenByMonth"), authUser.getLogin());
+            request.getSession().setAttribute("mapCpOpenByMonth", mapCpOpenByMonth);
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("warning", "Erreur d'ajout du compte", ex.getMessage()));
           }
