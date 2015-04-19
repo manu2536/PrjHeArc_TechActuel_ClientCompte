@@ -118,6 +118,7 @@ public class BankController extends HttpServlet {
             FakeData fakedata = new FakeData();
             List<Virement> listVirement = fakedata.getVirementList();
             request.getSession().setAttribute("listVirement", listVirement);
+            request.getSession().setAttribute("listComptes",fakedata.getComptes());
             //chargement de la liste des users 
             GamificationService gamificationService = new GamificationService();
             List<User> users = gamificationService.getUsersWithScores();

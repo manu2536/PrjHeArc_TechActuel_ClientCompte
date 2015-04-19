@@ -4,6 +4,7 @@
  */
 package ch.hearc.ig.ta.dao;
 
+import ch.hearc.ig.ta.business.Client;
 import ch.hearc.ig.ta.dbfactory.OracleConnections;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.exceptions.AccountDaoException;
+import java.util.List;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleTypes;
 
@@ -434,4 +436,47 @@ public class CompteDao {
         
         
     }
+    
+    
+     public static List<Compte> researchAll(){
+
+    List<Compte> comptes = new ArrayList<>();
+    Connection cnx = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    try {
+      cnx = OracleConnections.getConnection();
+
+      //String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
+      StringBuilder sql = new StringBuilder();
+      sql.append("select numero, nom, solde, taux from compte");
+      stmt = cnx.createStatement();
+      rs = stmt.executeQuery(sql.toString());
+
+      while (rs.next()) {
+        Compte cp = new Compte();
+        cp.setNumero(rs.getString("numero"));
+        cp.setNom(rs.getString("nom"));
+        cp.setSolde(rs.getFloat("solde"));
+        cp.setTaux(rs.getFloat("taux"));
+        comptes.add(cp);
+      }
+      return comptes;
+    } catch (SQLException ex) {
+      System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+      return null;
+    } finally {
+      try {
+        rs.close();
+        stmt.close();
+        cnx.close();
+      } catch (SQLException ex) {
+        System.out.println("Error SELECT SQL: " + ex.getMessage());
+      }
+
+    }
+    
+    
+  }
 }

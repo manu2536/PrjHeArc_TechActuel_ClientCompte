@@ -1,10 +1,13 @@
 package ch.hearc.ig.ta.services;
 
+import ch.hearc.ig.ta.business.Compte;
+import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +62,30 @@ public class GamificationService {
      
      return userList;
   
+  }
+  
+  public Map<Integer,Integer> getNbCompteOuvertsByMonth(List<Compte> comptes){
+  Date date = new Date();
+  
+  Compte fakeCompte = new Compte();
+  fakeCompte.setDateOuverture(date);
+  Map<Integer,Integer> mapMoisCpOuverts = new HashMap();
+  for(Compte compte : comptes){
+    //on limite à l'année acutelle
+   if(compte.getYear().equals(fakeCompte.getYear())){
+     
+     if(mapMoisCpOuverts.get(compte.getMonth()) == null){
+       mapMoisCpOuverts.put(compte.getMonth(), 1);
+     }else{
+        int value = mapMoisCpOuverts.get(compte.getMonth());
+        value ++;
+        mapMoisCpOuverts.remove(compte.getMonth());
+        mapMoisCpOuverts.put(compte.getMonth(),value);
+     }
+     }
+  
+  }
+  return mapMoisCpOuverts;
   }
   
 }

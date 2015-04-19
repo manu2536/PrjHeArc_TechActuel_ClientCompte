@@ -1,8 +1,10 @@
 package ch.hearc.ig.ta.utilities;
 
 import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.dao.ClientDao;
+import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.log.ApplicationLogger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,17 +26,20 @@ import java.util.logging.Level;
 public class FakeData {
 
   private List<Virement> virementList;
+  private List<Compte> comptes;
   private List<Client> clientListWithInscriptionDate;
   private List<Client> clientsList;
 
   public FakeData() {
 
     //on initialise la liste des clients (on ne charge ainsi qu'une fois en DB)
-     initClients();
+    initClients();
     //on initialise la liste des virements
     initAllVirements();
     //on modifie la liste des clients et on ajoute à chacun des clients une date fictive d'inscription
     initDateInscriptionIntoClients();
+    //les comptes ouverts
+    initGetCpOuverts();
   }
 
   /**
@@ -217,5 +223,64 @@ public class FakeData {
   public List<Client> getClientsListWithInscriptionDate() {
     return clientListWithInscriptionDate;
   }
+/**
+ * utilisé uniquement pour des statistiques
+ * @return une liste de comptes ouverts
+ */
+  public void initGetCpOuverts(){
+  //cette liste récupère 20 comptes en DB et les complètes avec les informations utilisateurs
+    List<Compte> tempComptes = CompteDao.researchAll();
+    comptes = new ArrayList<>();
+    List<String> usernames = usernames();
+    List<Date> dates =null;
+    try {
+      dates = generateDate();
+    } catch (ParseException ex) {
+       ApplicationLogger.getInstance().log(Level.SEVERE, null, ex);
+    }
+     
+    for(int i = 0; i < 20; i++){
+      tempComptes.get(i).setUserName(usernames.get(i));
+      tempComptes.get(i).setDateOuverture(dates.get(i));
+      comptes.add(tempComptes.get(i));
+    
+    }
+    
+  }
+  
+  
+  public List<String> usernames(){
+  
+    List<String> usernames = new ArrayList<>();
+    
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("francesco");
+    usernames.add("fabien");
+    usernames.add("fabien");
+    usernames.add("fabien");
+    usernames.add("fabien");
+    usernames.add("jeremy");
+    usernames.add("jeremy");
+    usernames.add("jeremy");
+    usernames.add("colin");
+    usernames.add("colin");
+    usernames.add("colin");
+    usernames.add("emmanuel");
+    usernames.add("emmanuel");
+    
+    return usernames;
+  }
 
+  public List<Compte> getComptes() {
+    return comptes;
+  }
+  
+  
+  
 }
