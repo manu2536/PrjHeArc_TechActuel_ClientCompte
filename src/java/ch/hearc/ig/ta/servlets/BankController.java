@@ -249,6 +249,44 @@ public class BankController extends HttpServlet {
           alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
         break;
+        
+      case "doDeleteClient":
+        URLRedirection = "BankController?action=listClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null) {
+          try {
+            Client c = new Client();
+            c.setIdentifiant(new Integer(request.getParameter("id")));
+            new ServicesImpl().deleteClient(c);
+            alertMessages.add(new AlertMessage("success", "Succès", "Client supprimé"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("warning", "Attention", "ID du client requis"));
+        }
+        break;
+
+      case "doDeleteCompte":
+        URLRedirection = "BankController?action=afficherClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null) {
+          try {
+            Compte c = new Compte();
+            c.setIdentifiant(new Integer(request.getParameter("id")));
+            new ServicesImpl().deleteCompte(c);
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte supprimé"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("warning", "Attention", "ID du compte requis"));
+        }
+        break;
 
       case "doAddCompte":
         forwardOrRedirect = "redirect";
@@ -478,7 +516,6 @@ public class BankController extends HttpServlet {
         }else{
           alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
-        
         break;
 
       case "profil":
@@ -504,45 +541,6 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "dashboard.jsp");
         request.setAttribute("targetPageTitle", "Accueil");
         break;
-
-      case "doDeleteClient":
-        URLRedirection = "BankController?action=listClient";
-        forwardOrRedirect = "redirect";
-
-        if (request.getParameter("id") != null) {
-          try {
-            Client c = new Client();
-            c.setIdentifiant(new Integer(request.getParameter("id")));
-            new ServicesImpl().deleteClient(c);
-            alertMessages.add(new AlertMessage("success", "Succès", "Client supprimé"));
-
-          } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
-          }
-        } else {
-          alertMessages.add(new AlertMessage("warning", "Attention", "ID du client requis"));
-        }
-        break;
-
-      case "doDeleteCompte":
-        URLRedirection = "BankController?action=afficherClient";
-        forwardOrRedirect = "redirect";
-
-        if (request.getParameter("id") != null) {
-          try {
-            Compte c = new Compte();
-            c.setIdentifiant(new Integer(request.getParameter("id")));
-            new ServicesImpl().deleteCompte(c);
-            alertMessages.add(new AlertMessage("success", "Succès", "Compte supprimé"));
-
-          } catch (MetierException ex) {
-            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
-          }
-        } else {
-          alertMessages.add(new AlertMessage("warning", "Attention", "ID du compte requis"));
-        }
-        break;
-
     }
 
     //Affecte les mssg dans tous les cas
