@@ -1,7 +1,9 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.business.Virement;
+import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.services.ServicesImpl;
