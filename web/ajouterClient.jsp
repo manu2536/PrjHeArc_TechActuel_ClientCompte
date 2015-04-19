@@ -17,25 +17,25 @@
               <div class="form-group">
                 <label class="col-md-2 control-label" for="nom">Nom</label>
                 <div class="col-md-4">
-                  <input id="nom" name="nom" type="text" placeholder="Nom" class="form-control input-md"> 
+                  <input id="nom" name="nom" type="text" placeholder="Nom" class="form-control input-md" required> 
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label" for="prenom">Prénom</label>  
                 <div class="col-md-4">
-                  <input id="prenom" name="prenom" type="text" placeholder="Prénom" class="form-control input-md"> 
+                  <input id="prenom" name="prenom" type="text" placeholder="Prénom" class="form-control input-md" required> 
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label" for="adresse">Adresse</label>  
                 <div class="col-md-4">
-                  <input id="adresse" name="adresse" type="text" placeholder="Adresse" class="form-control input-md"> 
+                  <input id="adresse" name="adresse" type="text" placeholder="Adresse" class="form-control input-md" required> 
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-2 control-label" for="ville">Ville</label>  
                 <div class="col-md-4">
-                  <input id="ville" name="ville" type="text" placeholder="Ville" class="form-control input-md"> 
+                  <input id="ville" name="ville" type="text" placeholder="Ville" class="form-control input-md" required> 
                 </div>
               </div>
               <div class="form-group">
