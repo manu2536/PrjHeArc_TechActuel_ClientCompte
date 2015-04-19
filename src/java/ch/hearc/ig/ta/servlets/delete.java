@@ -34,7 +34,7 @@ public class delete extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        try {
+        /*try {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
@@ -52,7 +52,7 @@ public class delete extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/index?del=error2&text=\""+ ex.getMessage() +"\"");
         }finally {
             out.close();
-        }
+        }*/
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

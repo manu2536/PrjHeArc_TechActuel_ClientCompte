@@ -1,7 +1,9 @@
 package ch.hearc.ig.ta.servlets;
 
 import ch.hearc.ig.ta.business.Client;
+import ch.hearc.ig.ta.business.Compte;
 import ch.hearc.ig.ta.business.Virement;
+import ch.hearc.ig.ta.dao.CompteDao;
 import ch.hearc.ig.ta.exceptions.MetierException;
 import ch.hearc.ig.ta.services.GamificationService;
 import ch.hearc.ig.ta.utilities.Level;
@@ -279,6 +281,41 @@ public class BankController extends HttpServlet {
           alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
         }
         break;
+        
+        case "updateAccount":
+
+        Compte compteModifier = CompteDao.researchByID(new Integer(request.getParameter("id")));
+        request.setAttribute("Compte", compteModifier);
+        //Page cible
+        request.getSession().setAttribute("currentPage", "compte");
+        request.setAttribute("targetPage", "updateAccount.jsp");
+        request.setAttribute("targetPageTitle", "Details compte");
+
+        break;
+
+      case "doUpdateCompte":
+
+        URLRedirection = "BankController?action=afficherClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null && request.getParameter("nom") != null && request.getParameter("taux") != null && request.getParameter("solde") != null) {
+          Compte compteAmodif = new Compte();
+          compteAmodif.setIdentifiant(new Integer(request.getParameter("id")));
+          compteAmodif.setNom(request.getParameter("nom"));
+          compteAmodif.setTaux(new Float(request.getParameter("taux")));
+          compteAmodif.setSolde(new Float(request.getParameter("solde")));
+
+          try {
+            new ServicesImpl().updateCompte(compteAmodif);
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte modifié"));
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("warning", "Attention", "Erreur de modification de client : " + ex));
+          } finally {
+          }
+        } else {
+          alertMessages.add(new AlertMessage("danger", "Paramètre manquant", "Veuillez renseigner tous les paramètres requis"));
+        }
+        break;
 
       case "virement":
         Client clVirement = getClientbyRequestIDorSession(request);
@@ -467,7 +504,56 @@ public class BankController extends HttpServlet {
         request.setAttribute("targetPage", "dashboard.jsp");
         request.setAttribute("targetPageTitle", "Accueil");
         break;
+
+      case "deleteClient":
+
+        URLRedirection = "BankController?action=listClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null) {
+
+          try {
+            //int id = new Integer(request.getParameter("id"));
+            Client c = new Client();
+            c.setIdentifiant(new Integer(request.getParameter("id")));
+            new ServicesImpl().deleteClient(c);
+            alertMessages.add(new AlertMessage("success", "Succès", "Client supprimé"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Client inexistant ou faux"));
+        }
+
+        break;
+
+      case "deleteCompte":
+
+        
+        URLRedirection = "BankController?action=afficherClient";
+        forwardOrRedirect = "redirect";
+
+        if (request.getParameter("id") != null) {
+
+          try {
+            //int id = new Integer(request.getParameter("id"));
+            Compte c = new Compte();
+            c.setIdentifiant(new Integer(request.getParameter("id")));
+            new ServicesImpl().deleteCompte(c);
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte supprimé"));
+
+          } catch (MetierException ex) {
+            alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
+          }
+        } else {
+          alertMessages.add(new AlertMessage("warning", "Attention", "Compte inexistant ou faux"));
+        }
+
+        break;
+
     }
+
     //Affecte les mssg dans tous les cas
     request.getSession().setAttribute("alertMessages", alertMessages);
 

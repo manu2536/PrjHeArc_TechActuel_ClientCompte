@@ -284,7 +284,7 @@ public class ClientDao {
     }
   }
 
-  public static boolean delete(Client cli) {
+  public static void delete(Client cli) {
     Connection cnx = null;
     PreparedStatement pstmt = null;
 
@@ -297,10 +297,8 @@ public class ClientDao {
       pstmt.setLong(1, cli.getIdentifiant());
       pstmt.executeUpdate();
       cnx.commit();
-      return true;
     } catch (SQLException ex) {
       System.out.println("Error DELETE SQL: " + ex.getMessage());
-      return false;
     } finally {
       try {
         pstmt.close();
@@ -310,7 +308,7 @@ public class ClientDao {
       }
     }
   }
-  
+
   public static void loadAccounts(Client c){
     c.setListeCompte(CompteDao.research(c.getIdentifiant()));
   }

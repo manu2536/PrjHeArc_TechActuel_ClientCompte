@@ -325,6 +325,16 @@ public class ServicesImpl {
       CompteDao.update(c);
     }
   }
+  
+  public void deleteClient(Client c) throws MetierException{
+    
+    ClientDao.delete(c);
+  }
+  
+  public void deleteCompte(Compte c) throws MetierException{
+    
+    CompteDao.delete(c);
+  }
 
   /**
    * Méthodes privées pour gérer les connexions
