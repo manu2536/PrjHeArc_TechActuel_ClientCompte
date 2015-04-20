@@ -19,7 +19,7 @@
         <form action="BankController?action=doDeleteCompte" method="post">
           <input type="hidden" id="id" name="id" value="" />
           <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-          <input type="submit" id="btnConfirmDelete" class="btn btn-primary" value="Supprimer"/>
+          <input type="submit" id="btnConfirmDelete" class="btn btn-danger btn-primary" value="Supprimer"/>
         </form>
       </div>
     </div>

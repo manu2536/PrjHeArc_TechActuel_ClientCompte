@@ -32,8 +32,8 @@
         <td>${customer.adresse} ${customer.ville}</td>
         <td>
           <a href="BankController?action=afficherClient&id=${customer.identifiant}" class="btn btn-info btn-mini" title="Afficher"><span class="glyphicon glyphicon-eye-open"></span></a>
-          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
-          <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteConfirm" data-nomclient="${customer.prenom} ${customer.nom}" data-idclient="${customer.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
+          <a href="BankController?action=updateClient&id=${customer.identifiant}" class="btn btn-warning btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
+          <button class="btn btn-danger btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteClientConfirm" data-nomclient="${customer.prenom} ${customer.nom}" data-idclient="${customer.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
           <a href="BankController?action=virement&id=${customer.identifiant}" class="btn btn-info btn-mini">Virement</a>
           <a href="BankController?action=depot&id=${customer.identifiant}" class="btn btn-info btn-mini">Depôt</a>
           <a href="BankController?action=retrait&id=${customer.identifiant}" class="btn btn-info btn-mini">Retrait</a>

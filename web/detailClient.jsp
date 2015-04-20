@@ -10,8 +10,8 @@
   <h1>Details client</h1>
   <fieldset>
     <legend>${Client.prenom} ${Client.nom} 
-      <a href="BankController?action=updateClient&id=${Client.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
-      <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteClientConfirm" data-nomclient="${Client.prenom} ${Client.nom}" data-idclient="${Client.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
+      <a href="BankController?action=updateClient&id=${Client.identifiant}" class="btn btn-warning btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
+      <button class="btn btn-danger btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteClientConfirm" data-nomclient="${Client.prenom} ${Client.nom}" data-idclient="${Client.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
     </legend>
     
     Adresse : ${Client.adresse}<br/>
@@ -46,8 +46,8 @@
                 <td><fmt:formatNumber pattern="0.00" value="${account.taux}"/> %</td>
                 <td>CHF <fmt:formatNumber pattern="0.00" value="${account.solde}"/></td>
                 <td>
-                  <a href="BankController?action=updateAccount&id=${account.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
-                  <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteCompteConfirm" data-idcompte="${account.identifiant}" data-nomcompte="${account.nom}"><span class="glyphicon glyphicon-trash"></span></button>
+                  <a href="BankController?action=updateAccount&id=${account.identifiant}" class="btn btn-warning btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
+                  <button class="btn btn-danger btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteCompteConfirm" data-idcompte="${account.identifiant}" data-nomcompte="${account.nom}"><span class="glyphicon glyphicon-trash"></span></button>
                 </td>
               </tr>
             </c:forEach>
