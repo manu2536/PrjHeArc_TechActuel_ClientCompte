@@ -7,8 +7,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div> <!-- MAIN -->
-  <h3>Liste des 10 derniers virements</h3>
-  <table class="table table-hover" style="width: 80%;">
+  <h4>Liste des 10 derniers virements effectués</h4>
+ <table class="table table-hover" style="width: 80%;">
        <tr>
       <th> Nom client débité</th>
       <th> N° Compte débité</th>
@@ -27,5 +27,5 @@
          <td>${virement.formatedDate}</td>
        </tr>
     </c:forEach>
-  </table>
+    </table>
 </div>

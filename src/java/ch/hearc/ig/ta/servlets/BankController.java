@@ -539,6 +539,9 @@ public class BankController extends HttpServlet {
 
       //Page par défaut
       case "dashboard":
+        //trier la liste des points
+        List<User> users = new GamificationService().sortUsers((List<User>) request.getSession().getAttribute("listUsers"));
+        request.getSession().setAttribute("listUsers", users);
         //Page cible
         request.getSession().setAttribute("currentPage", "accueil");
         request.setAttribute("targetPage", "dashboard.jsp");
