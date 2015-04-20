@@ -120,6 +120,9 @@ public class BankController extends HttpServlet {
             GamificationService gamificationService = new GamificationService();
             List<User> users = gamificationService.getUsersWithScores();
             Map<Integer,Integer> mapCpOpenByMonth = gamificationService.getNbCompteOuvertsByMonth(fakedata.getComptes(), request.getParameter("username"));
+            //charger la liste de clients pour l'auto-complétion
+            List<Client> clients = new ServicesImpl().getClientsAll();
+            request.getSession().setAttribute("listClients", clients);
             request.getSession().setAttribute("listUsers", users);
             request.getSession().setAttribute("mapCpOpenByMonth", mapCpOpenByMonth);
             //on passe aussi l'année pour pouvoir effectuer des comparaisons 
