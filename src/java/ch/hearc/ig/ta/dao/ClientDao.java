@@ -289,6 +289,8 @@ public class ClientDao {
     PreparedStatement pstmt = null;
 
     try {
+      
+      CompteDao.deleteAllComptes(cli.getIdentifiant());
       cnx = OracleConnections.getConnection();
 
       StringBuilder sql = new StringBuilder("DELETE FROM client WHERE numero = ?");

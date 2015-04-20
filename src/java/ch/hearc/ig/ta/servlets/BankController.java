@@ -263,6 +263,7 @@ public class BankController extends HttpServlet {
             c.setIdentifiant(new Integer(request.getParameter("id")));
             new ServicesImpl().deleteClient(c);
             alertMessages.add(new AlertMessage("success", "Succès", "Client supprimé"));
+            request.getSession().removeAttribute("SelectedClient");
 
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de suppression", ex.getMessage()));
