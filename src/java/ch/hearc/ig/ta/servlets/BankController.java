@@ -195,7 +195,7 @@ public class BankController extends HttpServlet {
             ServicesImpl services = new ServicesImpl();
             int id1 = services.addClient(request.getParameter("nom"), request.getParameter("prenom"), request.getParameter("adresse"), request.getParameter("ville"));
             Client cli1 = services.searchClientById(String.valueOf(id1));
-            alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté"));
+            alertMessages.add(new AlertMessage("success", "Succès", "Client ajouté (+10 points)"));
 
             //Ajout des points
             User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
@@ -302,7 +302,7 @@ public class BankController extends HttpServlet {
           try {
             ServicesImpl services = new ServicesImpl();
             services.addCompte(request.getParameter("nom"), request.getParameter("solde"), request.getParameter("taux"), idClie);
-            alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté"));
+            alertMessages.add(new AlertMessage("success", "Succès", "Compte ajouté (+5 points)"));
             
             //Ajout des points
             User authUser = services.getUser((String) request.getSession().getAttribute("authUser"));
@@ -400,7 +400,7 @@ public class BankController extends HttpServlet {
               request.getSession().setAttribute("listVirement", virements);
             }
             
-            alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué"));
+            alertMessages.add(new AlertMessage("success", "Succès", "Transfert de CHF " + montantTransfert + " effectué (+3 points)"));
 
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de transfert", ex.getMessage()));
@@ -433,7 +433,7 @@ public class BankController extends HttpServlet {
               request.getSession().setAttribute("listVirement", virements);
             }
             
-            alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué"));
+            alertMessages.add(new AlertMessage("success", "Succès", "Virement de CHF " + montantVirement + " effectué (+3 points)"));
 
           } catch (MetierException ex) {
             alertMessages.add(new AlertMessage("danger", "Erreur de virement", ex.getMessage()));
