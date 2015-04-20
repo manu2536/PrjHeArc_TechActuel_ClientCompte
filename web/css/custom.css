@@ -39,3 +39,11 @@ a.navbar-brand > img{
 .table > thead > tr > th {
   vertical-align: middle;
 }
+
+.ui-autocomplete{
+  z-index: 2000 !important;
+}
+
+.ui-front{
+  z-index: 2000 !important;
+}
