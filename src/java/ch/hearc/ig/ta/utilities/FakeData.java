@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -63,10 +62,10 @@ public class FakeData {
 // on parcourt la liste des clients (on prend les 10 premiers)   
     for (int i = 0; i < 10; i++) {
       Virement virement = new Virement();
-      virement.setNomClientDebit(clientsList.get(i).getNom());
+      virement.setNomClientDebit(clientsList.get(i).getPrenom()+ " " + clientsList.get(i).getNom());
       virement.setNoCptDebit(getFakeNumeroCpt());
       //pour le credit on prend toujours le client +10
-      virement.setNomClientCredit(clientsList.get(i + 10).getNom());
+      virement.setNomClientCredit(clientsList.get(i).getPrenom()+ " " + clientsList.get(i + 10).getNom());
       virement.setNoCptCredit(getFakeNumeroCpt());
       virement.setMontant(amountsList.get(i));
       virement.setDateVirement(dateList.get(i));

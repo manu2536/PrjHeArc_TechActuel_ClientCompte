@@ -4,24 +4,31 @@
     Author     : Fabien Maître
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<center><h1>Tableau de bord de ${authUser}</h1></center>
 <script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script>
-<%@include file="ajouterClient.jsp"%>
-<%--<%@include file="chartStat.jsp"%>--%>
-<div class="center-block">
-<%@include file="derniersVirements.jsp"%>
-</div>
-<div class="container">
+
+<h1 class="text-center">Tableau de bord de ${authUser}</h1>
+
+<div id="dashboard">
   <div class="row">
-    <div class="col-xs-6">
-      <div class ="span4" id="chartContainer" style="width: 400px; height: 300px;"></div> 
+    <div class="col-md-4 col-lg-5" id="chartContainer">
       <%@include file="chartUserStat.jsp"%>
     </div>
-    <div class="col-xs-6">
-      <div class ="span5" id="chartContainer2" style="width: 400px; height: 300px;;"></div>
+    <div class="col-md-6 col-md-offset-1 col-lg-7 col-lg-offset-0" id="chartContainer2">
       <%@include file="chartnbCPOuverts.jsp"%>
     </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+      <%@include file="derniersVirements.jsp"%>
+    </div>
+  </div>
+  <!-- Virements par date 
+  <div class="row">
+    <div class="col-md-6">
+      <div id="chartContainer3">
+        <%@include file="chartStat.jsp"%>
+      </div>
+    </div>
+  </div>
+  -->
 </div>
-
-

@@ -82,8 +82,8 @@ public class ServicesImpl {
      Client clientCredit = ClientDao.searchClientByIdCompte(compteCredit.getIdentifiant());
      
      Virement virement = new Virement();
-     virement.setNomClientDebit(clientDebit.getNom());
-     virement.setNomClientCredit(clientCredit.getNom());
+     virement.setNomClientDebit(clientDebit.getPrenom() + " " + clientDebit.getNom());
+     virement.setNomClientCredit(clientDebit.getPrenom() + " " + clientCredit.getNom());
      virement.setNoCptDebit(compteDebit.getDefaultIBANNumber());
      virement.setNoCptCredit(compteCredit.getDefaultIBANNumber());
      virement.setMontant(montant);

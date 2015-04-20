@@ -44,13 +44,6 @@ a.navbar-brand > img{
   height: 50px;
 }
 
-.navbar-nav > li.inline > a {
-  //float: left;
-}
-.navbar-nav > li > a.inline {
-  //display: inline;
-}
-
 .login-page input{
   margin-bottom: 15px;
 }
@@ -70,4 +63,20 @@ a.navbar-brand > img{
 
 .ui-front{
   z-index: 2000 !important;
+}
+
+div#dashboard{
+  margin: 0 20px 20px 20px;
+}
+
+#chartContainer{
+  height: 300px;
+}
+
+#chartContainer2{
+  height: 300px;
+}
+
+#chartContainer3{
+  height: 300px;
 }
