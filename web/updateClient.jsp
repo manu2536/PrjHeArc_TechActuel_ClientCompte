@@ -4,7 +4,7 @@
     Author     : colin.schaffne
 --%>
 
-<%@page import="ch.hearc.ig.ta.business.Client"%>
+<%@page import="ch.hearc.ig.ta.prjergonomie.business.Client"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <div class="container">

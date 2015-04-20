@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
-<%@page import="ch.hearc.ig.ta.utilities.AlertMessage"%>
+<%@page import="ch.hearc.ig.ta.prjergonomie.utilities.AlertMessage"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
   //Message d'erreur

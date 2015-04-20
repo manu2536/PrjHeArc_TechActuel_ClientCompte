@@ -133,3 +133,16 @@
     </div>
   </div>
 </div>
+              
+<script>
+  jQuery(document).ready(function($) {
+    $('#compteDebit').focus()
+    $('#collapseOne').on('shown.bs.collapse', function () {
+      $('#compteDebit').focus()
+    });
+    
+    $('#collapseTwo').on('shown.bs.collapse', function () {
+      $('#compteDebitVirement').focus()
+    });
+  });
+</script>

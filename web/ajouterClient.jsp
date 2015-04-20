@@ -34,3 +34,9 @@
     <div>
   </form>
 </div>
+
+<script>
+  jQuery(document).ready(function($) {
+    $('#nom').focus()
+  });
+</script>

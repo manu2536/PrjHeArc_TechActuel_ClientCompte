@@ -53,3 +53,11 @@
     </div>
   </div>
 </div>
+              
+<script>
+  jQuery(document).ready(function($) {
+    $('#collapseOne').on('shown.bs.collapse', function () {
+      $('#nom').focus()
+    });
+  });
+</script>

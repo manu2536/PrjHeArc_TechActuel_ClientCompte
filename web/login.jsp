@@ -5,7 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="ch.hearc.ig.ta.utilities.AlertMessage"%>
+<%@page import="ch.hearc.ig.ta.prjergonomie.utilities.AlertMessage"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.List"%>
@@ -98,7 +98,6 @@
         });
         $('#loginModal').modal('show');
       });
-      
     </script>
   </body>
 </html>

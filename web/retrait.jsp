@@ -36,3 +36,9 @@
     </div>
   </form
 </div>
+    
+ <script>
+  jQuery(document).ready(function($) {
+    $('#selectCompte').focus()
+  });
+</script>
