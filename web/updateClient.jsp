@@ -39,7 +39,7 @@
     </div>
     <div class="form-group">
       <div class="col-md-offset-2 col-md-10">
-        <button id="SEND" name="SEND" class="btn btn-primary">Modifier</button>
+        <button id="SEND" name="SEND" class="btn btn-success btn-primary">Modifier</button>
         <a class="btn btn-primary" href="BankController?action=afficherClient">Annuler</a>
       </div>
     </div>
