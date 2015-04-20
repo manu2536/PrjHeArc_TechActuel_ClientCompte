@@ -35,10 +35,10 @@
           <li class="${currentPage == "depot" ? 'active' : ''}"><a href="BankController?action=depot">Dépôt</a></li>
           <li class="${currentPage == "retrait" ? 'active' : ''}"><a href="BankController?action=retrait">Retrait</a></li>
         </c:if>
-          <%@include  file="autoCompletion.jsp"%>
-        <form class="navbar-form navbar-right" name="formSearch" method="post" action="BankController?action=listClient">
+        <%@include  file="autoCompletion.jsp"%>
+        <form class="navbar-form navbar-right" id="formSearch" name="formSearch" method="post" action="BankController?action=listClient">
           <div class="input-group">
-            <input type="text" id="tags" name="recherche" class="form-control" placeholder="Rechercher un client..."/>
+            <input type="text" id="rechercheclient" name="recherche" class="form-control" placeholder="Rechercher un client..."/>
             <span class="input-group-btn">
               <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
             </span>

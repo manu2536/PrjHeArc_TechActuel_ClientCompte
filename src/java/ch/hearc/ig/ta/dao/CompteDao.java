@@ -479,4 +479,32 @@ public class CompteDao {
     
     
   }
+
+  static void deleteAllComptes(int id) {
+    Connection cnx = null;
+    PreparedStatement pstmt = null;
+
+    try {
+      
+      
+      cnx = OracleConnections.getConnection();
+
+      StringBuilder sql = new StringBuilder("DELETE FROM compte WHERE numero_client = ?");
+      pstmt = (OraclePreparedStatement) cnx.prepareStatement(sql.toString());
+
+      pstmt.setLong(1, id);
+      pstmt.executeUpdate();
+      cnx.commit();
+    } catch (SQLException ex) {
+      System.out.println("Error DELETE SQL: " + ex.getMessage());
+    } finally {
+      try {
+        pstmt.close();
+        cnx.close();
+      } catch (SQLException ex) {
+        System.out.println("Error DELETE CLOSE: " + ex.getMessage());
+      }
+    }
+  }
+  
 }
