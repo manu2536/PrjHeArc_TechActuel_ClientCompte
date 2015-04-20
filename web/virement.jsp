@@ -29,7 +29,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label" for="compteDebit">Compte à débiter</label>
                 <div class="col-md-4">
-                  <select id="compteDebit" name="compteDebit" class="form-control">
+                  <select id="compteDebit" name="compteDebit" class="form-control" required>
                     <c:forEach var="Compte" items="${Client.listeCompte}">
                       <option value="${Compte.identifiant}">${Compte.identifiant} - ${Compte.nom}</option>
                     </c:forEach>
@@ -41,7 +41,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label" for="compteCredit">Compte à créditer</label>
                 <div class="col-md-4">
-                  <select id="compteCredit" name="compteCredit" class="form-control">
+                  <select id="compteCredit" name="compteCredit" class="form-control" required>
                     <c:forEach var="Compte" items="${Client.listeCompte}">
                       <option value="${Compte.identifiant}">${Compte.identifiant} - ${Compte.nom}</option>
                     </c:forEach>
@@ -93,7 +93,7 @@
               <div class="form-group">
                 <label class="col-md-2 control-label" for="compteDebitVirement">Compte à débiter</label>
                 <div class="col-md-4">
-                  <select id="compteDebitVirement" name="compteDebitVirement" class="form-control">
+                  <select id="compteDebitVirement" name="compteDebitVirement" class="form-control" required>
                     <c:forEach var="Compte" items="${Client.listeCompte}">
                       <option value="${Compte.identifiant}">${Compte.identifiant} - ${Compte.nom} </option>
                     </c:forEach>

@@ -15,7 +15,7 @@
     <div class="form-group">
       <label class="col-md-2 control-label" for="selectCompte">Compte de dépôt</label>
       <div class="col-md-4">
-        <select id="selectCompte" name="selectCompte" class="form-control">
+        <select id="selectCompte" name="selectCompte" class="form-control" required>
           <c:forEach var="Compte" items="${Client.listeCompte}">
             <option value="${Compte.identifiant}">${Compte.identifiant} - ${Compte.nom}</option>
           </c:forEach>

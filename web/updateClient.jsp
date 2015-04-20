@@ -8,8 +8,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <div class="container">
-  <h1>Modifier client ${Client.prenom} ${Client.nom}</h1>
+  <h1>Modifier le client</h1>
   <form class="form-horizontal" method="post" action="BankController">
+    <legend>${Client.prenom} ${Client.nom}</legend>
     <input type="hidden" name="action" value="doUpdateClient">
     <input type="hidden" name="id" value="${Client.identifiant}">
     <div class="form-group">
@@ -38,18 +39,9 @@
     </div>
     <div class="form-group">
       <div class="col-md-offset-2 col-md-10">
-        <button id="SEND" name="SEND" class="btn btn-primary">Valider</button>
+        <button id="SEND" name="SEND" class="btn btn-primary">Modifier</button>
+        <a class="btn btn-primary" href="BankController?action=afficherClient">Annuler</a>
       </div>
-    </form>
-        <form class="form-horizontal" method="post" action="BankController">
-          <input type="hidden" name="action" value="afficherClient">
-          <div class="form-group">
-        <label class="col-md-2 control-label" for="SEND"></label>
-        <div class="col-md-4">
-          <button id="singlebutton" name="SEND" class="btn btn-primary">ANNULER</button>
-        </div>
-      </div>
-          
-        </form>
-  </body>
-</html>
+    </div>
+  </form>
+</div>
