@@ -27,15 +27,17 @@
         %>
         <li class="${currentPage == "accueil" ? 'active' : ''}"><a href="BankController?action=dashboard">Accueil</a></li>
         <li class="dropdown ${currentPage == "clients" || currentPage == 'addClient' ? 'active' : ''}">
-          <a href="BankController?action=listClient" class="dropdown-toggle" data-hover="dropdown" role="button" aria-expanded="true">Clients <span class="caret"></span></a>
+          <a href="BankController?action=listClient" class="dropdown-toggle" data-hover="dropdown" role="button" aria-expanded="false">Clients <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a class="${currentPage == 'addClient' ? 'active' : ''}" href="BankController?action=addClient">Ajouter client</a></li>
+            <li class="${currentPage == 'addClient' ? 'active' : ''}"><a href="BankController?action=addClient">Ajouter client</a></li>
           </ul>
         </li>
         <%-- Si client selectionné --%>
         <c:if test="<%=session.getAttribute("SelectedClient") != null%>">
-          <li class="${currentPage == "client" ? 'active' : ''}"><a class="inline" href="BankController?action=afficherClient">Client: ${SelectedClient.nom} ${SelectedClient.prenom}</a><a class="inline" href="BankController?action=deselectClient"><span class="glyphicon glyphicon-off"></span></a></li>
-          <li class="${currentPage == "virement" ? 'active' : ''}"><a href="BankController?action=virement">Virement</a></li>
+          <li class="${currentPage == "client" ? 'active' : ''}"><a class="navbar-left" href="BankController?action=afficherClient">Client: ${SelectedClient.nom} ${SelectedClient.prenom}</a><a class="navbar-left" href="BankController?action=deselectClient" title="Désélectionner"><span class="glyphicon glyphicon-off"></span></a></li>
+          <!--<li class="${currentPage == "client" ? 'active' : ''}"><a href="BankController?action=afficherClient">Client: ${SelectedClient.nom} ${SelectedClient.prenom}</a></li>-->
+          <!--<li class="inline ${currentPage == "client" ? 'active' : ''}"><a href="BankController?action=deselectClient"><span class="glyphicon glyphicon-off"></span></a></li>-->
+          <li class="clearfix ${currentPage == "virement" ? 'active' : ''}"><a class="clearfix" href="BankController?action=virement">Virement</a></li>
           <li class="${currentPage == "depot" ? 'active' : ''}"><a href="BankController?action=depot">Dépôt</a></li>
           <li class="${currentPage == "retrait" ? 'active' : ''}"><a href="BankController?action=retrait">Retrait</a></li>
         </c:if>
