@@ -9,10 +9,11 @@
   <script type="text/javascript">
     var chartContainer2 = new CanvasJS.Chart("chartContainer2",
     {
-      theme: "theme4",
       title:{
         text: "Nombres de comptes ouverts par mois",
-        fontSize: 18
+         fontFamily: "Arial",
+         fontColor: "black",
+         fontSize: 18
       },
       animationEnabled: true,
       axisX: {

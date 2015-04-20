@@ -47,7 +47,17 @@ public class GamificationService {
   public Level getLevel(User user) {
     return Level.getLevel(user.getPoints());
   }
-
+  
+    /**
+   * Retourne une liste d'objets user triés dans l'ordre décroissant en fonction
+   * de leur points.
+   *
+   * @return une liste de users triés
+   */
+  public List<User> sortUsers(List<User> users) {
+    Collections.sort(users);
+    return users;
+  }
   /**
    * Retourne une liste d'objets user triés dans l'ordre décroissant en fonction
    * de leur points.

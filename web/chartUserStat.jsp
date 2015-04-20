@@ -7,7 +7,7 @@
 <script language ="javascript">
         var chart = new CanvasJS.Chart("chartContainer", {
             title: {
-                text: "Comparaison des scores",
+                text: "Comparaison des scores des utilisateurs",
                 fontFamily: "Arial",
                 fontColor: "black",
                 fontSize: 18
