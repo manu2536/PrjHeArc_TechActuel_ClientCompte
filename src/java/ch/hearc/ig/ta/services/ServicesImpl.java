@@ -84,8 +84,8 @@ public class ServicesImpl {
      Virement virement = new Virement();
      virement.setNomClientDebit(clientDebit.getNom());
      virement.setNomClientCredit(clientCredit.getNom());
-     virement.setNoCptDebit(compteDebit.getNumero());
-     virement.setNoCptCredit(compteCredit.getNumero());
+     virement.setNoCptDebit(compteDebit.getDefaultIBANNumber());
+     virement.setNoCptCredit(compteCredit.getDefaultIBANNumber());
      virement.setMontant(montant);
      Date date = new Date();
      //date du jour

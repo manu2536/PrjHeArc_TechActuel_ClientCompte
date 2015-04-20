@@ -2,7 +2,6 @@ package ch.hearc.ig.ta.services;
 
 import ch.hearc.ig.ta.utilities.Level;
 import ch.hearc.ig.ta.business.Compte;
-import ch.hearc.ig.ta.business.Virement;
 import ch.hearc.ig.ta.utilities.authentification.User;
 import ch.hearc.ig.ta.utilities.authentification.Users;
 import java.text.SimpleDateFormat;

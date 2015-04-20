@@ -1,13 +1,11 @@
 package ch.hearc.ig.ta.business;
 
-import ch.hearc.ig.ta.utilities.authentification.User;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 /*Test*/
-
 public class Compte implements Serializable {
 
   private Integer identifiant;
@@ -18,10 +16,9 @@ public class Compte implements Serializable {
   private Date dateOuverture;
   // JWE : ajouté pour les statistiques également
   private String userName;
-
-
+  private String defaultIBANNumber;
   private Float taux;
-  
+
   public Compte() {
     this.identifiant = -1;
     this.numero = "-1";
@@ -44,28 +41,34 @@ public class Compte implements Serializable {
   }
 
   @Override
-  public boolean equals(Object obj){
-    if (obj == null) return false;
-    if (obj == this) return true;
-    if (!(obj instanceof Compte))return false;
-    Compte objCompte = (Compte)obj;
-    
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof Compte)) {
+      return false;
+    }
+    Compte objCompte = (Compte) obj;
+
     Boolean equals = false;
-    if(objCompte.getIdentifiant().compareTo(this.getIdentifiant()) == 0){
-      if(objCompte.getNumero().equals(this.getNumero())){
-        if(objCompte.getNom().equals(this.getNom())){
-          if(objCompte.getSolde().compareTo(this.getSolde()) == 0){
-            if(objCompte.getTaux().compareTo(this.getTaux()) == 0){
+    if (objCompte.getIdentifiant().compareTo(this.getIdentifiant()) == 0) {
+      if (objCompte.getNumero().equals(this.getNumero())) {
+        if (objCompte.getNom().equals(this.getNom())) {
+          if (objCompte.getSolde().compareTo(this.getSolde()) == 0) {
+            if (objCompte.getTaux().compareTo(this.getTaux()) == 0) {
               equals = true;
             }
           }
         }
       }
     }
-      
+
     return equals;
   }
-  
+
   public void print() {
     System.out.println(this.toString());
   }
@@ -113,25 +116,26 @@ public class Compte implements Serializable {
   public void setNumero(String numero) {
     this.numero = numero;
   }
-  
-    public Date getDateOuverture() {
+
+  public Date getDateOuverture() {
     return dateOuverture;
   }
 
   public void setDateOuverture(Date dateOuverture) {
     this.dateOuverture = dateOuverture;
   }
-  
-    /**
+
+  /**
    * A utiliser pour de l'affichage uniquement
+   *
    * @return une date formattée de type jj.mm.aaaa
    */
-  public String getFormatedDate(){
+  public String getFormatedDate() {
     SimpleDateFormat sdfy = new SimpleDateFormat("MM");
     String month = sdfy.format(dateOuverture);
-  
-   String formatedDate = getDay() + "." + month + "."  + getYear();
-   return formatedDate;
+
+    String formatedDate = getDay() + "." + month + "." + getYear();
+    return formatedDate;
   }
 
   public String getYear() {
@@ -143,7 +147,7 @@ public class Compte implements Serializable {
     SimpleDateFormat sdfy = new SimpleDateFormat("MM");
     String month = sdfy.format(dateOuverture);
     Integer monthInt = Integer.valueOf(month);
-    return monthInt -1;
+    return monthInt - 1;
   }
 
   public String getDay() {
@@ -158,4 +162,12 @@ public class Compte implements Serializable {
   public void setUserName(String userName) {
     this.userName = userName;
   }
+
+  public String getDefaultIBANNumber() {
+    defaultIBANNumber = "CHXX XXXX XXXX XXXX XXXX X";
+    return defaultIBANNumber;
+  }
+
+  
+  
 }

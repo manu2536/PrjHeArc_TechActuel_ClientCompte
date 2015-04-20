@@ -3,10 +3,10 @@
     Created on : 10 avr. 2015, 02:55:12
     Author     : Fabien Maître
 --%>
-
-<center><h1>Bienvenue sur le dashboard</h1></center>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<center><h1>Tableau de bord de ${authUser}</h1></center>
 <script type="text/javascript" src="assets/canvasjs/canvasjs.min.js"></script>
-<%--<%@include file="ajouterClient.jsp"%>--%>
+<%@include file="ajouterClient.jsp"%>
 <%--<%@include file="chartStat.jsp"%>--%>
 <div class="center-block">
 <%@include file="derniersVirements.jsp"%>

@@ -29,6 +29,7 @@ public class FakeData {
   private List<Compte> comptes;
   private List<Client> clientListWithInscriptionDate;
   private List<Client> clientsList;
+  private String fakeNumeroCpt = "";
 
   public FakeData() {
 
@@ -51,7 +52,6 @@ public class FakeData {
    *
    */
   public void initAllVirements() {
-    List<String> accountNumber = generateNumeroCpt();
     List<Float> amountsList = generateTenAmounts();
     List<Date> dateList = null;
     try {
@@ -64,10 +64,10 @@ public class FakeData {
     for (int i = 0; i < 10; i++) {
       Virement virement = new Virement();
       virement.setNomClientDebit(clientsList.get(i).getNom());
-      virement.setNoCptDebit(accountNumber.get(i));
+      virement.setNoCptDebit(getFakeNumeroCpt());
       //pour le credit on prend toujours le client +10
       virement.setNomClientCredit(clientsList.get(i + 10).getNom());
-      virement.setNoCptCredit(accountNumber.get(i + 10));
+      virement.setNoCptCredit(getFakeNumeroCpt());
       virement.setMontant(amountsList.get(i));
       virement.setDateVirement(dateList.get(i));
       //on ajoute à la liste le virement préparé
@@ -127,36 +127,14 @@ public class FakeData {
   }
 
   /**
-   * Permet de construire une liste de numéro compte
+   * Permet de construire un faux numéro de compte
    *
-   * @return une liste de type List contenant des montants simulés
+   * @return un numéro de compte simulé
    */
-  private List<String> generateNumeroCpt() {
-
-    List<String> accountNumberList = new ArrayList<>();
-
-    accountNumberList.add("CH72 0000 5564 5554 6442 7");
-    accountNumberList.add("CH45 1200 5564 5824 6442 7");
-    accountNumberList.add("CH58 1100 5564 1224 6442 7");
-    accountNumberList.add("CH67 0000 5441 4642 6442 7");
-    accountNumberList.add("CH79 1111 5564 5554 6442 7");
-    accountNumberList.add("CH97 0000 5564 6424 6442 7");
-    accountNumberList.add("CH46 9999 4545 5554 6442 7");
-    accountNumberList.add("CH22 4444 5564 2121 6442 7");
-    accountNumberList.add("CH11 3333 5521 5251 6442 7");
-    accountNumberList.add("CH68 0000 5564 6421 6442 7");
-    accountNumberList.add("CH72 2121 5564 5554 6442 7");
-    accountNumberList.add("CH93 3333 6445 5554 6442 7");
-    accountNumberList.add("CH45 5621 5564 2121 6442 3");
-    accountNumberList.add("CH30 7411 5423 8641 6442 2");
-    accountNumberList.add("CH32 5341 5564 5554 6442 1");
-    accountNumberList.add("CH56 6952 5564 5554 6442 4");
-    accountNumberList.add("CH54 0000 7521 5554 6442 5");
-    accountNumberList.add("CH55 5521 5564 5554 6442 6");
-    accountNumberList.add("CH75 4521 3641 5554 6442 8");
-    accountNumberList.add("CH65 1576 7544 5554 6442 9");
-
-    return accountNumberList;
+  private String getFakeNumeroCpt() {
+   
+    this.fakeNumeroCpt ="CHXX XXXX XXXX XXXX XXXX X";
+    return this.fakeNumeroCpt;
   }
 
   /**
