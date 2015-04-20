@@ -18,6 +18,23 @@ div.alert{
   margin-bottom: 20px;
 }
 
+.navbar-nav > li > .dropdown-menu {
+  padding: 0px;
+}
+
+.navbar-nav > li > .dropdown-menu > li > a {
+  padding-top : 10px;
+  padding-bottom : 10px;
+}
+
+
+.navbar-default .navbar-nav > .active a, 
+.navbar-default .navbar-nav > .active a:focus, 
+.navbar-default .navbar-nav > .active a:hover {
+    background-color: #e7e7e7;
+    color: #555;
+}
+
 a.navbar-brand{
   padding: 0px;
   padding-right: 14px;
@@ -25,6 +42,10 @@ a.navbar-brand{
 
 a.navbar-brand > img{
   height: 50px;
+}
+
+.navbar-nav > li > a.inline{
+  display: inline-block;
 }
 
 .login-page input{

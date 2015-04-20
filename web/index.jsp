@@ -52,6 +52,9 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src=".//assets/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Ouverture automatique des dropdowsn Boostrap au hover -->
+    <!-- Permet d'utiliser data-hover="dropdown" -->
+    <script src=".//assets/bootstrap-hover-dropdown-2.1.3/bootstrap-hover-dropdown.min.js"></script>
   </head>
 
   <body>

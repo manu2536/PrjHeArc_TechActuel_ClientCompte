@@ -185,6 +185,13 @@ public class BankController extends HttpServlet {
           request.setAttribute("targetPageTitle", "Clients");
         }
         break;
+        
+      case "addClient":
+        //Page cible
+        request.getSession().setAttribute("currentPage", "addClient"); //Utile uniquement si le lien est également dans le menu afin de le mettre en sélection
+        request.setAttribute("targetPage", "ajouterClient.jsp");
+        request.setAttribute("targetPageTitle", "Ajouter un client");
+        break;
 
       case "doAddClient":
         forwardOrRedirect = "redirect";
