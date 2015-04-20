@@ -230,7 +230,7 @@ public class BankController extends HttpServlet {
         //Page cible
         request.getSession().setAttribute("currentPage", "client");
         request.setAttribute("targetPage", "updateClient.jsp");
-        request.setAttribute("targetPageTitle", "Details client");
+        request.setAttribute("targetPageTitle", "Modifier client");
         break;
 
       case "doUpdateClient":
@@ -337,9 +337,9 @@ public class BankController extends HttpServlet {
         Compte compteModifier = CompteDao.researchByID(new Integer(request.getParameter("id")));
         request.setAttribute("Compte", compteModifier);
         //Page cible
-        request.getSession().setAttribute("currentPage", "compte");
+        request.getSession().setAttribute("currentPage", "client");
         request.setAttribute("targetPage", "updateAccount.jsp");
-        request.setAttribute("targetPageTitle", "Details compte");
+        request.setAttribute("targetPageTitle", "Modifier compte");
 
         break;
 
