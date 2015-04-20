@@ -9,7 +9,11 @@
 <div class="container">
   <h1>Details client</h1>
   <fieldset>
-    <legend>${Client.prenom} ${Client.nom}  <a href="BankController?action=updateClient&id=${Client.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a></legend>
+    <legend>${Client.prenom} ${Client.nom} 
+      <a href="BankController?action=updateClient&id=${Client.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
+      <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteClientConfirm" data-nomclient="${Client.prenom} ${Client.nom}" data-idclient="${Client.identifiant}"><span class="glyphicon glyphicon-trash"></span></button>
+    </legend>
+    
     Adresse : ${Client.adresse}<br/>
     Ville : ${Client.ville}<br/>
 
@@ -23,7 +27,7 @@
       Aucun compte ouvert
     </c:when>
 
-    <%-- Avec recherche --%>
+    <%-- Un ou plusieurs compte --%>
     <c:otherwise>
       <div> <!-- Affichage compte -->
         <table class="table table-hover">
@@ -43,7 +47,7 @@
                 <td>CHF <fmt:formatNumber pattern="0.00" value="${account.solde}"/></td>
                 <td>
                   <a href="BankController?action=updateAccount&id=${account.identifiant}" class="btn btn-info btn-mini" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a>
-                  <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteConfirm" data-idcompte="${account.identifiant}" data-nomcompte="${account.nom}"><span class="glyphicon glyphicon-trash"></span></button>
+                  <button class="btn btn-info btn-mini" title="Supprimer" data-toggle="modal" data-target="#deleteCompteConfirm" data-idcompte="${account.identifiant}" data-nomcompte="${account.nom}"><span class="glyphicon glyphicon-trash"></span></button>
                 </td>
               </tr>
             </c:forEach>
@@ -57,44 +61,5 @@
   <%@include file="ajouterCompte.jsp"%>
 </div>
 
-
-<!-- Modal confirmation suppression compte -->
-<div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="Confirmation de suppression" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirmation de suppression</h4>
-      </div>
-      <div class="modal-body">
-        Voulez-vous vraiment supprimer le compte <b><span class="idCompte"></span> - <span class="nomCompte"></span></b>?
-      </div>
-      <div class="modal-footer">
-        <form action="BankController?action=doDeleteCompte" method="post">
-          <input type="hidden" id="id" name="id" value="" />
-          <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-          <input type="submit" id="btnConfirmDelete" class="btn btn-primary" value="Supprimer"/>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
- 
- 
-<script>
- jQuery(document).ready(function($) {
-   //Ouverture confirmation suppression
-   $('#deleteConfirm').on('show.bs.modal', function (event) {
-     var button = $(event.relatedTarget); // Button that triggered the modal
-     var idCompte = button.data('idcompte'); //data-idcompte
-     var nomCompte = button.data('nomcompte');
-     var modal = $(this);
-     
-     //Renseigne l'id et le nom du compte sélectionné
-     modal.find('.idCompte').text(idCompte);
-     modal.find('.nomCompte').text(nomCompte);
-     //Renseigne l'id du compte sélectionné
-     modal.find('#id').val(idCompte);
-   });
- });
-</script>
+<%@include file="deleteClient.jsp"%>
+<%@include file="deleteCompte.jsp"%>
